@@ -1,338 +1,763 @@
 <!DOCTYPE html>
-<html lang="ar" dir="rtl">
+<html lang="ar" dir="rtl" data-theme="dark">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>محقق الهارمونيك — Scott Carney V3</title>
-<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@300;400;600&family=Tajawal:wght@300;400;500;700;900&display=swap" rel="stylesheet">
+<title>Harmonic Validator — Scott Carney V3</title>
+<link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@300;400;500;700&display=swap" rel="stylesheet">
 <style>
-* { box-sizing: border-box; margin: 0; padding: 0; }
-
+/* ══════════════════════════════════════════
+   TRADINGVIEW COLOR SYSTEM
+══════════════════════════════════════════ */
 :root {
-  --bg: #f7f8fa;
-  --white: #ffffff;
-  --border: #e2e6ed;
-  --border2: #c8d0dc;
-  --gold: #a0720a;
-  --gold-light: #fdf3e0;
-  --gold-mid: #e8c068;
-  --green: #166534;
-  --green-light: #f0fdf4;
-  --green-mid: #86efac;
-  --red: #991b1b;
-  --red-light: #fef2f2;
-  --red-mid: #fca5a5;
-  --blue: #1e3a5f;
-  --muted: #6b7280;
-  --text: #111318;
-  --mono: 'IBM Plex Mono', monospace;
-  --arabic: 'Tajawal', sans-serif;
-  --radius: 2px;
-  --shadow: 0 1px 3px rgba(0,0,0,0.08);
-  --shadow-md: 0 4px 12px rgba(0,0,0,0.08);
+  --tv-font: 'Tajawal', -apple-system, BlinkMacSystemFont, sans-serif;
+  --tv-mono: 'Courier New', Courier, monospace;
+  --tv-radius: 4px;
+  --tv-transition: 0.15s ease;
 }
 
-body { background: var(--bg); color: var(--text); font-family: var(--arabic); min-height: 100vh; }
+/* DARK THEME — TradingView exact */
+[data-theme="dark"] {
+  --tv-bg-primary:    #131722;
+  --tv-bg-secondary:  #1e222d;
+  --tv-bg-tertiary:   #2a2e39;
+  --tv-bg-hover:      #2f3241;
+  --tv-border:        #363a45;
+  --tv-border-light:  #434651;
 
-.page { max-width: 960px; margin: 0 auto; padding: 32px 20px 60px; }
+  --tv-text-primary:  #d1d4dc;
+  --tv-text-secondary:#787b86;
+  --tv-text-muted:    #555964;
 
-/* HEADER */
-.site-header {
-  display: flex; align-items: flex-end; justify-content: space-between;
-  margin-bottom: 36px; padding-bottom: 20px;
-  border-bottom: 2px solid var(--text);
-  flex-wrap: wrap; gap: 12px;
+  --tv-blue:          #2962ff;
+  --tv-blue-hover:    #1e53e5;
+  --tv-blue-light:    rgba(41,98,255,0.12);
+
+  --tv-green:         #26a69a;
+  --tv-green-light:   rgba(38,166,154,0.12);
+  --tv-green-text:    #26a69a;
+
+  --tv-red:           #ef5350;
+  --tv-red-light:     rgba(239,83,80,0.12);
+  --tv-red-text:      #ef5350;
+
+  --tv-orange:        #ff9800;
+  --tv-orange-light:  rgba(255,152,0,0.1);
+
+  --tv-white:         #ffffff;
+  --tv-toolbar:       #1e222d;
 }
-.site-title { font-size: 28px; font-weight: 900; color: var(--text); letter-spacing: -0.02em; line-height: 1; }
-.site-title span { color: var(--gold); }
-.site-sub { font-family: var(--mono); font-size: 10px; color: var(--muted); letter-spacing: 0.15em; text-transform: uppercase; margin-top: 5px; }
-.badge { font-family: var(--mono); font-size: 10px; font-weight: 600; letter-spacing: 0.12em; background: var(--text); color: var(--white); padding: 5px 12px; border-radius: var(--radius); }
 
-/* INPUT SECTION */
-.input-section { background: var(--white); border: 1px solid var(--border); border-radius: var(--radius); box-shadow: var(--shadow); margin-bottom: 24px; overflow: hidden; }
-.input-header { background: var(--text); color: var(--white); padding: 14px 20px; display: flex; align-items: center; justify-content: space-between; }
-.input-header-title { font-family: var(--mono); font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase; }
-.input-header-hint { font-size: 12px; color: rgba(255,255,255,0.45); font-family: var(--mono); }
+/* LIGHT THEME — TradingView exact */
+[data-theme="light"] {
+  --tv-bg-primary:    #ffffff;
+  --tv-bg-secondary:  #f0f3fa;
+  --tv-bg-tertiary:   #e8ecf5;
+  --tv-bg-hover:      #e0e5f0;
+  --tv-border:        #e0e3eb;
+  --tv-border-light:  #d1d4dc;
 
-.inputs-grid { display: grid; grid-template-columns: repeat(4,1fr); gap: 0; }
-@media(max-width:640px) { .inputs-grid { grid-template-columns: repeat(2,1fr); } }
+  --tv-text-primary:  #131722;
+  --tv-text-secondary:#787b86;
+  --tv-text-muted:    #b2b5be;
 
-.input-cell { border-left: 1px solid var(--border); border-bottom: 1px solid var(--border); padding: 18px 20px; }
-.input-cell:first-child { border-left: none; }
-@media(max-width:640px) { .input-cell:nth-child(2n+1) { border-left: none; } }
+  --tv-blue:          #2962ff;
+  --tv-blue-hover:    #1e53e5;
+  --tv-blue-light:    rgba(41,98,255,0.08);
 
-.input-cell-label { font-family: var(--mono); font-size: 10px; color: var(--muted); letter-spacing: 0.12em; text-transform: uppercase; margin-bottom: 10px; display: flex; align-items: center; gap: 7px; }
-.dot { width: 7px; height: 7px; border-radius: 50%; display: inline-block; }
+  --tv-green:         #089981;
+  --tv-green-light:   rgba(8,153,129,0.1);
+  --tv-green-text:    #089981;
 
-.ratio-field {
-  width: 100%; border: none; border-bottom: 2px solid var(--border2);
-  background: transparent; font-family: var(--mono); font-size: 24px; font-weight: 600;
-  color: var(--text); padding: 4px 0; outline: none; transition: border-color 0.2s;
+  --tv-red:           #f23645;
+  --tv-red-light:     rgba(242,54,69,0.1);
+  --tv-red-text:      #f23645;
+
+  --tv-orange:        #e65100;
+  --tv-orange-light:  rgba(230,81,0,0.08);
+
+  --tv-white:         #ffffff;
+  --tv-toolbar:       #f0f3fa;
+}
+
+/* ══════════════════════════════════════════
+   RESET & BASE
+══════════════════════════════════════════ */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+html { font-size: 13px; }
+
+body {
+  font-family: var(--tv-font);
+  background: var(--tv-bg-primary);
+  color: var(--tv-text-primary);
+  min-height: 100vh;
+  transition: background var(--tv-transition), color var(--tv-transition);
+  line-height: 1.5;
+}
+
+/* ══════════════════════════════════════════
+   TOPBAR — TradingView style
+══════════════════════════════════════════ */
+.tv-topbar {
+  height: 46px;
+  background: var(--tv-bg-secondary);
+  border-bottom: 1px solid var(--tv-border);
+  display: flex;
+  align-items: center;
+  padding: 0 16px;
+  gap: 8px;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+
+.tv-logo {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-left: 4px;
+}
+.tv-logo-icon {
+  width: 28px; height: 28px;
+  background: var(--tv-blue);
+  border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 14px; font-weight: 700; color: white;
+  flex-shrink: 0;
+}
+.tv-logo-text {
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--tv-text-primary);
+  letter-spacing: -0.01em;
+}
+.tv-logo-badge {
+  font-size: 10px;
+  background: var(--tv-blue-light);
+  color: var(--tv-blue);
+  border: 1px solid rgba(41,98,255,0.3);
+  padding: 2px 6px;
+  border-radius: 3px;
+  font-weight: 600;
+  letter-spacing: 0.05em;
+}
+
+.tv-topbar-sep {
+  width: 1px; height: 20px;
+  background: var(--tv-border);
+  margin: 0 4px;
+}
+
+.tv-topbar-spacer { flex: 1; }
+
+.tv-topbar-btn {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  padding: 5px 10px;
+  border: none;
+  background: transparent;
+  color: var(--tv-text-secondary);
+  font-family: var(--tv-font);
+  font-size: 12px;
+  cursor: pointer;
+  border-radius: var(--tv-radius);
+  transition: all var(--tv-transition);
+  white-space: nowrap;
+}
+.tv-topbar-btn:hover { background: var(--tv-bg-hover); color: var(--tv-text-primary); }
+.tv-topbar-btn.active { background: var(--tv-blue-light); color: var(--tv-blue); }
+
+.theme-toggle {
+  width: 32px; height: 32px;
+  border: 1px solid var(--tv-border);
+  border-radius: var(--tv-radius);
+  background: var(--tv-bg-tertiary);
+  color: var(--tv-text-secondary);
+  cursor: pointer;
+  font-size: 14px;
+  display: flex; align-items: center; justify-content: center;
+  transition: all var(--tv-transition);
+}
+.theme-toggle:hover { background: var(--tv-bg-hover); color: var(--tv-text-primary); border-color: var(--tv-border-light); }
+
+/* ══════════════════════════════════════════
+   LAYOUT
+══════════════════════════════════════════ */
+.tv-layout {
+  display: grid;
+  grid-template-columns: 320px 1fr;
+  height: calc(100vh - 46px);
+  overflow: hidden;
+}
+@media(max-width: 768px) {
+  .tv-layout { grid-template-columns: 1fr; height: auto; overflow: auto; }
+}
+
+/* ── LEFT PANEL ── */
+.tv-left {
+  background: var(--tv-bg-secondary);
+  border-left: 1px solid var(--tv-border);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.tv-panel-header {
+  padding: 10px 14px;
+  border-bottom: 1px solid var(--tv-border);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-shrink: 0;
+}
+.tv-panel-title {
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--tv-text-secondary);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+
+/* INPUT FIELDS */
+.tv-inputs {
+  padding: 14px;
+  flex-shrink: 0;
+  border-bottom: 1px solid var(--tv-border);
+}
+
+.tv-field-group { margin-bottom: 10px; }
+.tv-field-group:last-child { margin-bottom: 0; }
+
+.tv-field-label {
+  font-size: 11px;
+  color: var(--tv-text-secondary);
+  margin-bottom: 5px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.tv-dot {
+  width: 6px; height: 6px;
+  border-radius: 50%;
+  display: inline-block;
+  flex-shrink: 0;
+}
+
+.tv-input {
+  width: 100%;
+  background: var(--tv-bg-primary);
+  border: 1px solid var(--tv-border);
+  border-radius: var(--tv-radius);
+  color: var(--tv-text-primary);
+  font-family: var(--tv-mono);
+  font-size: 15px;
+  font-weight: 600;
+  padding: 8px 10px;
+  outline: none;
+  transition: border-color var(--tv-transition), background var(--tv-transition);
   -moz-appearance: textfield;
 }
-.ratio-field::-webkit-outer-spin-button, .ratio-field::-webkit-inner-spin-button { -webkit-appearance: none; }
-.ratio-field::placeholder { color: #d1d5db; font-weight: 300; }
-.ratio-field:focus { border-bottom-color: var(--text); }
-.ratio-field.has-value { border-bottom-color: var(--gold-mid); }
+.tv-input::-webkit-outer-spin-button,
+.tv-input::-webkit-inner-spin-button { -webkit-appearance: none; }
+.tv-input::placeholder { color: var(--tv-text-muted); font-weight: 400; font-size: 13px; }
+.tv-input:focus { border-color: var(--tv-blue); background: var(--tv-bg-primary); }
+.tv-input.has-val { border-color: var(--tv-orange); }
 
-.input-actions { padding: 16px 20px; display: flex; gap: 10px; align-items: center; border-bottom: 1px solid var(--border); }
-
-.btn-analyze {
-  background: var(--text); color: var(--white); border: none;
-  font-family: var(--mono); font-size: 12px; font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase;
-  padding: 12px 28px; cursor: pointer; border-radius: var(--radius); transition: background 0.15s;
-  display: flex; align-items: center; gap: 8px;
+/* ANALYZE BUTTON */
+.tv-btn-analyze {
+  width: 100%;
+  margin-top: 12px;
+  padding: 9px;
+  background: var(--tv-blue);
+  color: white;
+  border: none;
+  border-radius: var(--tv-radius);
+  font-family: var(--tv-font);
+  font-size: 13px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: background var(--tv-transition);
+  display: flex; align-items: center; justify-content: center; gap: 6px;
 }
-.btn-analyze:hover { background: #2d3748; }
-.btn-clear {
-  background: transparent; color: var(--muted); border: 1px solid var(--border2);
-  font-family: var(--mono); font-size: 11px; letter-spacing: 0.1em;
-  padding: 11px 18px; cursor: pointer; border-radius: var(--radius); transition: all 0.15s;
+.tv-btn-analyze:hover { background: var(--tv-blue-hover); }
+.tv-btn-clear {
+  width: 100%;
+  margin-top: 6px;
+  padding: 7px;
+  background: transparent;
+  color: var(--tv-text-secondary);
+  border: 1px solid var(--tv-border);
+  border-radius: var(--tv-radius);
+  font-family: var(--tv-font);
+  font-size: 12px;
+  cursor: pointer;
+  transition: all var(--tv-transition);
 }
-.btn-clear:hover { border-color: var(--text); color: var(--text); }
+.tv-btn-clear:hover { background: var(--tv-bg-hover); color: var(--tv-text-primary); border-color: var(--tv-border-light); }
 
-.input-note { padding: 11px 20px; font-size: 11px; color: var(--muted); font-family: var(--mono); letter-spacing: 0.04em; display: flex; gap: 18px; flex-wrap: wrap; }
+/* HINT */
+.tv-hint { padding: 10px 14px; border-bottom: 1px solid var(--tv-border); flex-shrink: 0; }
+.tv-hint p { font-size: 11px; color: var(--tv-text-muted); line-height: 1.7; }
 
-/* RESULTS */
-.no-results {
-  text-align: center; padding: 52px 20px; color: var(--muted);
-  font-size: 12px; font-family: var(--mono); letter-spacing: 0.08em;
-  border: 1px dashed var(--border2); border-radius: var(--radius); background: var(--white);
+/* RESULTS LIST */
+.tv-results-list {
+  flex: 1;
+  overflow-y: auto;
+  padding: 8px;
 }
-.no-results .big { font-size: 36px; display: block; margin-bottom: 12px; opacity: 0.2; }
+.tv-results-list::-webkit-scrollbar { width: 4px; }
+.tv-results-list::-webkit-scrollbar-track { background: transparent; }
+.tv-results-list::-webkit-scrollbar-thumb { background: var(--tv-border); border-radius: 2px; }
 
-/* MATCH CARD */
-.match-card {
-  background: var(--white); border: 1px solid var(--border);
-  border-radius: var(--radius); box-shadow: var(--shadow);
-  margin-bottom: 14px; overflow: hidden;
-  animation: slideIn 0.3s ease;
+/* EMPTY STATE */
+.tv-empty {
+  padding: 32px 16px;
+  text-align: center;
+  color: var(--tv-text-muted);
+  font-size: 12px;
+  line-height: 2;
 }
-@keyframes slideIn { from { opacity:0; transform:translateY(8px); } to { opacity:1; transform:translateY(0); } }
-.match-card.perfect { border-color: var(--green-mid); border-width: 2px; }
-.match-card.good    { border-color: var(--gold-mid); }
+.tv-empty-icon { font-size: 28px; display: block; margin-bottom: 8px; opacity: 0.3; }
 
-.match-header { padding: 16px 20px; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 10px; }
-.match-card.perfect .match-header { background: var(--green-light); }
-.match-card.good    .match-header { background: var(--gold-light); }
-.match-card.weak    .match-header { background: var(--bg); }
+/* RESULT ITEM */
+.tv-result-item {
+  padding: 10px 12px;
+  border-radius: var(--tv-radius);
+  margin-bottom: 4px;
+  cursor: pointer;
+  border: 1px solid transparent;
+  transition: all var(--tv-transition);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+}
+.tv-result-item:hover { background: var(--tv-bg-hover); }
+.tv-result-item.selected { background: var(--tv-blue-light); border-color: rgba(41,98,255,0.3); }
 
-.match-name { display: flex; align-items: center; gap: 14px; }
-.match-icon { font-size: 18px; width: 38px; height: 38px; display: flex; align-items: center; justify-content: center; border-radius: 50%; flex-shrink: 0; }
-.match-card.perfect .match-icon { background: var(--green-mid); }
-.match-card.good    .match-icon { background: var(--gold-mid); }
-.match-card.weak    .match-icon { background: var(--border); }
+.tv-result-left { display: flex; align-items: center; gap: 10px; min-width: 0; }
+.tv-result-dot {
+  width: 8px; height: 8px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+.tv-result-dot.perfect { background: var(--tv-green); }
+.tv-result-dot.good    { background: var(--tv-orange); }
+.tv-result-dot.weak    { background: var(--tv-text-muted); }
 
-.match-name-ar { font-size: 20px; font-weight: 700; color: var(--text); }
-.match-name-en { font-family: var(--mono); font-size: 11px; color: var(--muted); letter-spacing: 0.1em; }
+.tv-result-name { font-size: 13px; font-weight: 700; color: var(--tv-text-primary); }
+.tv-result-sub  { font-size: 10px; color: var(--tv-text-muted); margin-top: 1px; }
 
-.match-score-wrap { display: flex; align-items: center; gap: 10px; }
-.match-score { font-family: var(--mono); font-size: 30px; font-weight: 600; color: var(--text); line-height: 1; }
-.match-score sup { font-size: 14px; color: var(--muted); }
-.match-label { font-family: var(--mono); font-size: 9px; letter-spacing: 0.14em; text-transform: uppercase; padding: 4px 9px; border-radius: 2px; }
-.match-card.perfect .match-label { background: var(--green); color: white; }
-.match-card.good    .match-label { background: var(--gold); color: white; }
-.match-card.weak    .match-label { background: var(--muted); color: white; }
+.tv-result-score {
+  font-family: var(--tv-mono);
+  font-size: 13px;
+  font-weight: 700;
+  flex-shrink: 0;
+}
+.tv-result-score.perfect { color: var(--tv-green-text); }
+.tv-result-score.good    { color: var(--tv-orange); }
+.tv-result-score.weak    { color: var(--tv-text-muted); }
 
-.match-ratios { display: grid; grid-template-columns: repeat(4,1fr); border-top: 1px solid var(--border); }
-@media(max-width:640px) { .match-ratios { grid-template-columns: repeat(2,1fr); } }
+/* ── RIGHT PANEL ── */
+.tv-right {
+  background: var(--tv-bg-primary);
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+}
+.tv-right::-webkit-scrollbar { width: 4px; }
+.tv-right::-webkit-scrollbar-thumb { background: var(--tv-border); }
 
-.ratio-cell { padding: 13px 16px; border-left: 1px solid var(--border); position: relative; }
-.ratio-cell:first-child { border-left: none; }
-@media(max-width:640px) { .ratio-cell:nth-child(2n+1) { border-left: none; } }
-.ratio-cell.ok  { background: rgba(134,239,172,0.1); }
-.ratio-cell.bad { background: rgba(252,165,165,0.12); }
-.ratio-cell-label { font-family: var(--mono); font-size: 9px; color: var(--muted); letter-spacing: 0.1em; text-transform: uppercase; margin-bottom: 5px; }
-.ratio-cell-entered { font-family: var(--mono); font-size: 17px; font-weight: 600; color: var(--text); }
-.ratio-cell.ok  .ratio-cell-entered { color: var(--green); }
-.ratio-cell.bad .ratio-cell-entered { color: var(--red); }
-.ratio-cell-range { font-family: var(--mono); font-size: 10px; color: var(--muted); margin-top: 3px; }
-.ratio-cell-status { position: absolute; top: 10px; left: 12px; font-size: 11px; font-family: var(--mono); font-weight: 600; }
-.ratio-cell.ok  .ratio-cell-status { color: var(--green); }
-.ratio-cell.bad .ratio-cell-status { color: var(--red); }
+/* DETAIL VIEW */
+.tv-detail {
+  flex: 1;
+  padding: 20px 24px;
+}
 
-.match-footer { padding: 10px 20px; border-top: 1px solid var(--border); display: flex; gap: 18px; flex-wrap: wrap; background: var(--bg); }
-.match-footer-item { font-size: 11px; color: var(--muted); display: flex; align-items: center; gap: 4px; }
-.match-footer-item strong { color: var(--text); font-weight: 700; }
+/* Welcome screen */
+.tv-welcome {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 300px;
+  text-align: center;
+  color: var(--tv-text-muted);
+  padding: 40px;
+}
+.tv-welcome-icon { font-size: 48px; margin-bottom: 16px; opacity: 0.2; }
+.tv-welcome h2 { font-size: 16px; color: var(--tv-text-secondary); margin-bottom: 8px; font-weight: 600; }
+.tv-welcome p { font-size: 12px; line-height: 1.8; max-width: 320px; }
 
-/* RESULTS HEADER */
-.results-header { font-family: var(--mono); font-size: 10px; color: var(--muted); letter-spacing: 0.1em; text-transform: uppercase; margin-bottom: 12px; }
+/* DETAIL HEADER */
+.tv-detail-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  margin-bottom: 20px;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+.tv-detail-name-ar { font-size: 24px; font-weight: 700; color: var(--tv-text-primary); }
+.tv-detail-name-en { font-size: 12px; color: var(--tv-text-muted); margin-top: 2px; letter-spacing: 0.05em; }
 
-/* REFERENCE TABLE */
-.ref-section { margin-top: 44px; }
-.section-label { font-family: var(--mono); font-size: 10px; letter-spacing: 0.16em; text-transform: uppercase; color: var(--muted); margin-bottom: 12px; display: flex; align-items: center; gap: 10px; }
-.section-label::after { content:''; flex:1; height:1px; background:var(--border2); }
+.tv-score-badge {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 4px;
+}
+.tv-score-num {
+  font-family: var(--tv-mono);
+  font-size: 32px;
+  font-weight: 700;
+  line-height: 1;
+}
+.tv-score-num.perfect { color: var(--tv-green-text); }
+.tv-score-num.good    { color: var(--tv-orange); }
+.tv-score-num.weak    { color: var(--tv-text-muted); }
+.tv-score-label {
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  padding: 2px 8px;
+  border-radius: 3px;
+}
+.perfect .tv-score-label { background: var(--tv-green-light); color: var(--tv-green-text); }
+.good    .tv-score-label { background: var(--tv-orange-light); color: var(--tv-orange); }
+.weak    .tv-score-label { background: var(--tv-bg-tertiary); color: var(--tv-text-secondary); }
 
-.ref-table { width: 100%; border-collapse: collapse; font-family: var(--mono); font-size: 11px; background: var(--white); border: 1px solid var(--border); box-shadow: var(--shadow); }
-.ref-table th { background: var(--text); color: var(--white); padding: 9px 14px; text-align: right; font-size: 9px; letter-spacing: 0.14em; text-transform: uppercase; font-weight: 600; border-left: 1px solid rgba(255,255,255,0.1); }
-.ref-table th:first-child { border-left: none; }
-.ref-table td { padding: 9px 14px; border: 1px solid var(--border); color: var(--text); vertical-align: middle; }
-.ref-table tr:hover td { background: var(--bg); }
-.ref-table .cat-row td { background: var(--bg); color: var(--muted); font-size: 9px; letter-spacing: 0.14em; text-transform: uppercase; padding: 6px 14px; border-color: var(--border2); }
-.ref-table td:first-child { font-weight: 700; }
-.t-ideal { color: var(--gold); font-weight: 600; }
-.t-range { color: var(--blue); }
-.t-note  { color: var(--muted); font-size: 10px; }
+/* META STRIP */
+.tv-meta-strip {
+  display: flex;
+  gap: 0;
+  border: 1px solid var(--tv-border);
+  border-radius: var(--tv-radius);
+  overflow: hidden;
+  margin-bottom: 20px;
+}
+.tv-meta-item {
+  flex: 1;
+  padding: 10px 14px;
+  border-left: 1px solid var(--tv-border);
+}
+.tv-meta-item:last-child { border-left: none; }
+.tv-meta-key { font-size: 10px; color: var(--tv-text-muted); text-transform: uppercase; letter-spacing: 0.07em; margin-bottom: 3px; }
+.tv-meta-val { font-size: 13px; font-weight: 700; color: var(--tv-text-primary); }
+.tv-meta-val.green { color: var(--tv-green-text); }
+.tv-meta-val.orange { color: var(--tv-orange); }
+.tv-meta-val.blue { color: var(--tv-blue); }
 
-/* FOOTER */
-.site-footer { margin-top: 48px; padding-top: 20px; border-top: 1px solid var(--border); display: flex; justify-content: space-between; flex-wrap: wrap; gap: 8px; }
-.site-footer span { font-family: var(--mono); font-size: 10px; color: var(--muted); letter-spacing: 0.08em; }
+/* RATIO BREAKDOWN */
+.tv-section-title {
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--tv-text-secondary);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  margin-bottom: 10px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.tv-section-title::after { content:''; flex:1; height:1px; background: var(--tv-border); }
+
+.tv-ratio-grid {
+  display: grid;
+  grid-template-columns: repeat(2,1fr);
+  gap: 8px;
+  margin-bottom: 20px;
+}
+@media(max-width:600px) { .tv-ratio-grid { grid-template-columns: 1fr; } }
+
+.tv-ratio-card {
+  background: var(--tv-bg-secondary);
+  border: 1px solid var(--tv-border);
+  border-radius: var(--tv-radius);
+  padding: 12px 14px;
+  position: relative;
+  overflow: hidden;
+}
+.tv-ratio-card::before {
+  content: '';
+  position: absolute;
+  right: 0; top: 0; bottom: 0;
+  width: 3px;
+}
+.tv-ratio-card.ok::before  { background: var(--tv-green); }
+.tv-ratio-card.bad::before { background: var(--tv-red); }
+.tv-ratio-card.na::before  { background: var(--tv-border); }
+
+.tv-ratio-card-label { font-size: 10px; color: var(--tv-text-muted); text-transform: uppercase; letter-spacing: 0.07em; margin-bottom: 6px; }
+.tv-ratio-card-val {
+  font-family: var(--tv-mono);
+  font-size: 20px;
+  font-weight: 700;
+  margin-bottom: 4px;
+}
+.tv-ratio-card.ok  .tv-ratio-card-val { color: var(--tv-green-text); }
+.tv-ratio-card.bad .tv-ratio-card-val { color: var(--tv-red-text); }
+.tv-ratio-card.na  .tv-ratio-card-val { color: var(--tv-text-muted); }
+
+.tv-ratio-card-range { font-size: 11px; color: var(--tv-text-muted); }
+.tv-ratio-card-range span { color: var(--tv-text-secondary); font-weight: 600; }
+
+.tv-ratio-card-status {
+  position: absolute;
+  top: 10px;
+  left: 12px;
+  font-size: 12px;
+  font-weight: 700;
+}
+.tv-ratio-card.ok  .tv-ratio-card-status { color: var(--tv-green-text); }
+.tv-ratio-card.bad .tv-ratio-card-status { color: var(--tv-red-text); }
+
+/* PRZ BOX */
+.tv-prz-box {
+  background: var(--tv-blue-light);
+  border: 1px solid rgba(41,98,255,0.25);
+  border-radius: var(--tv-radius);
+  padding: 12px 16px;
+  margin-bottom: 20px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.tv-prz-icon { font-size: 20px; flex-shrink: 0; }
+.tv-prz-label { font-size: 10px; color: var(--tv-blue); text-transform: uppercase; letter-spacing: 0.07em; margin-bottom: 2px; }
+.tv-prz-val { font-size: 15px; font-weight: 700; color: var(--tv-text-primary); }
+.tv-prz-note { font-size: 11px; color: var(--tv-text-muted); margin-top: 2px; }
+
+/* ══════════════════════════════════════════
+   REF TABLE — bottom of right panel
+══════════════════════════════════════════ */
+.tv-ref { padding: 0 24px 24px; }
+
+.tv-table-wrap { overflow-x: auto; border: 1px solid var(--tv-border); border-radius: var(--tv-radius); }
+
+.tv-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 12px;
+  background: var(--tv-bg-secondary);
+}
+.tv-table th {
+  background: var(--tv-bg-tertiary);
+  color: var(--tv-text-secondary);
+  padding: 8px 12px;
+  text-align: right;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
+  border-bottom: 1px solid var(--tv-border);
+  white-space: nowrap;
+}
+.tv-table td {
+  padding: 8px 12px;
+  border-bottom: 1px solid var(--tv-border);
+  color: var(--tv-text-primary);
+  vertical-align: middle;
+  white-space: nowrap;
+}
+.tv-table tr:last-child td { border-bottom: none; }
+.tv-table tbody tr:hover td { background: var(--tv-bg-hover); }
+.tv-table .cat-row td {
+  background: var(--tv-bg-tertiary);
+  color: var(--tv-text-muted);
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  padding: 5px 12px;
+  font-weight: 700;
+}
+.tv-table td:first-child { font-weight: 700; }
+.t-g { color: var(--tv-green-text); font-weight: 700; }
+.t-b { color: var(--tv-blue); }
+.t-m { color: var(--tv-text-muted); font-size: 11px; }
 </style>
 </head>
 <body>
-<div class="page">
 
-  <header class="site-header">
-    <div>
-      <div class="site-title">محقق <span>الهارمونيك</span></div>
-      <div class="site-sub">Scott Carney V3 · Harmonic Pattern Detector</div>
-    </div>
-    <div class="badge">V3 · 2026</div>
-  </header>
-
-  <div class="input-section">
-    <div class="input-header">
-      <span class="input-header-title">أدخل النسب المحسوبة</span>
-      <span class="input-header-hint">الموقع يكتشف النموذج تلقائياً</span>
-    </div>
-    <div class="inputs-grid">
-      <div class="input-cell">
-        <div class="input-cell-label"><span class="dot" style="background:#f59e0b"></span>B من XA</div>
-        <input type="number" class="ratio-field" id="inp_bxa" placeholder="0.000" step="0.001" oninput="onInput(this)">
-      </div>
-      <div class="input-cell">
-        <div class="input-cell-label"><span class="dot" style="background:#3b82f6"></span>C من AB</div>
-        <input type="number" class="ratio-field" id="inp_cab" placeholder="0.000" step="0.001" oninput="onInput(this)">
-      </div>
-      <div class="input-cell">
-        <div class="input-cell-label"><span class="dot" style="background:#10b981"></span>D من XA</div>
-        <input type="number" class="ratio-field" id="inp_dxa" placeholder="0.000" step="0.001" oninput="onInput(this)">
-      </div>
-      <div class="input-cell">
-        <div class="input-cell-label"><span class="dot" style="background:#ef4444"></span>D من BC</div>
-        <input type="number" class="ratio-field" id="inp_dbc" placeholder="0.000" step="0.001" oninput="onInput(this)">
-      </div>
-    </div>
-    <div class="input-actions">
-      <button class="btn-analyze" onclick="analyze()">⟶ &nbsp;تحليل النموذج</button>
-      <button class="btn-clear" onclick="clearAll()">مسح الكل</button>
-    </div>
-    <div class="input-note">
-      <span>◈ أدخل النسبة كرقم عشري (مثال: 0.618)</span>
-      <span>◈ يمكن إدخال نسبة واحدة أو أكثر</span>
-      <span>◈ اضغط Enter للتحليل</span>
-    </div>
+<!-- TOPBAR -->
+<div class="tv-topbar">
+  <div class="tv-logo">
+    <div class="tv-logo-icon">H</div>
+    <div class="tv-logo-text">Harmonic Validator</div>
   </div>
-
-  <div id="resultsSection">
-    <div class="no-results">
-      <span class="big">◎</span>
-      أدخل النسب أعلاه وسيكتشف المحقق النموذج تلقائياً
-    </div>
-  </div>
-
-  <div class="ref-section">
-    <div class="section-label">جدول النسب المرجعية الشامل — Scott Carney V3</div>
-    <div style="overflow-x:auto">
-      <table class="ref-table">
-        <thead>
-          <tr>
-            <th>النموذج</th>
-            <th>B من XA</th>
-            <th>C من AB</th>
-            <th>D من XA</th>
-            <th>D من BC</th>
-            <th>ملاحظات</th>
-          </tr>
-        </thead>
-        <tbody id="refBody"></tbody>
-      </table>
-    </div>
-  </div>
-
-  <footer class="site-footer">
-    <span>HARMONIC VALIDATOR · SCOTT CARNEY V3 · Built for Precision Trading</span>
-    <span>النسب من المصدر الرسمي HarmonicTrader.com</span>
-  </footer>
+  <span class="tv-logo-badge">V3</span>
+  <div class="tv-topbar-sep"></div>
+  <button class="tv-topbar-btn active" onclick="showTab('validator')">محقق النماذج</button>
+  <button class="tv-topbar-btn" onclick="showTab('reference')">جدول المرجعي</button>
+  <div class="tv-topbar-spacer"></div>
+  <span style="font-size:11px;color:var(--tv-text-muted);margin-left:8px">Scott Carney V3</span>
+  <div class="tv-topbar-sep"></div>
+  <button class="theme-toggle" onclick="toggleTheme()" title="تبديل الثيم" id="themeBtn">🌙</button>
 </div>
 
+<!-- MAIN LAYOUT -->
+<div class="tv-layout">
+
+  <!-- LEFT: inputs + results list -->
+  <div class="tv-left">
+    <div class="tv-panel-header">
+      <span class="tv-panel-title">إدخال النسب</span>
+    </div>
+
+    <div class="tv-inputs">
+      <div class="tv-field-group">
+        <div class="tv-field-label"><span class="tv-dot" style="background:#f6a800"></span>B من XA</div>
+        <input type="number" class="tv-input" id="inp_bxa" placeholder="0.000" step="0.001" oninput="onInput(this)">
+      </div>
+      <div class="tv-field-group">
+        <div class="tv-field-label"><span class="tv-dot" style="background:#2962ff"></span>C من AB</div>
+        <input type="number" class="tv-input" id="inp_cab" placeholder="0.000" step="0.001" oninput="onInput(this)">
+      </div>
+      <div class="tv-field-group">
+        <div class="tv-field-label"><span class="tv-dot" style="background:#26a69a"></span>D من XA</div>
+        <input type="number" class="tv-input" id="inp_dxa" placeholder="0.000" step="0.001" oninput="onInput(this)">
+      </div>
+      <div class="tv-field-group">
+        <div class="tv-field-label"><span class="tv-dot" style="background:#ef5350"></span>D من BC</div>
+        <input type="number" class="tv-input" id="inp_dbc" placeholder="0.000" step="0.001" oninput="onInput(this)">
+      </div>
+      <button class="tv-btn-analyze" onclick="analyze()">▶ &nbsp;تحليل النموذج</button>
+      <button class="tv-btn-clear" onclick="clearAll()">مسح الكل</button>
+    </div>
+
+    <div class="tv-hint">
+      <p>أدخل نسبة واحدة أو أكثر · الموقع يكتشف النموذج تلقائياً · اضغط Enter للتحليل</p>
+    </div>
+
+    <div class="tv-panel-header" style="border-top:none">
+      <span class="tv-panel-title">النتائج</span>
+      <span id="resultsCount" style="font-size:11px;color:var(--tv-text-muted)"></span>
+    </div>
+
+    <div class="tv-results-list" id="resultsList">
+      <div class="tv-empty">
+        <span class="tv-empty-icon">◎</span>
+        أدخل النسب وانقر تحليل
+      </div>
+    </div>
+  </div>
+
+  <!-- RIGHT: detail view -->
+  <div class="tv-right" id="rightPanel">
+    <div class="tv-detail">
+      <div class="tv-welcome">
+        <div class="tv-welcome-icon">◈</div>
+        <h2>محقق نماذج الهارمونيك</h2>
+        <p>أدخل نسب فيبوناتشي المحسوبة من السعر في اليسار وسيظهر هنا تفاصيل النموذج المطابق</p>
+      </div>
+    </div>
+    <!-- reference table (hidden by default) -->
+    <div id="refSection" style="display:none">
+      <div class="tv-ref">
+        <div style="padding:20px 0 14px">
+          <div class="tv-section-title">جدول النسب المرجعية الشامل — Scott Carney V3</div>
+        </div>
+        <div class="tv-table-wrap">
+          <table class="tv-table">
+            <thead>
+              <tr>
+                <th>النموذج</th>
+                <th>B من XA</th>
+                <th>C من AB</th>
+                <th>D من XA</th>
+                <th>D من BC</th>
+                <th>ملاحظات</th>
+              </tr>
+            </thead>
+            <tbody id="refBody"></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div><!-- /layout -->
+
 <script>
-// ═══════════════════════════════════════════
+// ══════════════════════════════════════════
 // DATABASE
-// ═══════════════════════════════════════════
+// ══════════════════════════════════════════
 const DB = [
   {
-    id:'gartley', nameAr:'الجارتلي', nameEn:'GARTLEY', cat:'كلاسيكية', icon:'◆',
+    id:'gartley', nameAr:'الجارتلي', nameEn:'GARTLEY', cat:'كلاسيكية',
     prz:'0.78–0.88 من XA', type:'استمراري', note:'لا كسر القاع عند C',
     legs:{
       bxa:{ min:0.588, max:0.648, ideal:'0.618', label:'B من XA' },
       cab:{ min:0.382, max:0.886, ideal:'0.618', label:'C من AB' },
       dxa:{ min:0.780, max:0.880, ideal:'0.786', label:'D من XA' },
-      dbc:{ min:1.130, max:1.618, ideal:'1.13 / 1.27 / 1.618', label:'D من BC' },
+      dbc:{ min:1.130, max:1.618, ideal:'1.13/1.27/1.618', label:'D من BC' },
     }
   },
   {
-    id:'bat', nameAr:'الخفاش', nameEn:'BAT', cat:'كلاسيكية', icon:'◆',
+    id:'bat', nameAr:'الخفاش', nameEn:'BAT', cat:'كلاسيكية',
     prz:'0.886 من XA', type:'انعكاسي', note:'لا كسر القاع عند C',
     legs:{
       bxa:{ min:0.382, max:0.550, ideal:'0.500', label:'B من XA' },
       cab:{ min:0.382, max:0.886, ideal:'0.618', label:'C من AB' },
       dxa:{ min:0.886, max:0.886, ideal:'0.886', label:'D من XA' },
-      dbc:{ min:1.618, max:2.618, ideal:'1.618 / 2 / 2.24 / 2.618', label:'D من BC' },
+      dbc:{ min:1.618, max:2.618, ideal:'1.618/2/2.24/2.618', label:'D من BC' },
     }
   },
   {
-    id:'butterfly', nameAr:'الفراشة', nameEn:'BUTTERFLY', cat:'كلاسيكية', icon:'◆',
+    id:'butterfly', nameAr:'الفراشة', nameEn:'BUTTERFLY', cat:'كلاسيكية',
     prz:'1.27 من XA', type:'انعكاسي عميق', note:'D يتجاوز X · لا كسر القاع عند C',
     legs:{
       bxa:{ min:0.755, max:0.816, ideal:'0.786', label:'B من XA' },
       cab:{ min:0.382, max:0.886, ideal:'0.618', label:'C من AB' },
       dxa:{ min:1.270, max:1.270, ideal:'1.27', label:'D من XA' },
-      dbc:{ min:1.618, max:2.618, ideal:'1.618 / 2 / 2.24 / 2.618', label:'D من BC' },
+      dbc:{ min:1.618, max:2.618, ideal:'1.618/2/2.24/2.618', label:'D من BC' },
     }
   },
   {
-    id:'crab', nameAr:'السرطان', nameEn:'CRAB', cat:'كلاسيكية', icon:'◆',
+    id:'crab', nameAr:'السرطان', nameEn:'CRAB', cat:'كلاسيكية',
     prz:'1.618–1.902 من XA', type:'انعكاسي قصوي', note:'لا كسر القاع عند C',
     legs:{
       bxa:{ min:0.382, max:0.618, ideal:'0.382–0.618', label:'B من XA' },
       cab:{ min:0.382, max:0.886, ideal:'0.618', label:'C من AB' },
       dxa:{ min:1.618, max:1.902, ideal:'1.618', label:'D من XA' },
-      dbc:{ min:2.618, max:3.618, ideal:'2.618 / 3.14 / 3.618', label:'D من BC' },
+      dbc:{ min:2.618, max:3.618, ideal:'2.618/3.14/3.618', label:'D من BC' },
     }
   },
   {
-    id:'shark', nameAr:'القرش', nameEn:'SHARK', cat:'كلاسيكية', icon:'◆',
+    id:'shark', nameAr:'القرش', nameEn:'SHARK', cat:'كلاسيكية',
     prz:'0.88–1.13 من XA', type:'دفعي / انعكاسي', note:'نقاط OXABC · يسبق 5-0',
     legs:{
       bxa:{ min:0.382, max:0.618, ideal:'0.382–0.618', label:'B من XA' },
       cab:{ min:1.130, max:1.618, ideal:'1.13–1.618', label:'C من AB' },
       dxa:{ min:0.880, max:1.130, ideal:'0.886–1.13', label:'D من XA' },
-      dbc:{ min:1.618, max:2.240, ideal:'1.618 / 2 / 2.24', label:'D من BC' },
+      dbc:{ min:1.618, max:2.240, ideal:'1.618/2/2.24', label:'D من BC' },
     }
   },
   {
-    id:'alt-bat', nameAr:'الخفاش البديل', nameEn:'ALT BAT', cat:'فرعية', icon:'◇',
+    id:'alt-bat', nameAr:'الخفاش البديل', nameEn:'ALT BAT', cat:'فرعية',
     prz:'1.13 من XA', type:'انعكاسي', note:'B ≤ 0.382 · لا كسر القاع عند C',
     legs:{
       bxa:{ min:0.352, max:0.382, ideal:'0.382', label:'B من XA' },
       cab:{ min:0.382, max:0.886, ideal:'0.618', label:'C من AB' },
       dxa:{ min:1.130, max:1.130, ideal:'1.13', label:'D من XA' },
-      dbc:{ min:2.000, max:3.618, ideal:'2 / 2.24 / 2.618 / 3 / 3.618', label:'D من BC' },
+      dbc:{ min:2.000, max:3.618, ideal:'2/2.24/2.618/3/3.618', label:'D من BC' },
     }
   },
   {
-    id:'deep-crab', nameAr:'السرطان العميق', nameEn:'DEEP CRAB', cat:'فرعية', icon:'◇',
+    id:'deep-crab', nameAr:'السرطان العميق', nameEn:'DEEP CRAB', cat:'فرعية',
     prz:'1.618–1.902 من XA', type:'انعكاسي قصوي', note:'B عميق · لا كسر القاع عند C',
     legs:{
       bxa:{ min:0.880, max:0.936, ideal:'0.886', label:'B من XA' },
       cab:{ min:0.382, max:0.886, ideal:'0.618', label:'C من AB' },
       dxa:{ min:1.618, max:1.902, ideal:'1.618', label:'D من XA' },
-      dbc:{ min:2.000, max:3.618, ideal:'2 / 2.24 / 2.618 / 3 / 3.618', label:'D من BC' },
+      dbc:{ min:2.000, max:3.618, ideal:'2/2.24/2.618/3/3.618', label:'D من BC' },
     }
   },
   {
-    id:'cypher', nameAr:'السايفر', nameEn:'CYPHER', cat:'فرعية', icon:'◇',
+    id:'cypher', nameAr:'السايفر', nameEn:'CYPHER', cat:'فرعية',
     prz:'0.782 من XC', type:'انعكاسي', note:'C يتجاوز A · D = 78.2% من XC',
     legs:{
       bxa:{ min:0.382, max:0.618, ideal:'0.382–0.618', label:'B من XA' },
@@ -342,7 +767,7 @@ const DB = [
     }
   },
   {
-    id:'five-zero', nameAr:'الخمسة-صفر', nameEn:'5-0', cat:'فرعية', icon:'◇',
+    id:'five-zero', nameAr:'الخمسة-صفر', nameEn:'5-0', cat:'فرعية',
     prz:'0.500 من BC', type:'انعكاسي', note:'يتبع القرش · AB=CD عكسي شرط',
     legs:{
       bxa:{ min:1.130, max:1.618, ideal:'≤ 1.618', label:'AB من XA' },
@@ -352,8 +777,8 @@ const DB = [
     }
   },
   {
-    id:'abcd', nameAr:'AB=CD', nameEn:'AB=CD', cat:'فرعية', icon:'◇',
-    prz:'D = نهاية CD', type:'استمراري / انعكاسي', note:'CD = AB في المسافة والوقت',
+    id:'abcd', nameAr:'AB=CD', nameEn:'AB=CD', cat:'فرعية',
+    prz:'D = نهاية CD', type:'استمراري / انعكاسي', note:'CD = AB مسافةً وزمناً',
     legs:{
       bxa:{ min:null, max:null, ideal:'—', label:'غير مطلوب' },
       cab:{ min:0.618, max:0.786, ideal:'0.618–0.786', label:'BC من AB' },
@@ -363,11 +788,45 @@ const DB = [
   },
 ];
 
-// ═══════════════════════════════════════════
-// HELPERS
-// ═══════════════════════════════════════════
+// ══════════════════════════════════════════
+// STATE
+// ══════════════════════════════════════════
+let allMatches = [];
+let selectedId = null;
+let currentTab = 'validator';
+
+// ══════════════════════════════════════════
+// THEME
+// ══════════════════════════════════════════
+function toggleTheme() {
+  const html = document.documentElement;
+  const isDark = html.getAttribute('data-theme') === 'dark';
+  html.setAttribute('data-theme', isDark ? 'light' : 'dark');
+  document.getElementById('themeBtn').textContent = isDark ? '🌙' : '☀️';
+}
+
+// ══════════════════════════════════════════
+// TABS
+// ══════════════════════════════════════════
+function showTab(tab) {
+  currentTab = tab;
+  document.querySelectorAll('.tv-topbar-btn').forEach((b,i) => b.classList.toggle('active', i === (tab==='validator'?0:1)));
+  const refSec = document.getElementById('refSection');
+  if (tab === 'reference') {
+    refSec.style.display = 'block';
+    document.querySelector('.tv-detail') && (document.querySelector('.tv-detail').style.display = 'none');
+  } else {
+    refSec.style.display = 'none';
+    document.querySelector('.tv-detail') && (document.querySelector('.tv-detail').style.display = '');
+    if (selectedId) showDetail(selectedId);
+  }
+}
+
+// ══════════════════════════════════════════
+// INPUTS
+// ══════════════════════════════════════════
 function onInput(el) {
-  el.classList.toggle('has-value', el.value !== '' && !isNaN(parseFloat(el.value)));
+  el.classList.toggle('has-val', el.value !== '' && !isNaN(parseFloat(el.value)));
 }
 
 function getInputs() {
@@ -382,12 +841,17 @@ function getInputs() {
 function clearAll() {
   ['inp_bxa','inp_cab','inp_dxa','inp_dbc'].forEach(id => {
     const el = document.getElementById(id);
-    el.value = ''; el.classList.remove('has-value');
+    el.value = ''; el.classList.remove('has-val');
   });
-  document.getElementById('resultsSection').innerHTML =
-    `<div class="no-results"><span class="big">◎</span>أدخل النسب أعلاه وسيكتشف المحقق النموذج تلقائياً</div>`;
+  allMatches = []; selectedId = null;
+  document.getElementById('resultsList').innerHTML = `<div class="tv-empty"><span class="tv-empty-icon">◎</span>أدخل النسب وانقر تحليل</div>`;
+  document.getElementById('resultsCount').textContent = '';
+  renderWelcome();
 }
 
+// ══════════════════════════════════════════
+// SCORING
+// ══════════════════════════════════════════
 function inRange(val, min, max) {
   if (min === null || max === null) return null;
   if (isNaN(val)) return null;
@@ -396,89 +860,155 @@ function inRange(val, min, max) {
 
 function scorePattern(p, inputs) {
   const keys = ['bxa','cab','dxa','dbc'];
-  let passed = 0, failed = 0, results = {};
+  let passed=0, failed=0, results={};
   keys.forEach(k => {
-    const leg = p.legs[k];
-    const val = inputs[k];
+    const leg = p.legs[k], val = inputs[k];
     const res = inRange(val, leg.min, leg.max);
-    results[k] = { val, min: leg.min, max: leg.max, ideal: leg.ideal, label: leg.label, result: res };
-    if (res === true) passed++;
-    else if (res === false) failed++;
+    results[k] = { val, min:leg.min, max:leg.max, ideal:leg.ideal, label:leg.label, result:res };
+    if (res===true) passed++;
+    else if (res===false) failed++;
   });
-  const applicable = passed + failed;
-  const score = applicable === 0 ? 0 : Math.round((passed / applicable) * 100);
+  const applicable = passed+failed;
+  const score = applicable===0 ? 0 : Math.round((passed/applicable)*100);
   return { score, passed, failed, results };
 }
 
-// ═══════════════════════════════════════════
+// ══════════════════════════════════════════
 // ANALYZE
-// ═══════════════════════════════════════════
+// ══════════════════════════════════════════
 function analyze() {
   const inputs = getInputs();
   const entered = Object.values(inputs).filter(v => !isNaN(v)).length;
   if (entered === 0) { alert('يرجى إدخال نسبة واحدة على الأقل'); return; }
 
-  let matches = DB.map(p => ({ pattern: p, ...scorePattern(p, inputs) }))
+  allMatches = DB.map(p => ({ pattern:p, ...scorePattern(p,inputs) }))
     .filter(m => m.score > 0)
     .sort((a,b) => b.score - a.score);
 
-  const sec = document.getElementById('resultsSection');
+  const list = document.getElementById('resultsList');
+  const count = document.getElementById('resultsCount');
 
-  if (matches.length === 0) {
-    sec.innerHTML = `<div class="no-results"><span class="big">✕</span>لا يوجد نموذج مطابق — راجع القيم أو تأكد من صحة الحسابات</div>`;
+  if (allMatches.length === 0) {
+    list.innerHTML = `<div class="tv-empty"><span class="tv-empty-icon">✕</span>لا يوجد نموذج مطابق<br>راجع القيم المُدخلة</div>`;
+    count.textContent = '';
+    renderWelcome();
     return;
   }
 
-  const topScore = matches[0].score;
-  let html = `<div class="results-header">◈ النتائج — ${matches.length} نموذج مطابق · أفضل تطابق: ${topScore}%</div>`;
+  count.textContent = `${allMatches.length} نتيجة`;
 
-  matches.slice(0,6).forEach(m => {
-    const quality = m.score === 100 ? 'perfect' : m.score >= 50 ? 'good' : 'weak';
-    const label   = m.score === 100 ? 'مطابقة تامة' : m.score >= 75 ? 'مطابقة جيدة' : m.score >= 50 ? 'جزئي' : 'ضعيف';
-
-    const cells = ['bxa','cab','dxa','dbc'].map(k => {
-      const r = m.results[k];
-      if (r.min === null) return `<div class="ratio-cell"><div class="ratio-cell-label">${r.label}</div><div class="ratio-cell-entered" style="color:#d1d5db">—</div><div class="ratio-cell-range">غير مطلوب</div></div>`;
-      if (isNaN(r.val)) return `<div class="ratio-cell"><div class="ratio-cell-label">${r.label}</div><div class="ratio-cell-entered" style="color:#d1d5db">—</div><div class="ratio-cell-range">لم يُدخل</div></div>`;
-      const cls = r.result ? 'ok' : 'bad';
-      return `<div class="ratio-cell ${cls}">
-        <div class="ratio-cell-status">${r.result ? '✓' : '✗'}</div>
-        <div class="ratio-cell-label">${r.label}</div>
-        <div class="ratio-cell-entered">${r.val.toFixed(3)}</div>
-        <div class="ratio-cell-range">النطاق: ${r.min}–${r.max}</div>
-      </div>`;
-    }).join('');
-
-    html += `<div class="match-card ${quality}">
-      <div class="match-header">
-        <div class="match-name">
-          <div class="match-icon">${m.pattern.icon}</div>
-          <div>
-            <div class="match-name-ar">${m.pattern.nameAr}</div>
-            <div class="match-name-en">${m.pattern.nameEn}</div>
-          </div>
-        </div>
-        <div class="match-score-wrap">
-          <div class="match-score">${m.score}<sup>%</sup></div>
-          <div class="match-label">${label}</div>
+  list.innerHTML = allMatches.slice(0,8).map((m,i) => {
+    const q = m.score===100 ? 'perfect' : m.score>=50 ? 'good' : 'weak';
+    return `<div class="tv-result-item ${i===0?'selected':''}" onclick="selectMatch('${m.pattern.id}')">
+      <div class="tv-result-left">
+        <div class="tv-result-dot ${q}"></div>
+        <div>
+          <div class="tv-result-name">${m.pattern.nameAr}</div>
+          <div class="tv-result-sub">${m.pattern.nameEn} · ${m.pattern.type}</div>
         </div>
       </div>
-      <div class="match-ratios">${cells}</div>
-      <div class="match-footer">
-        <span class="match-footer-item">◈ PRZ: <strong>${m.pattern.prz}</strong></span>
-        <span class="match-footer-item">◈ النوع: <strong>${m.pattern.type}</strong></span>
-        <span class="match-footer-item">◈ ${m.pattern.note}</span>
-        <span class="match-footer-item">◈ ${m.passed} من ${m.passed+m.failed} نسبة مطابقة</span>
-      </div>
+      <div class="tv-result-score ${q}">${m.score}%</div>
     </div>`;
-  });
+  }).join('');
 
-  sec.innerHTML = html;
+  // auto-select first
+  selectedId = allMatches[0].pattern.id;
+  showDetail(selectedId);
 }
 
-// ═══════════════════════════════════════════
-// REFERENCE TABLE
-// ═══════════════════════════════════════════
+function selectMatch(id) {
+  selectedId = id;
+  document.querySelectorAll('.tv-result-item').forEach(el => {
+    el.classList.toggle('selected', el.getAttribute('onclick').includes(`'${id}'`));
+  });
+  showDetail(id);
+}
+
+// ══════════════════════════════════════════
+// DETAIL VIEW
+// ══════════════════════════════════════════
+function renderWelcome() {
+  const right = document.getElementById('rightPanel');
+  const detail = right.querySelector('.tv-detail');
+  if (detail) detail.innerHTML = `
+    <div class="tv-welcome">
+      <div class="tv-welcome-icon">◈</div>
+      <h2>محقق نماذج الهارمونيك</h2>
+      <p>أدخل نسب فيبوناتشي المحسوبة من السعر في اليسار وسيظهر هنا تفاصيل النموذج المطابق</p>
+    </div>`;
+}
+
+function showDetail(id) {
+  if (currentTab !== 'validator') return;
+  const match = allMatches.find(m => m.pattern.id === id);
+  if (!match) return;
+  const p = match.pattern;
+  const q = match.score===100 ? 'perfect' : match.score>=50 ? 'good' : 'weak';
+  const qlabel = match.score===100 ? 'مطابقة تامة' : match.score>=75 ? 'مطابقة جيدة' : match.score>=50 ? 'جزئي' : 'ضعيف';
+
+  const keys = ['bxa','cab','dxa','dbc'];
+  const ratioCells = keys.map(k => {
+    const r = match.results[k];
+    if (r.min===null) return `<div class="tv-ratio-card na"><div class="tv-ratio-card-label">${r.label}</div><div class="tv-ratio-card-val">—</div><div class="tv-ratio-card-range">غير مطلوب</div></div>`;
+    if (isNaN(r.val)) return `<div class="tv-ratio-card na"><div class="tv-ratio-card-label">${r.label}</div><div class="tv-ratio-card-val" style="font-size:14px;color:var(--tv-text-muted)">لم يُدخل</div><div class="tv-ratio-card-range">نطاق: <span>${r.min}–${r.max}</span></div></div>`;
+    const cls = r.result?'ok':'bad';
+    const icon = r.result?'✓':'✗';
+    return `<div class="tv-ratio-card ${cls}">
+      <div class="tv-ratio-card-status">${icon}</div>
+      <div class="tv-ratio-card-label">${r.label}</div>
+      <div class="tv-ratio-card-val">${r.val.toFixed(3)}</div>
+      <div class="tv-ratio-card-range">النطاق: <span>${r.min}–${r.max}</span> · مثالي: ${r.ideal}</div>
+    </div>`;
+  }).join('');
+
+  const right = document.getElementById('rightPanel');
+  const detail = right.querySelector('.tv-detail');
+  if (!detail) return;
+
+  detail.innerHTML = `
+    <div class="tv-detail-header">
+      <div>
+        <div class="tv-detail-name-ar">${p.nameAr}</div>
+        <div class="tv-detail-name-en">${p.nameEn} · ${p.cat}</div>
+      </div>
+      <div class="tv-score-badge ${q}">
+        <div class="tv-score-num ${q}">${match.score}<span style="font-size:16px">%</span></div>
+        <div class="tv-score-label">${qlabel}</div>
+      </div>
+    </div>
+
+    <div class="tv-meta-strip">
+      <div class="tv-meta-item">
+        <div class="tv-meta-key">نوع النموذج</div>
+        <div class="tv-meta-val blue">${p.type}</div>
+      </div>
+      <div class="tv-meta-item">
+        <div class="tv-meta-key">نسب مطابقة</div>
+        <div class="tv-meta-val ${q==='perfect'?'green':q==='good'?'orange':''}">${match.passed} / ${match.passed+match.failed}</div>
+      </div>
+      <div class="tv-meta-item">
+        <div class="tv-meta-key">التصنيف</div>
+        <div class="tv-meta-val">${p.cat}</div>
+      </div>
+    </div>
+
+    <div class="tv-prz-box">
+      <div class="tv-prz-icon">🎯</div>
+      <div>
+        <div class="tv-prz-label">منطقة الانعكاس المحتملة — PRZ</div>
+        <div class="tv-prz-val">${p.prz}</div>
+        <div class="tv-prz-note">${p.note}</div>
+      </div>
+    </div>
+
+    <div class="tv-section-title">تفاصيل النسب</div>
+    <div class="tv-ratio-grid">${ratioCells}</div>
+  `;
+}
+
+// ══════════════════════════════════════════
+// REF TABLE
+// ══════════════════════════════════════════
 function buildRefTable() {
   const tbody = document.getElementById('refBody');
   const cats = [...new Set(DB.map(p => p.cat))];
@@ -486,24 +1016,24 @@ function buildRefTable() {
     const cr = document.createElement('tr'); cr.className = 'cat-row';
     cr.innerHTML = `<td colspan="6">◈ النماذج ال${cat}</td>`;
     tbody.appendChild(cr);
-    DB.filter(p => p.cat === cat).forEach(p => {
-      const fmt = l => l.min === null ? '<span class="t-note">—</span>'
-        : l.min === l.max ? `<span class="t-ideal">${l.min}</span>`
-        : `<span class="t-range">${l.min}–${l.max}</span>`;
+    DB.filter(p => p.cat===cat).forEach(p => {
+      const fmt = l => l.min===null ? '<span class="t-m">—</span>'
+        : l.min===l.max ? `<span class="t-g">${l.min}</span>`
+        : `<span class="t-b">${l.min}–${l.max}</span>`;
       const tr = document.createElement('tr');
       tr.innerHTML = `
-        <td>${p.nameAr}<br><span style="font-size:9px;color:#9ca3af">${p.nameEn}</span></td>
-        <td>${fmt(p.legs.bxa)}<br><span class="t-note">${p.legs.bxa.ideal}</span></td>
-        <td>${fmt(p.legs.cab)}<br><span class="t-note">${p.legs.cab.ideal}</span></td>
-        <td>${fmt(p.legs.dxa)}<br><span class="t-note">${p.legs.dxa.ideal}</span></td>
-        <td>${fmt(p.legs.dbc)}<br><span class="t-note">${p.legs.dbc.ideal}</span></td>
-        <td class="t-note">${p.note}</td>`;
+        <td>${p.nameAr} <span style="font-size:10px;color:var(--tv-text-muted)">${p.nameEn}</span></td>
+        <td>${fmt(p.legs.bxa)}<br><span class="t-m">${p.legs.bxa.ideal}</span></td>
+        <td>${fmt(p.legs.cab)}<br><span class="t-m">${p.legs.cab.ideal}</span></td>
+        <td>${fmt(p.legs.dxa)}<br><span class="t-m">${p.legs.dxa.ideal}</span></td>
+        <td>${fmt(p.legs.dbc)}<br><span class="t-m">${p.legs.dbc.ideal}</span></td>
+        <td class="t-m">${p.note}</td>`;
       tbody.appendChild(tr);
     });
   });
 }
 
-document.addEventListener('keydown', e => { if (e.key === 'Enter') analyze(); });
+document.addEventListener('keydown', e => { if (e.key==='Enter') analyze(); });
 buildRefTable();
 </script>
 </body>
