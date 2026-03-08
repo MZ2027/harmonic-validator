@@ -1,0 +1,1031 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>محقق نماذج الهارمونيك</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@300;400;500;700;900&family=IBM+Plex+Mono:wght@400;600&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --bg: #060a0f;
+      --surface: #0d1520;
+      --surface2: #111d2e;
+      --border: #1a2d45;
+      --gold: #c9a84c;
+      --gold-dim: #8a6e2f;
+      --green: #00e5a0;
+      --green-dim: #00a872;
+      --red: #ff4757;
+      --red-dim: #c0392b;
+      --blue: #3fa9f5;
+      --text: #e8f0fa;
+      --text-dim: #6b8aab;
+      --text-muted: #3a566e;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'Tajawal', sans-serif;
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+
+    /* Background grid */
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background-image:
+        linear-gradient(rgba(201,168,76,0.03) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(201,168,76,0.03) 1px, transparent 1px);
+      background-size: 40px 40px;
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    /* Glow orbs */
+    body::after {
+      content: '';
+      position: fixed;
+      top: -200px;
+      right: -200px;
+      width: 600px;
+      height: 600px;
+      background: radial-gradient(circle, rgba(201,168,76,0.06) 0%, transparent 70%);
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    .wrapper {
+      position: relative;
+      z-index: 1;
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 0 24px 60px;
+    }
+
+    /* ===== HEADER ===== */
+    header {
+      padding: 40px 0 30px;
+      text-align: center;
+      border-bottom: 1px solid var(--border);
+      margin-bottom: 40px;
+      position: relative;
+    }
+
+    .logo-line {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 16px;
+      margin-bottom: 10px;
+    }
+
+    .logo-symbol {
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 28px;
+      color: var(--gold);
+      opacity: 0.8;
+    }
+
+    header h1 {
+      font-size: clamp(26px, 4vw, 38px);
+      font-weight: 900;
+      letter-spacing: -0.5px;
+      background: linear-gradient(135deg, var(--gold) 0%, #fff5d6 50%, var(--gold) 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    header p {
+      color: var(--text-dim);
+      font-size: 15px;
+      margin-top: 8px;
+      font-weight: 300;
+    }
+
+    .version-badge {
+      display: inline-block;
+      margin-top: 12px;
+      padding: 3px 12px;
+      border: 1px solid var(--gold-dim);
+      border-radius: 20px;
+      font-size: 11px;
+      color: var(--gold);
+      font-family: 'IBM Plex Mono', monospace;
+      letter-spacing: 1px;
+    }
+
+    /* ===== PATTERN SELECTOR ===== */
+    .selector-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+      gap: 10px;
+      margin-bottom: 36px;
+    }
+
+    .pattern-btn {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 14px 10px;
+      cursor: pointer;
+      transition: all 0.2s;
+      text-align: center;
+      color: var(--text-dim);
+      font-family: 'Tajawal', sans-serif;
+      font-size: 14px;
+      font-weight: 500;
+    }
+
+    .pattern-btn .en-name {
+      display: block;
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 12px;
+      color: var(--text-muted);
+      margin-bottom: 4px;
+    }
+
+    .pattern-btn:hover {
+      border-color: var(--gold-dim);
+      color: var(--text);
+      background: var(--surface2);
+    }
+
+    .pattern-btn.active {
+      border-color: var(--gold);
+      background: linear-gradient(135deg, rgba(201,168,76,0.12), rgba(201,168,76,0.04));
+      color: var(--gold);
+    }
+
+    .pattern-btn.active .en-name { color: var(--gold-dim); }
+
+    /* ===== MAIN CARD ===== */
+    .card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      overflow: hidden;
+    }
+
+    .card-header {
+      padding: 20px 28px;
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: var(--surface2);
+    }
+
+    .card-title {
+      font-size: 20px;
+      font-weight: 700;
+      color: var(--text);
+    }
+
+    .card-title span {
+      font-family: 'IBM Plex Mono', monospace;
+      color: var(--gold);
+      font-size: 16px;
+      margin-right: 10px;
+    }
+
+    .info-badge {
+      font-size: 12px;
+      color: var(--text-muted);
+      font-family: 'IBM Plex Mono', monospace;
+    }
+
+    .card-body { padding: 28px; }
+
+    /* ===== INPUTS GRID ===== */
+    .inputs-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 20px;
+      margin-bottom: 28px;
+    }
+
+    @media (max-width: 600px) {
+      .inputs-grid { grid-template-columns: 1fr; }
+    }
+
+    .input-group {
+      position: relative;
+    }
+
+    .input-group label {
+      display: block;
+      font-size: 13px;
+      color: var(--text-dim);
+      margin-bottom: 8px;
+      font-weight: 500;
+    }
+
+    .input-group label .point-tag {
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 11px;
+      background: rgba(201,168,76,0.1);
+      color: var(--gold);
+      padding: 2px 7px;
+      border-radius: 4px;
+      margin-left: 8px;
+    }
+
+    .input-group label .range-hint {
+      font-size: 11px;
+      color: var(--text-muted);
+      font-family: 'IBM Plex Mono', monospace;
+      display: block;
+      margin-top: 3px;
+    }
+
+    .input-wrapper {
+      position: relative;
+    }
+
+    .input-wrapper input {
+      width: 100%;
+      background: var(--bg);
+      border: 1.5px solid var(--border);
+      border-radius: 8px;
+      padding: 12px 44px 12px 16px;
+      color: var(--text);
+      font-size: 18px;
+      font-family: 'IBM Plex Mono', monospace;
+      font-weight: 600;
+      outline: none;
+      transition: border-color 0.2s, box-shadow 0.2s;
+      text-align: center;
+      direction: ltr;
+    }
+
+    .input-wrapper input:focus {
+      border-color: var(--gold-dim);
+      box-shadow: 0 0 0 3px rgba(201,168,76,0.1);
+    }
+
+    .input-wrapper input.valid {
+      border-color: var(--green);
+      box-shadow: 0 0 0 3px rgba(0,229,160,0.08);
+    }
+
+    .input-wrapper input.invalid {
+      border-color: var(--red);
+      box-shadow: 0 0 0 3px rgba(255,71,87,0.08);
+    }
+
+    .input-status {
+      position: absolute;
+      left: 12px;
+      top: 50%;
+      transform: translateY(-50%);
+      font-size: 18px;
+      transition: all 0.2s;
+    }
+
+    /* ===== VALIDATE BUTTON ===== */
+    .validate-btn {
+      width: 100%;
+      padding: 16px;
+      background: linear-gradient(135deg, var(--gold) 0%, #e8c05a 100%);
+      border: none;
+      border-radius: 10px;
+      color: #0d0a00;
+      font-family: 'Tajawal', sans-serif;
+      font-size: 17px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.25s;
+      letter-spacing: 0.3px;
+      margin-bottom: 24px;
+    }
+
+    .validate-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 24px rgba(201,168,76,0.35);
+    }
+
+    .validate-btn:active { transform: translateY(0); }
+
+    /* ===== RESULT ===== */
+    .result-panel {
+      border-radius: 12px;
+      padding: 24px;
+      display: none;
+      animation: slideUp 0.3s ease;
+    }
+
+    @keyframes slideUp {
+      from { opacity: 0; transform: translateY(12px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .result-panel.valid-result {
+      display: block;
+      background: linear-gradient(135deg, rgba(0,229,160,0.08), rgba(0,229,160,0.03));
+      border: 1px solid rgba(0,229,160,0.3);
+    }
+
+    .result-panel.invalid-result {
+      display: block;
+      background: linear-gradient(135deg, rgba(255,71,87,0.08), rgba(255,71,87,0.03));
+      border: 1px solid rgba(255,71,87,0.3);
+    }
+
+    .result-header {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      margin-bottom: 18px;
+    }
+
+    .result-icon {
+      font-size: 36px;
+      line-height: 1;
+    }
+
+    .result-title {
+      font-size: 22px;
+      font-weight: 800;
+    }
+
+    .valid-result .result-title { color: var(--green); }
+    .invalid-result .result-title { color: var(--red); }
+
+    .result-subtitle {
+      font-size: 13px;
+      color: var(--text-dim);
+      margin-top: 2px;
+    }
+
+    /* Detail rows */
+    .details-grid {
+      display: grid;
+      gap: 8px;
+    }
+
+    .detail-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 10px 14px;
+      background: rgba(0,0,0,0.25);
+      border-radius: 8px;
+      border-right: 3px solid transparent;
+    }
+
+    .detail-row.ok { border-right-color: var(--green); }
+    .detail-row.fail { border-right-color: var(--red); }
+    .detail-row.warn { border-right-color: var(--gold); }
+
+    .detail-label {
+      font-size: 13px;
+      color: var(--text-dim);
+    }
+
+    .detail-label strong {
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 12px;
+      color: var(--gold);
+      background: rgba(201,168,76,0.1);
+      padding: 2px 6px;
+      border-radius: 3px;
+      margin-left: 8px;
+    }
+
+    .detail-right {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-family: 'IBM Plex Mono', monospace;
+    }
+
+    .detail-value {
+      font-size: 15px;
+      font-weight: 600;
+      color: var(--text);
+    }
+
+    .detail-range {
+      font-size: 11px;
+      color: var(--text-muted);
+    }
+
+    .detail-status {
+      font-size: 16px;
+    }
+
+    /* ===== REFERENCE TABLE ===== */
+    .ref-section {
+      margin-top: 40px;
+    }
+
+    .ref-title {
+      font-size: 16px;
+      font-weight: 700;
+      color: var(--text-dim);
+      margin-bottom: 16px;
+      padding-bottom: 10px;
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .ref-title::before {
+      content: '';
+      display: inline-block;
+      width: 4px;
+      height: 16px;
+      background: var(--gold);
+      border-radius: 2px;
+    }
+
+    .ref-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 13px;
+    }
+
+    .ref-table th {
+      padding: 10px 14px;
+      background: var(--surface2);
+      color: var(--text-muted);
+      font-weight: 600;
+      text-align: right;
+      border-bottom: 1px solid var(--border);
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 11px;
+      letter-spacing: 0.5px;
+    }
+
+    .ref-table td {
+      padding: 11px 14px;
+      border-bottom: 1px solid rgba(26,45,69,0.5);
+      color: var(--text-dim);
+      vertical-align: middle;
+    }
+
+    .ref-table tr:hover td { background: rgba(201,168,76,0.03); }
+
+    .ref-table .pattern-name {
+      font-weight: 700;
+      color: var(--gold);
+      font-size: 13px;
+    }
+
+    .ref-table .num {
+      font-family: 'IBM Plex Mono', monospace;
+      color: var(--blue);
+      font-size: 12px;
+    }
+
+    .ref-table .special {
+      font-family: 'IBM Plex Mono', monospace;
+      color: var(--green);
+      font-size: 11px;
+    }
+
+    .ref-table .note {
+      font-size: 11px;
+      color: var(--text-muted);
+      font-style: italic;
+    }
+
+    /* ===== SCROLL BAR ===== */
+    ::-webkit-scrollbar { width: 6px; }
+    ::-webkit-scrollbar-track { background: var(--bg); }
+    ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
+
+    /* ===== FOOTER ===== */
+    footer {
+      text-align: center;
+      padding: 30px 0 10px;
+      color: var(--text-muted);
+      font-size: 12px;
+      font-family: 'IBM Plex Mono', monospace;
+      border-top: 1px solid var(--border);
+      margin-top: 50px;
+    }
+  </style>
+</head>
+<body>
+<div class="wrapper">
+
+  <header>
+    <div class="logo-line">
+      <span class="logo-symbol">◈</span>
+      <h1>محقق نماذج الهارمونيك</h1>
+      <span class="logo-symbol">◈</span>
+    </div>
+    <p>أدخل النسب للتحقق من صحة النموذج وفق معايير Scott Carney</p>
+    <span class="version-badge">HARMONIC PATTERNS · V3</span>
+  </header>
+
+  <!-- Pattern Selector -->
+  <div class="selector-grid" id="patternSelector"></div>
+
+  <!-- Input Card -->
+  <div class="card">
+    <div class="card-header">
+      <div class="card-title">
+        <span id="activePatternCode">GARTLEY</span>
+        <span id="activePatternName">الجارتلي</span>
+      </div>
+      <div class="info-badge" id="patternNote">نسبة B = 0.618 مثالية</div>
+    </div>
+    <div class="card-body">
+      <div class="inputs-grid" id="inputsGrid"></div>
+      <button class="validate-btn" onclick="validate()">⟶ تحقق من النموذج</button>
+      <div class="result-panel" id="resultPanel"></div>
+    </div>
+  </div>
+
+  <!-- Reference Table -->
+  <div class="ref-section">
+    <div class="ref-title">جدول النسب المرجعية — Scott Carney V3</div>
+    <div style="overflow-x:auto;">
+      <table class="ref-table">
+        <thead>
+          <tr>
+            <th>النموذج</th>
+            <th>B من XA</th>
+            <th>C من AB</th>
+            <th>D من XA</th>
+            <th>D من BC</th>
+            <th>PRZ / ملاحظات</th>
+          </tr>
+        </thead>
+        <tbody id="refTableBody"></tbody>
+      </table>
+    </div>
+  </div>
+
+</div>
+
+<footer>HARMONIC VALIDATOR · SCOTT CARNEY V3 · Built for Precision Trading</footer>
+
+<script>
+// ============================================================
+//  HARMONIC PATTERNS DATABASE — Scott Carney V3 (Corrected)
+// ============================================================
+const PATTERNS = {
+  gartley: {
+    name: "الجارتلي",
+    code: "GARTLEY",
+    note: "نسبة B = 0.618 مثالية • D يجب أن يكون عند 0.786",
+    inputs: [
+      {
+        id: "B_XA",
+        label: "تصحيح B من ضلع XA",
+        tag: "B",
+        hint: "مثالي: 0.618",
+        min: 0.588, max: 0.648, ideal: 0.618
+      },
+      {
+        id: "C_AB",
+        label: "تصحيح C من ضلع AB",
+        tag: "C",
+        hint: "0.382 – 0.886",
+        min: 0.382, max: 0.886
+      },
+      {
+        id: "D_XA",
+        label: "تصحيح D من ضلع XA",
+        tag: "D",
+        hint: "مثالي: 0.786",
+        min: 0.786, max: 0.786, ideal: 0.786, tolerance: 0.02
+      },
+      {
+        id: "D_BC",
+        label: "امتداد D من ضلع BC",
+        tag: "D",
+        hint: "1.272 – 1.618",
+        min: 1.272, max: 1.618
+      }
+    ],
+    prz: "0.786 XA + 1.13 أو 1.618 BC",
+    note2: "يجب ألا تكسر D مستوى X"
+  },
+
+  bat: {
+    name: "الخفاش",
+    code: "BAT",
+    note: "B يجب ألا يتجاوز 0.50 من XA — الفارق عن Gartley",
+    inputs: [
+      {
+        id: "B_XA",
+        label: "تصحيح B من ضلع XA",
+        tag: "B",
+        hint: "0.382 – 0.500",
+        min: 0.382, max: 0.500
+      },
+      {
+        id: "C_AB",
+        label: "تصحيح C من ضلع AB",
+        tag: "C",
+        hint: "0.382 – 0.886",
+        min: 0.382, max: 0.886
+      },
+      {
+        id: "D_XA",
+        label: "تصحيح D من ضلع XA",
+        tag: "D",
+        hint: "مثالي: 0.886",
+        min: 0.886, max: 0.886, ideal: 0.886, tolerance: 0.015
+      },
+      {
+        id: "D_BC",
+        label: "امتداد D من ضلع BC",
+        tag: "D",
+        hint: "1.618 – 2.618",
+        min: 1.618, max: 2.618
+      }
+    ],
+    prz: "0.886 XA + 1.618–2.618 BC",
+    note2: "B > 0.50 يُحوّل النموذج إلى Gartley"
+  },
+
+  crab: {
+    name: "السلطعون",
+    code: "CRAB",
+    note: "D عند 1.618 من XA هي العلامة المميزة لـ CRAB",
+    inputs: [
+      {
+        id: "B_XA",
+        label: "تصحيح B من ضلع XA",
+        tag: "B",
+        hint: "0.382 – 0.618",
+        min: 0.382, max: 0.618
+      },
+      {
+        id: "C_AB",
+        label: "تصحيح C من ضلع AB",
+        tag: "C",
+        hint: "0.382 – 0.886",
+        min: 0.382, max: 0.886
+      },
+      {
+        id: "D_XA",
+        label: "امتداد D من ضلع XA",
+        tag: "D",
+        hint: "مثالي: 1.618",
+        min: 1.618, max: 1.618, ideal: 1.618, tolerance: 0.02
+      },
+      {
+        id: "D_BC",
+        label: "امتداد D من ضلع BC",
+        tag: "D",
+        hint: "2.618 – 3.618",
+        min: 2.618, max: 3.618
+      }
+    ],
+    prz: "1.618 XA + 2.618–3.618 BC",
+    note2: "D يمتد خارج X — أبعد نموذج"
+  },
+
+  deepcrab: {
+    name: "السلطعون الممتد",
+    code: "DEEP CRAB",
+    note: "B بين 0.886–0.936 هو ما يُميزه عن CRAB العادي",
+    inputs: [
+      {
+        id: "B_XA",
+        label: "تصحيح B من ضلع XA",
+        tag: "B",
+        hint: "0.886 – 0.936",
+        min: 0.886, max: 0.936
+      },
+      {
+        id: "C_AB",
+        label: "تصحيح C من ضلع AB",
+        tag: "C",
+        hint: "0.382 – 0.886",
+        min: 0.382, max: 0.886
+      },
+      {
+        id: "D_XA",
+        label: "امتداد D من ضلع XA",
+        tag: "D",
+        hint: "مثالي: 1.618",
+        min: 1.618, max: 1.618, ideal: 1.618, tolerance: 0.02
+      },
+      {
+        id: "D_BC",
+        label: "امتداد D من ضلع BC",
+        tag: "D",
+        hint: "2 – 3.14",
+        min: 2.0, max: 3.14
+      }
+    ],
+    prz: "1.618 XA + 2–3.618 BC",
+    note2: "B عميق يتجاوز 0.886 هو الفارق الرئيسي"
+  },
+
+  butterfly: {
+    name: "الفراشة",
+    code: "BUTTERFLY",
+    note: "B = 0.786 نسبة ثابتة ومحددة — ليس نطاقاً",
+    inputs: [
+      {
+        id: "B_XA",
+        label: "تصحيح B من ضلع XA",
+        tag: "B",
+        hint: "مثالي: 0.786",
+        min: 0.786, max: 0.786, ideal: 0.786, tolerance: 0.015
+      },
+      {
+        id: "C_AB",
+        label: "تصحيح C من ضلع AB",
+        tag: "C",
+        hint: "0.382 – 0.886",
+        min: 0.382, max: 0.886
+      },
+      {
+        id: "D_XA",
+        label: "امتداد D من ضلع XA",
+        tag: "D",
+        hint: "1.27 – 1.618",
+        min: 1.27, max: 1.618
+      },
+      {
+        id: "D_BC",
+        label: "امتداد D من ضلع BC",
+        tag: "D",
+        hint: "1.618 – 2.618",
+        min: 1.618, max: 2.618
+      }
+    ],
+    prz: "1.27 أو 1.618 XA + 1.618–2.618 BC",
+    note2: "D يمتد خارج X مثل CRAB لكن أقل امتداداً"
+  },
+
+  altbat: {
+    name: "الخفاش البديل",
+    code: "ALT BAT",
+    note: "B = 0.382 فقط — أصغر B بين جميع النماذج",
+    inputs: [
+      {
+        id: "B_XA",
+        label: "تصحيح B من ضلع XA",
+        tag: "B",
+        hint: "مثالي: 0.382",
+        min: 0.382, max: 0.382, ideal: 0.382, tolerance: 0.01
+      },
+      {
+        id: "C_AB",
+        label: "تصحيح C من ضلع AB",
+        tag: "C",
+        hint: "0.382 – 0.886",
+        min: 0.382, max: 0.886
+      },
+      {
+        id: "D_XA",
+        label: "امتداد D من ضلع XA",
+        tag: "D",
+        hint: "مثالي: 1.13",
+        min: 1.13, max: 1.13, ideal: 1.13, tolerance: 0.02
+      },
+      {
+        id: "D_BC",
+        label: "امتداد D من ضلع BC",
+        tag: "D",
+        hint: "2 – 3.618",
+        min: 2.0, max: 3.618
+      }
+    ],
+    prz: "1.13 XA + 2–3.618 BC",
+    note2: "B صغير جداً = تصحيح خفيف قبل الانطلاق"
+  },
+
+  shark: {
+    name: "القرش",
+    code: "SHARK",
+    note: "D يعتمد على 0.886 من الضلع OX — العلامة الأساسية",
+    inputs: [
+      {
+        id: "B_XA",
+        label: "تصحيح B من ضلع XA",
+        tag: "B",
+        hint: "0.382 – 0.618",
+        min: 0.382, max: 0.618
+      },
+      {
+        id: "C_AB",
+        label: "امتداد C من ضلع AB",
+        tag: "C",
+        hint: "1.13 – 1.618",
+        min: 1.13, max: 1.618
+      },
+      {
+        id: "D_XA",
+        label: "تصحيح D من ضلع XA",
+        tag: "D",
+        hint: "0.886 – 1.13",
+        min: 0.886, max: 1.13
+      },
+      {
+        id: "D_BC",
+        label: "امتداد D من ضلع BC",
+        tag: "D",
+        hint: "1.618 – 2.24",
+        min: 1.618, max: 2.24
+      }
+    ],
+    prz: "0.886 OX + 1.618–2.24 BC",
+    note2: "نموذج 5 نقاط — يختلف هيكلياً عن XABCD التقليدي"
+  }
+};
+
+// ============================================================
+//  BUILD UI
+// ============================================================
+let currentPattern = 'gartley';
+
+function buildSelector() {
+  const container = document.getElementById('patternSelector');
+  const patternList = [
+    ['gartley','الجارتلي'],['bat','الخفاش'],['crab','السلطعون'],
+    ['deepcrab','السلطعون الممتد'],['butterfly','الفراشة'],
+    ['altbat','الخفاش البديل'],['shark','القرش']
+  ];
+  patternList.forEach(([key, ar]) => {
+    const btn = document.createElement('button');
+    btn.className = 'pattern-btn' + (key === currentPattern ? ' active' : '');
+    btn.innerHTML = `<span class="en-name">${PATTERNS[key].code}</span>${ar}`;
+    btn.onclick = () => selectPattern(key);
+    container.appendChild(btn);
+  });
+}
+
+function selectPattern(key) {
+  currentPattern = key;
+  document.querySelectorAll('.pattern-btn').forEach((b,i) => {
+    b.classList.toggle('active', Object.keys(PATTERNS)[i] === key);
+  });
+  const p = PATTERNS[key];
+  document.getElementById('activePatternCode').textContent = p.code;
+  document.getElementById('activePatternName').textContent = p.name;
+  document.getElementById('patternNote').textContent = p.note;
+  buildInputs(key);
+  document.getElementById('resultPanel').style.display = 'none';
+  document.getElementById('resultPanel').className = 'result-panel';
+}
+
+function buildInputs(key) {
+  const p = PATTERNS[key];
+  const grid = document.getElementById('inputsGrid');
+  grid.innerHTML = '';
+  p.inputs.forEach(inp => {
+    const div = document.createElement('div');
+    div.className = 'input-group';
+    div.innerHTML = `
+      <label>
+        ${inp.label}
+        <span class="point-tag">${inp.tag}</span>
+        <span class="range-hint">${inp.hint}</span>
+      </label>
+      <div class="input-wrapper">
+        <input type="number" id="inp_${inp.id}" step="0.001" min="0" max="10"
+          placeholder="0.000" oninput="liveCheck('${inp.id}', ${inp.min}, ${inp.max}, ${inp.tolerance||0})" />
+        <span class="input-status" id="status_${inp.id}"></span>
+      </div>
+    `;
+    grid.appendChild(div);
+  });
+}
+
+function liveCheck(id, min, max, tol) {
+  const input = document.getElementById('inp_' + id);
+  const status = document.getElementById('status_' + id);
+  const val = parseFloat(input.value);
+  if (isNaN(val) || input.value === '') {
+    input.className = '';
+    status.textContent = '';
+    return;
+  }
+  const lo = tol ? min - tol : min;
+  const hi = tol ? max + tol : max;
+  const ok = val >= lo && val <= hi;
+  input.className = ok ? 'valid' : 'invalid';
+  status.textContent = ok ? '✓' : '✗';
+  status.style.color = ok ? 'var(--green)' : 'var(--red)';
+}
+
+function validate() {
+  const p = PATTERNS[currentPattern];
+  const results = [];
+  let allOk = true;
+
+  p.inputs.forEach(inp => {
+    const el = document.getElementById('inp_' + inp.id);
+    const val = parseFloat(el.value);
+    if (isNaN(val)) {
+      results.push({ inp, val: null, ok: false, missing: true });
+      allOk = false;
+      return;
+    }
+    const tol = inp.tolerance || 0;
+    const lo = tol ? inp.min - tol : inp.min;
+    const hi = tol ? inp.max + tol : inp.max;
+    const ok = val >= lo && val <= hi;
+    if (!ok) allOk = false;
+    results.push({ inp, val, ok, lo, hi });
+  });
+
+  renderResult(allOk, results, p);
+}
+
+function renderResult(allOk, results, p) {
+  const panel = document.getElementById('resultPanel');
+  panel.className = 'result-panel ' + (allOk ? 'valid-result' : 'invalid-result');
+
+  let rows = results.map(r => {
+    if (r.missing) {
+      return `<div class="detail-row warn">
+        <div class="detail-label"><strong>${r.inp.tag}</strong> ${r.inp.label}</div>
+        <div class="detail-right">
+          <span class="detail-range">لم يُدخل</span>
+          <span class="detail-status">⚠️</span>
+        </div>
+      </div>`;
+    }
+    const tol = r.inp.tolerance || 0;
+    const rangeText = tol
+      ? `${r.inp.ideal} ± ${tol}`
+      : r.inp.min === r.inp.max
+        ? `${r.inp.min}`
+        : `${r.inp.min} – ${r.inp.max}`;
+    return `<div class="detail-row ${r.ok ? 'ok' : 'fail'}">
+      <div class="detail-label">
+        <strong>${r.inp.tag}</strong> ${r.inp.label}
+        <br/><span style="font-size:11px;color:var(--text-muted);font-family:'IBM Plex Mono',monospace">المطلوب: ${rangeText}</span>
+      </div>
+      <div class="detail-right">
+        <span class="detail-value">${r.val.toFixed(3)}</span>
+        <span class="detail-status">${r.ok ? '✅' : '❌'}</span>
+      </div>
+    </div>`;
+  }).join('');
+
+  panel.innerHTML = `
+    <div class="result-header">
+      <div class="result-icon">${allOk ? '🎯' : '⚠️'}</div>
+      <div>
+        <div class="result-title">${allOk ? 'النموذج صحيح ✓' : 'النموذج غير مكتمل ✗'}</div>
+        <div class="result-subtitle">${allOk
+          ? `نموذج ${p.name} (${p.code}) مكتمل — ${p.prz}`
+          : 'بعض النسب خارج النطاق المطلوب'}</div>
+      </div>
+    </div>
+    <div class="details-grid">${rows}</div>
+    ${allOk ? `<div style="margin-top:14px;padding:12px 16px;background:rgba(0,229,160,0.07);border-radius:8px;font-size:13px;color:var(--green-dim)">
+      <strong style="color:var(--green)">📌 منطقة PRZ:</strong> ${p.prz}<br/>
+      <span style="color:var(--text-muted)">${p.note2}</span>
+    </div>` : ''}
+  `;
+}
+
+// ============================================================
+//  REFERENCE TABLE
+// ============================================================
+function buildRefTable() {
+  const tbody = document.getElementById('refTableBody');
+  const rows = [
+    ['الجارتلي','GARTLEY','0.618 ✦','0.382–0.886','0.786 ✦','1.272–1.618','0.786 XA'],
+    ['الخفاش','BAT','0.382–0.50 ⚠','0.382–0.886','0.886 ✦','1.618–2.618','0.886 XA'],
+    ['السلطعون','CRAB','0.382–0.618','0.382–0.886','1.618 ✦','2.618–3.618','1.618 XA'],
+    ['السلطعون الممتد','DEEP CRAB','0.886–0.936','0.382–0.886','1.618 ✦','2.0–3.14','1.618 XA'],
+    ['الفراشة','BUTTERFLY','0.786 ✦','0.382–0.886','1.27–1.618','1.618–2.618','1.27 XA'],
+    ['الخفاش البديل','ALT BAT','0.382 ✦','0.382–0.886','1.13 ✦','2.0–3.618','1.13 XA'],
+    ['القرش','SHARK','0.382–0.618','1.13–1.618','0.886–1.13','1.618–2.24','0.886 OX ⭐'],
+  ];
+  rows.forEach(([ar, en, b, c, d_xa, d_bc, prz]) => {
+    const tr = document.createElement('tr');
+    tr.innerHTML = `
+      <td><span class="pattern-name">${ar}</span><br/><span style="font-family:'IBM Plex Mono',monospace;font-size:11px;color:var(--text-muted)">${en}</span></td>
+      <td class="num">${b}</td>
+      <td class="num">${c}</td>
+      <td class="num">${d_xa}</td>
+      <td class="num">${d_bc}</td>
+      <td class="special">${prz}</td>
+    `;
+    tbody.appendChild(tr);
+  });
+}
+
+// ============================================================
+//  INIT
+// ============================================================
+buildSelector();
+buildInputs(currentPattern);
+buildRefTable();
+</script>
+</body>
+</html>
