@@ -3,883 +3,508 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>محقق نماذج الهارمونيك — Scott Carney V3</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@300;400;600&family=Tajawal:wght@300;400;500;700&display=swap" rel="stylesheet">
+<title>محقق الهارمونيك — Scott Carney V3</title>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@300;400;600&family=Tajawal:wght@300;400;500;700;900&display=swap" rel="stylesheet">
 <style>
-  :root {
-    --bg: #f4f6f9;
-    --surface: #ffffff;
-    --surface2: #eef1f6;
-    --border: #cdd5e0;
-    --gold: #b07d2a;
-    --gold2: #c8963e;
-    --cyan: #0e7490;
-    --red: #dc2626;
-    --green: #16a34a;
-    --muted: #4a5568;
-    --text: #000000;
-    --text-bright: #000000;
-    --mono: 'IBM Plex Mono', monospace;
-    --arabic: 'Tajawal', sans-serif;
-  }
+* { box-sizing: border-box; margin: 0; padding: 0; }
 
-  * { box-sizing: border-box; margin: 0; padding: 0; }
+:root {
+  --bg: #f7f8fa;
+  --white: #ffffff;
+  --border: #e2e6ed;
+  --border2: #c8d0dc;
+  --gold: #a0720a;
+  --gold-light: #fdf3e0;
+  --gold-mid: #e8c068;
+  --green: #166534;
+  --green-light: #f0fdf4;
+  --green-mid: #86efac;
+  --red: #991b1b;
+  --red-light: #fef2f2;
+  --red-mid: #fca5a5;
+  --blue: #1e3a5f;
+  --muted: #6b7280;
+  --text: #111318;
+  --mono: 'IBM Plex Mono', monospace;
+  --arabic: 'Tajawal', sans-serif;
+  --radius: 2px;
+  --shadow: 0 1px 3px rgba(0,0,0,0.08);
+  --shadow-md: 0 4px 12px rgba(0,0,0,0.08);
+}
 
-  body {
-    background: var(--bg);
-    color: var(--text);
-    font-family: var(--arabic);
-    min-height: 100vh;
-    overflow-x: hidden;
-  }
+body { background: var(--bg); color: var(--text); font-family: var(--arabic); min-height: 100vh; }
 
-  /* Grid background */
-  body::before { display: none; }
+.page { max-width: 960px; margin: 0 auto; padding: 32px 20px 60px; }
 
-  .wrapper { position: relative; z-index: 1; max-width: 1100px; margin: 0 auto; padding: 0 20px; }
+/* HEADER */
+.site-header {
+  display: flex; align-items: flex-end; justify-content: space-between;
+  margin-bottom: 36px; padding-bottom: 20px;
+  border-bottom: 2px solid var(--text);
+  flex-wrap: wrap; gap: 12px;
+}
+.site-title { font-size: 28px; font-weight: 900; color: var(--text); letter-spacing: -0.02em; line-height: 1; }
+.site-title span { color: var(--gold); }
+.site-sub { font-family: var(--mono); font-size: 10px; color: var(--muted); letter-spacing: 0.15em; text-transform: uppercase; margin-top: 5px; }
+.badge { font-family: var(--mono); font-size: 10px; font-weight: 600; letter-spacing: 0.12em; background: var(--text); color: var(--white); padding: 5px 12px; border-radius: var(--radius); }
 
-  /* ── HEADER ── */
-  header {
-    border-bottom: 1px solid var(--border);
-    padding: 28px 0 22px;
-    margin-bottom: 32px;
-  }
-  .header-inner {
-    display: flex;
-    align-items: center;
-    gap: 20px;
-    flex-wrap: wrap;
-  }
-  .logo-mark {
-    width: 48px; height: 48px;
-    border: 2px solid var(--gold);
-    display: flex; align-items: center; justify-content: center;
-    font-family: var(--mono);
-    color: var(--gold);
-    font-size: 20px;
-    flex-shrink: 0;
-    position: relative;
-    animation: pulse-border 3s ease-in-out infinite;
-  }
-  @keyframes pulse-border {
-    0%,100% { box-shadow: 0 0 0 0 rgba(200,150,62,0); }
-    50% { box-shadow: 0 0 0 6px rgba(200,150,62,0.15); }
-  }
-  .header-text h1 {
-    font-size: 22px;
-    font-weight: 700;
-    color: var(--text-bright);
-    letter-spacing: 0.03em;
-  }
-  .header-text p {
-    font-size: 12px;
-    color: var(--muted);
-    font-family: var(--mono);
-    letter-spacing: 0.1em;
-    margin-top: 3px;
-  }
-  .version-badge {
-    margin-right: auto;
-    background: linear-gradient(135deg, var(--gold) 0%, #8b5e20 100%);
-    color: #0a0500;
-    font-family: var(--mono);
-    font-size: 11px;
-    font-weight: 600;
-    padding: 4px 12px;
-    letter-spacing: 0.12em;
-  }
+/* INPUT SECTION */
+.input-section { background: var(--white); border: 1px solid var(--border); border-radius: var(--radius); box-shadow: var(--shadow); margin-bottom: 24px; overflow: hidden; }
+.input-header { background: var(--text); color: var(--white); padding: 14px 20px; display: flex; align-items: center; justify-content: space-between; }
+.input-header-title { font-family: var(--mono); font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase; }
+.input-header-hint { font-size: 12px; color: rgba(255,255,255,0.45); font-family: var(--mono); }
 
-  /* ── PATTERN TABS ── */
-  .pattern-nav {
-    display: flex;
-    gap: 2px;
-    margin-bottom: 24px;
-    flex-wrap: wrap;
-    border-bottom: 1px solid var(--border);
-    padding-bottom: 0;
-  }
-  .tab-btn {
-    background: transparent;
-    border: none;
-    border-bottom: 2px solid transparent;
-    padding: 10px 18px;
-    color: var(--muted);
-    font-family: var(--mono);
-    font-size: 11px;
-    letter-spacing: 0.1em;
-    cursor: pointer;
-    transition: all 0.2s;
-    white-space: nowrap;
-    margin-bottom: -1px;
-  }
-  .tab-btn:hover { color: var(--text); }
-  .tab-btn.active {
-    color: var(--gold);
-    border-bottom-color: var(--gold);
-  }
+.inputs-grid { display: grid; grid-template-columns: repeat(4,1fr); gap: 0; }
+@media(max-width:640px) { .inputs-grid { grid-template-columns: repeat(2,1fr); } }
 
-  /* ── MAIN GRID ── */
-  .main-grid {
-    display: grid;
-    grid-template-columns: 340px 1fr;
-    gap: 20px;
-    margin-bottom: 40px;
-  }
-  @media(max-width: 780px) { .main-grid { grid-template-columns: 1fr; } }
+.input-cell { border-left: 1px solid var(--border); border-bottom: 1px solid var(--border); padding: 18px 20px; }
+.input-cell:first-child { border-left: none; }
+@media(max-width:640px) { .input-cell:nth-child(2n+1) { border-left: none; } }
 
-  /* ── PANEL ── */
-  .panel {
-    background: var(--surface);
-    border: 1px solid var(--border);
-  }
-  .panel-header {
-    padding: 14px 18px;
-    border-bottom: 1px solid var(--border);
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-  }
-  .panel-title {
-    font-family: var(--mono);
-    font-size: 11px;
-    letter-spacing: 0.12em;
-    color: var(--gold);
-    text-transform: uppercase;
-  }
-  .panel-body { padding: 18px; }
+.input-cell-label { font-family: var(--mono); font-size: 10px; color: var(--muted); letter-spacing: 0.12em; text-transform: uppercase; margin-bottom: 10px; display: flex; align-items: center; gap: 7px; }
+.dot { width: 7px; height: 7px; border-radius: 50%; display: inline-block; }
 
-  /* ── PATTERN INFO ── */
-  .pattern-name-ar {
-    font-size: 26px;
-    font-weight: 700;
-    color: var(--text-bright);
-    margin-bottom: 4px;
-  }
-  .pattern-name-en {
-    font-family: var(--mono);
-    font-size: 14px;
-    color: var(--gold2);
-    letter-spacing: 0.1em;
-    margin-bottom: 14px;
-  }
-  .pattern-desc {
-    font-size: 13px;
-    line-height: 1.7;
-    color: var(--muted);
-    margin-bottom: 16px;
-    border-right: 2px solid var(--border);
-    padding-right: 12px;
-  }
-  .pattern-meta {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 8px;
-    margin-bottom: 16px;
-  }
-  .meta-item {
-    background: var(--surface2);
-    border: 1px solid var(--border);
-    padding: 8px 10px;
-  }
-  .meta-label {
-    font-family: var(--mono);
-    font-size: 9px;
-    color: var(--muted);
-    letter-spacing: 0.12em;
-    text-transform: uppercase;
-    margin-bottom: 3px;
-  }
-  .meta-value {
-    font-family: var(--mono);
-    font-size: 13px;
-    color: var(--cyan);
-    font-weight: 600;
-  }
+.ratio-field {
+  width: 100%; border: none; border-bottom: 2px solid var(--border2);
+  background: transparent; font-family: var(--mono); font-size: 24px; font-weight: 600;
+  color: var(--text); padding: 4px 0; outline: none; transition: border-color 0.2s;
+  -moz-appearance: textfield;
+}
+.ratio-field::-webkit-outer-spin-button, .ratio-field::-webkit-inner-spin-button { -webkit-appearance: none; }
+.ratio-field::placeholder { color: #d1d5db; font-weight: 300; }
+.ratio-field:focus { border-bottom-color: var(--text); }
+.ratio-field.has-value { border-bottom-color: var(--gold-mid); }
 
-  /* ── RATIOS TABLE IN PANEL ── */
-  .ratio-rows { display: flex; flex-direction: column; gap: 6px; }
-  .ratio-row {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    background: var(--surface2);
-    border: 1px solid var(--border);
-    padding: 8px 12px;
-  }
-  .ratio-label {
-    font-family: var(--mono);
-    font-size: 12px;
-    color: var(--muted);
-    min-width: 70px;
-  }
-  .ratio-range {
-    flex: 1;
-    font-family: var(--mono);
-    font-size: 12px;
-    color: var(--text);
-  }
-  .ratio-ideal {
-    font-family: var(--mono);
-    font-size: 12px;
-    color: var(--gold);
-    font-weight: 600;
-  }
+.input-actions { padding: 16px 20px; display: flex; gap: 10px; align-items: center; border-bottom: 1px solid var(--border); }
 
-  /* ── INPUT FORM ── */
-  .inputs-section { }
-  .input-group {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    margin-bottom: 10px;
-  }
-  .input-label {
-    font-family: var(--mono);
-    font-size: 11px;
-    color: var(--muted);
-    min-width: 90px;
-    letter-spacing: 0.08em;
-  }
-  .ratio-input {
-    flex: 1;
-    background: var(--bg);
-    border: 1px solid var(--border);
-    color: var(--text-bright);
-    font-family: var(--mono);
-    font-size: 14px;
-    padding: 9px 12px;
-    outline: none;
-    transition: border-color 0.2s;
-    width: 100%;
-  }
-  .ratio-input:focus { border-color: var(--gold); }
-  .ratio-input.valid { border-color: var(--green); }
-  .ratio-input.invalid { border-color: var(--red); }
+.btn-analyze {
+  background: var(--text); color: var(--white); border: none;
+  font-family: var(--mono); font-size: 12px; font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase;
+  padding: 12px 28px; cursor: pointer; border-radius: var(--radius); transition: background 0.15s;
+  display: flex; align-items: center; gap: 8px;
+}
+.btn-analyze:hover { background: #2d3748; }
+.btn-clear {
+  background: transparent; color: var(--muted); border: 1px solid var(--border2);
+  font-family: var(--mono); font-size: 11px; letter-spacing: 0.1em;
+  padding: 11px 18px; cursor: pointer; border-radius: var(--radius); transition: all 0.15s;
+}
+.btn-clear:hover { border-color: var(--text); color: var(--text); }
 
-  .input-status {
-    min-width: 20px;
-    text-align: center;
-    font-size: 16px;
-  }
+.input-note { padding: 11px 20px; font-size: 11px; color: var(--muted); font-family: var(--mono); letter-spacing: 0.04em; display: flex; gap: 18px; flex-wrap: wrap; }
 
-  .validate-btn {
-    width: 100%;
-    margin-top: 14px;
-    background: var(--gold);
-    border: none;
-    color: #050a0f;
-    font-family: var(--mono);
-    font-size: 13px;
-    font-weight: 600;
-    letter-spacing: 0.12em;
-    padding: 13px;
-    cursor: pointer;
-    transition: all 0.2s;
-    text-transform: uppercase;
-  }
-  .validate-btn:hover { background: var(--gold2); }
+/* RESULTS */
+.no-results {
+  text-align: center; padding: 52px 20px; color: var(--muted);
+  font-size: 12px; font-family: var(--mono); letter-spacing: 0.08em;
+  border: 1px dashed var(--border2); border-radius: var(--radius); background: var(--white);
+}
+.no-results .big { font-size: 36px; display: block; margin-bottom: 12px; opacity: 0.2; }
 
-  /* ── RESULT ── */
-  .result-box {
-    margin-top: 14px;
-    padding: 14px;
-    border: 1px solid var(--border);
-    display: none;
-    animation: fadeIn 0.3s ease;
-  }
-  @keyframes fadeIn { from { opacity:0; transform: translateY(4px); } to { opacity:1; transform: translateY(0); } }
-  .result-box.valid { border-color: var(--green); background: rgba(34,197,94,0.06); }
-  .result-box.invalid { border-color: var(--red); background: rgba(239,68,68,0.06); }
-  .result-box.warning { border-color: var(--gold); background: rgba(200,150,62,0.06); }
+/* MATCH CARD */
+.match-card {
+  background: var(--white); border: 1px solid var(--border);
+  border-radius: var(--radius); box-shadow: var(--shadow);
+  margin-bottom: 14px; overflow: hidden;
+  animation: slideIn 0.3s ease;
+}
+@keyframes slideIn { from { opacity:0; transform:translateY(8px); } to { opacity:1; transform:translateY(0); } }
+.match-card.perfect { border-color: var(--green-mid); border-width: 2px; }
+.match-card.good    { border-color: var(--gold-mid); }
 
-  .result-icon { font-size: 24px; margin-bottom: 6px; }
-  .result-title {
-    font-family: var(--mono);
-    font-size: 13px;
-    font-weight: 600;
-    letter-spacing: 0.1em;
-    margin-bottom: 4px;
-  }
-  .result-title.valid { color: var(--green); }
-  .result-title.invalid { color: var(--red); }
-  .result-title.warning { color: var(--gold); }
-  .result-detail {
-    font-size: 12px;
-    color: var(--muted);
-    line-height: 1.6;
-  }
+.match-header { padding: 16px 20px; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 10px; }
+.match-card.perfect .match-header { background: var(--green-light); }
+.match-card.good    .match-header { background: var(--gold-light); }
+.match-card.weak    .match-header { background: var(--bg); }
 
-  /* ── MASTER TABLE ── */
-  .table-section { margin-top: 40px; }
-  .section-title {
-    font-family: var(--mono);
-    font-size: 11px;
-    letter-spacing: 0.16em;
-    color: var(--gold);
-    text-transform: uppercase;
-    margin-bottom: 14px;
-    display: flex;
-    align-items: center;
-    gap: 12px;
-  }
-  .section-title::after {
-    content: '';
-    flex: 1;
-    height: 1px;
-    background: var(--border);
-  }
+.match-name { display: flex; align-items: center; gap: 14px; }
+.match-icon { font-size: 18px; width: 38px; height: 38px; display: flex; align-items: center; justify-content: center; border-radius: 50%; flex-shrink: 0; }
+.match-card.perfect .match-icon { background: var(--green-mid); }
+.match-card.good    .match-icon { background: var(--gold-mid); }
+.match-card.weak    .match-icon { background: var(--border); }
 
-  .master-table {
-    width: 100%;
-    border-collapse: collapse;
-    font-family: var(--mono);
-    font-size: 12px;
-  }
-  .master-table th {
-    background: var(--surface2);
-    color: var(--gold);
-    font-weight: 600;
-    font-size: 10px;
-    letter-spacing: 0.12em;
-    text-transform: uppercase;
-    padding: 10px 14px;
-    text-align: right;
-    border: 1px solid var(--border);
-  }
-  .master-table td {
-    padding: 9px 14px;
-    border: 1px solid var(--border);
-    color: var(--text);
-    vertical-align: middle;
-  }
-  .master-table tr:hover td { background: rgba(200,150,62,0.04); }
-  .master-table tr td:first-child { color: var(--text-bright); font-weight: 600; }
-  .cat-row td {
-    background: var(--surface2);
-    color: var(--muted);
-    font-size: 10px;
-    letter-spacing: 0.12em;
-    text-transform: uppercase;
-    padding: 6px 14px;
-  }
+.match-name-ar { font-size: 20px; font-weight: 700; color: var(--text); }
+.match-name-en { font-family: var(--mono); font-size: 11px; color: var(--muted); letter-spacing: 0.1em; }
 
-  /* ideal highlight */
-  .ideal { color: var(--gold2); }
-  .range { color: var(--cyan); }
-  .note-cell { color: var(--muted); font-size: 11px; }
+.match-score-wrap { display: flex; align-items: center; gap: 10px; }
+.match-score { font-family: var(--mono); font-size: 30px; font-weight: 600; color: var(--text); line-height: 1; }
+.match-score sup { font-size: 14px; color: var(--muted); }
+.match-label { font-family: var(--mono); font-size: 9px; letter-spacing: 0.14em; text-transform: uppercase; padding: 4px 9px; border-radius: 2px; }
+.match-card.perfect .match-label { background: var(--green); color: white; }
+.match-card.good    .match-label { background: var(--gold); color: white; }
+.match-card.weak    .match-label { background: var(--muted); color: white; }
 
-  /* ── FOOTER ── */
-  footer {
-    border-top: 1px solid var(--border);
-    padding: 20px 0;
-    margin-top: 40px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    flex-wrap: wrap;
-    gap: 10px;
-  }
-  footer span {
-    font-family: var(--mono);
-    font-size: 10px;
-    color: var(--muted);
-    letter-spacing: 0.1em;
-  }
+.match-ratios { display: grid; grid-template-columns: repeat(4,1fr); border-top: 1px solid var(--border); }
+@media(max-width:640px) { .match-ratios { grid-template-columns: repeat(2,1fr); } }
 
-  ::-webkit-scrollbar { width: 6px; }
-  ::-webkit-scrollbar-track { background: #e8ecf2; }
-  ::-webkit-scrollbar-thumb { background: #b0bdd0; }
+.ratio-cell { padding: 13px 16px; border-left: 1px solid var(--border); position: relative; }
+.ratio-cell:first-child { border-left: none; }
+@media(max-width:640px) { .ratio-cell:nth-child(2n+1) { border-left: none; } }
+.ratio-cell.ok  { background: rgba(134,239,172,0.1); }
+.ratio-cell.bad { background: rgba(252,165,165,0.12); }
+.ratio-cell-label { font-family: var(--mono); font-size: 9px; color: var(--muted); letter-spacing: 0.1em; text-transform: uppercase; margin-bottom: 5px; }
+.ratio-cell-entered { font-family: var(--mono); font-size: 17px; font-weight: 600; color: var(--text); }
+.ratio-cell.ok  .ratio-cell-entered { color: var(--green); }
+.ratio-cell.bad .ratio-cell-entered { color: var(--red); }
+.ratio-cell-range { font-family: var(--mono); font-size: 10px; color: var(--muted); margin-top: 3px; }
+.ratio-cell-status { position: absolute; top: 10px; left: 12px; font-size: 11px; font-family: var(--mono); font-weight: 600; }
+.ratio-cell.ok  .ratio-cell-status { color: var(--green); }
+.ratio-cell.bad .ratio-cell-status { color: var(--red); }
+
+.match-footer { padding: 10px 20px; border-top: 1px solid var(--border); display: flex; gap: 18px; flex-wrap: wrap; background: var(--bg); }
+.match-footer-item { font-size: 11px; color: var(--muted); display: flex; align-items: center; gap: 4px; }
+.match-footer-item strong { color: var(--text); font-weight: 700; }
+
+/* RESULTS HEADER */
+.results-header { font-family: var(--mono); font-size: 10px; color: var(--muted); letter-spacing: 0.1em; text-transform: uppercase; margin-bottom: 12px; }
+
+/* REFERENCE TABLE */
+.ref-section { margin-top: 44px; }
+.section-label { font-family: var(--mono); font-size: 10px; letter-spacing: 0.16em; text-transform: uppercase; color: var(--muted); margin-bottom: 12px; display: flex; align-items: center; gap: 10px; }
+.section-label::after { content:''; flex:1; height:1px; background:var(--border2); }
+
+.ref-table { width: 100%; border-collapse: collapse; font-family: var(--mono); font-size: 11px; background: var(--white); border: 1px solid var(--border); box-shadow: var(--shadow); }
+.ref-table th { background: var(--text); color: var(--white); padding: 9px 14px; text-align: right; font-size: 9px; letter-spacing: 0.14em; text-transform: uppercase; font-weight: 600; border-left: 1px solid rgba(255,255,255,0.1); }
+.ref-table th:first-child { border-left: none; }
+.ref-table td { padding: 9px 14px; border: 1px solid var(--border); color: var(--text); vertical-align: middle; }
+.ref-table tr:hover td { background: var(--bg); }
+.ref-table .cat-row td { background: var(--bg); color: var(--muted); font-size: 9px; letter-spacing: 0.14em; text-transform: uppercase; padding: 6px 14px; border-color: var(--border2); }
+.ref-table td:first-child { font-weight: 700; }
+.t-ideal { color: var(--gold); font-weight: 600; }
+.t-range { color: var(--blue); }
+.t-note  { color: var(--muted); font-size: 10px; }
+
+/* FOOTER */
+.site-footer { margin-top: 48px; padding-top: 20px; border-top: 1px solid var(--border); display: flex; justify-content: space-between; flex-wrap: wrap; gap: 8px; }
+.site-footer span { font-family: var(--mono); font-size: 10px; color: var(--muted); letter-spacing: 0.08em; }
 </style>
 </head>
 <body>
-<div class="wrapper">
+<div class="page">
 
-  <!-- HEADER -->
-  <header>
-    <div class="header-inner">
-      <div class="logo-mark">◈</div>
-      <div class="header-text">
-        <h1>محقق نماذج الهارمونيك</h1>
-        <p>HARMONIC PATTERNS · SCOTT CARNEY V3</p>
-      </div>
-      <div class="version-badge">V3 · COMPLETE</div>
+  <header class="site-header">
+    <div>
+      <div class="site-title">محقق <span>الهارمونيك</span></div>
+      <div class="site-sub">Scott Carney V3 · Harmonic Pattern Detector</div>
     </div>
+    <div class="badge">V3 · 2026</div>
   </header>
 
-  <!-- TABS -->
-  <div class="pattern-nav" id="patternNav">
-    <!-- filled by JS -->
+  <div class="input-section">
+    <div class="input-header">
+      <span class="input-header-title">أدخل النسب المحسوبة</span>
+      <span class="input-header-hint">الموقع يكتشف النموذج تلقائياً</span>
+    </div>
+    <div class="inputs-grid">
+      <div class="input-cell">
+        <div class="input-cell-label"><span class="dot" style="background:#f59e0b"></span>B من XA</div>
+        <input type="number" class="ratio-field" id="inp_bxa" placeholder="0.000" step="0.001" oninput="onInput(this)">
+      </div>
+      <div class="input-cell">
+        <div class="input-cell-label"><span class="dot" style="background:#3b82f6"></span>C من AB</div>
+        <input type="number" class="ratio-field" id="inp_cab" placeholder="0.000" step="0.001" oninput="onInput(this)">
+      </div>
+      <div class="input-cell">
+        <div class="input-cell-label"><span class="dot" style="background:#10b981"></span>D من XA</div>
+        <input type="number" class="ratio-field" id="inp_dxa" placeholder="0.000" step="0.001" oninput="onInput(this)">
+      </div>
+      <div class="input-cell">
+        <div class="input-cell-label"><span class="dot" style="background:#ef4444"></span>D من BC</div>
+        <input type="number" class="ratio-field" id="inp_dbc" placeholder="0.000" step="0.001" oninput="onInput(this)">
+      </div>
+    </div>
+    <div class="input-actions">
+      <button class="btn-analyze" onclick="analyze()">⟶ &nbsp;تحليل النموذج</button>
+      <button class="btn-clear" onclick="clearAll()">مسح الكل</button>
+    </div>
+    <div class="input-note">
+      <span>◈ أدخل النسبة كرقم عشري (مثال: 0.618)</span>
+      <span>◈ يمكن إدخال نسبة واحدة أو أكثر</span>
+      <span>◈ اضغط Enter للتحليل</span>
+    </div>
   </div>
 
-  <!-- MAIN GRID -->
-  <div class="main-grid">
-
-    <!-- LEFT: Info + Ratios -->
-    <div>
-      <div class="panel" id="infoPanel">
-        <div class="panel-header">
-          <span class="panel-title" id="panelCategory">النموذج</span>
-        </div>
-        <div class="panel-body">
-          <div class="pattern-name-ar" id="displayNameAr">—</div>
-          <div class="pattern-name-en" id="displayNameEn">—</div>
-          <div class="pattern-desc" id="displayDesc">—</div>
-          <div class="pattern-meta">
-            <div class="meta-item">
-              <div class="meta-label">النقطة الحرجة</div>
-              <div class="meta-value" id="metaPRZ">—</div>
-            </div>
-            <div class="meta-item">
-              <div class="meta-label">هيكل النقاط</div>
-              <div class="meta-value" id="metaPoints">—</div>
-            </div>
-            <div class="meta-item">
-              <div class="meta-label">نوع النموذج</div>
-              <div class="meta-value" id="metaType">—</div>
-            </div>
-            <div class="meta-item">
-              <div class="meta-label">الموثوقية</div>
-              <div class="meta-value" id="metaRel">—</div>
-            </div>
-          </div>
-          <div class="ratio-rows" id="ratioDisplay"></div>
-        </div>
-      </div>
+  <div id="resultsSection">
+    <div class="no-results">
+      <span class="big">◎</span>
+      أدخل النسب أعلاه وسيكتشف المحقق النموذج تلقائياً
     </div>
+  </div>
 
-    <!-- RIGHT: Validator -->
-    <div>
-      <div class="panel">
-        <div class="panel-header">
-          <span class="panel-title">التحقق من النسب</span>
-          <span style="font-family:var(--mono);font-size:10px;color:var(--muted)">أدخل النسب المحسوبة</span>
-        </div>
-        <div class="panel-body">
-          <div class="inputs-section" id="inputsSection">
-            <!-- filled by JS -->
-          </div>
-          <button class="validate-btn" onclick="validatePattern()">⟶ تحقق من النموذج</button>
-          <div class="result-box" id="resultBox">
-            <div class="result-icon" id="resultIcon"></div>
-            <div class="result-title" id="resultTitle"></div>
-            <div class="result-detail" id="resultDetail"></div>
-          </div>
-        </div>
-      </div>
-    </div>
-
-  </div><!-- /main-grid -->
-
-  <!-- MASTER REFERENCE TABLE -->
-  <div class="table-section">
-    <div class="section-title">جدول النسب المرجعية الشامل — Scott Carney V3</div>
+  <div class="ref-section">
+    <div class="section-label">جدول النسب المرجعية الشامل — Scott Carney V3</div>
     <div style="overflow-x:auto">
-    <table class="master-table">
-      <thead>
-        <tr>
-          <th>النموذج</th>
-          <th>B من XA</th>
-          <th>C من AB</th>
-          <th>D من XA</th>
-          <th>D من BC</th>
-          <th>PRZ / ملاحظات</th>
-        </tr>
-      </thead>
-      <tbody id="masterTableBody">
-        <!-- filled by JS -->
-      </tbody>
-    </table>
+      <table class="ref-table">
+        <thead>
+          <tr>
+            <th>النموذج</th>
+            <th>B من XA</th>
+            <th>C من AB</th>
+            <th>D من XA</th>
+            <th>D من BC</th>
+            <th>ملاحظات</th>
+          </tr>
+        </thead>
+        <tbody id="refBody"></tbody>
+      </table>
     </div>
   </div>
 
-  <footer>
+  <footer class="site-footer">
     <span>HARMONIC VALIDATOR · SCOTT CARNEY V3 · Built for Precision Trading</span>
-    <span>جميع النسب وفق معايير HarmonicTrader.com</span>
+    <span>النسب من المصدر الرسمي HarmonicTrader.com</span>
   </footer>
-
-</div><!-- /wrapper -->
+</div>
 
 <script>
-// ═══════════════════════════════════════════════════════════════════
-// PATTERNS DATABASE — Scott Carney V3 Complete
-// ═══════════════════════════════════════════════════════════════════
-const PATTERNS = [
-  // ── الكلاسيكية ──────────────────────────────────────────────────
+// ═══════════════════════════════════════════
+// DATABASE
+// ═══════════════════════════════════════════
+const DB = [
   {
-    id: 'gartley',
-    nameAr: 'الجارتلي',
-    nameEn: 'GARTLEY',
-    category: 'كلاسيكية',
-    desc: 'أقدم النماذج الهارمونية، اكتُشف عام 1935. نموذج استمراري قوي. B المثالي 0.618، والمقبول 0.588–0.648. مهم: عدم كسر القاع عند C.',
-    prz: '0.78–0.88 من XA',
-    points: 'XABCD',
-    type: 'استمراري',
-    reliability: '★★★★☆',
-    legs: [
-      { label: 'B من XA', min: 0.588, max: 0.648, ideal: '0.618 مثالي' },
-      { label: 'C من AB', min: 0.382, max: 0.886, ideal: '0.618 — مهم: لا كسر القاع' },
-      { label: 'D من XA', min: 0.780, max: 0.880, ideal: '0.786 مثالي' },
-      { label: 'D من BC', min: 1.130, max: 1.618, ideal: '1.13 / 1.27 / 1.618' },
-    ],
-    tableNote: 'B: 0.588–0.648 · D من XA: 0.78–0.88 · D من BC: 1.13/1.27/1.618'
+    id:'gartley', nameAr:'الجارتلي', nameEn:'GARTLEY', cat:'كلاسيكية', icon:'◆',
+    prz:'0.78–0.88 من XA', type:'استمراري', note:'لا كسر القاع عند C',
+    legs:{
+      bxa:{ min:0.588, max:0.648, ideal:'0.618', label:'B من XA' },
+      cab:{ min:0.382, max:0.886, ideal:'0.618', label:'C من AB' },
+      dxa:{ min:0.780, max:0.880, ideal:'0.786', label:'D من XA' },
+      dbc:{ min:1.130, max:1.618, ideal:'1.13 / 1.27 / 1.618', label:'D من BC' },
+    }
   },
   {
-    id: 'bat',
-    nameAr: 'الخفاش',
-    nameEn: 'BAT',
-    category: 'كلاسيكية',
-    desc: 'من أدق النماذج الهارمونية، اكتشفه Carney عام 2001. B بين 0.382–0.55. BC لا تقل عن 1.618. مهم: عدم كسر القاع عند C.',
-    prz: '0.886 من XA',
-    points: 'XABCD',
-    type: 'انعكاسي',
-    reliability: '★★★★★',
-    legs: [
-      { label: 'B من XA', min: 0.382, max: 0.550, ideal: '0.500 مثالي' },
-      { label: 'C من AB', min: 0.382, max: 0.886, ideal: '0.618 — مهم: لا كسر القاع' },
-      { label: 'D من XA', min: 0.886, max: 0.886, ideal: '0.886 بالضبط' },
-      { label: 'D من BC', min: 1.618, max: 2.618, ideal: '1.618 / 2 / 2.24 / 2.618' },
-    ],
-    tableNote: 'B: 0.382–0.55 · D = 0.886 XA · BC: 1.618/2/2.24/2.618'
+    id:'bat', nameAr:'الخفاش', nameEn:'BAT', cat:'كلاسيكية', icon:'◆',
+    prz:'0.886 من XA', type:'انعكاسي', note:'لا كسر القاع عند C',
+    legs:{
+      bxa:{ min:0.382, max:0.550, ideal:'0.500', label:'B من XA' },
+      cab:{ min:0.382, max:0.886, ideal:'0.618', label:'C من AB' },
+      dxa:{ min:0.886, max:0.886, ideal:'0.886', label:'D من XA' },
+      dbc:{ min:1.618, max:2.618, ideal:'1.618 / 2 / 2.24 / 2.618', label:'D من BC' },
+    }
   },
   {
-    id: 'butterfly',
-    nameAr: 'الفراشة',
-    nameEn: 'BUTTERFLY',
-    category: 'كلاسيكية',
-    desc: 'نموذج امتدادي، B بين 0.755–0.816 (مثالي 0.786). مهم: عدم كسر القاع عند C. D من XA = 1.27 هو الرقم الأهم.',
-    prz: '1.27 من XA',
-    points: 'XABCD',
-    type: 'انعكاسي عميق',
-    reliability: '★★★★☆',
-    legs: [
-      { label: 'B من XA', min: 0.755, max: 0.816, ideal: '0.786 مثالي' },
-      { label: 'C من AB', min: 0.382, max: 0.886, ideal: '0.618 — مهم: لا كسر القاع' },
-      { label: 'D من XA', min: 1.270, max: 1.270, ideal: '1.27 الرقم الأساسي' },
-      { label: 'D من BC', min: 1.618, max: 2.618, ideal: '1.618 / 2 / 2.24 / 2.618' },
-    ],
-    tableNote: 'B: 0.755–0.816 · D من XA = 1.27 · BC: 1.618/2/2.24/2.618'
+    id:'butterfly', nameAr:'الفراشة', nameEn:'BUTTERFLY', cat:'كلاسيكية', icon:'◆',
+    prz:'1.27 من XA', type:'انعكاسي عميق', note:'D يتجاوز X · لا كسر القاع عند C',
+    legs:{
+      bxa:{ min:0.755, max:0.816, ideal:'0.786', label:'B من XA' },
+      cab:{ min:0.382, max:0.886, ideal:'0.618', label:'C من AB' },
+      dxa:{ min:1.270, max:1.270, ideal:'1.27', label:'D من XA' },
+      dbc:{ min:1.618, max:2.618, ideal:'1.618 / 2 / 2.24 / 2.618', label:'D من BC' },
+    }
   },
   {
-    id: 'crab',
-    nameAr: 'السرطان',
-    nameEn: 'CRAB',
-    category: 'كلاسيكية',
-    desc: 'أكثر النماذج دقة حسب Carney. B بين 0.382–0.618. مهم: عدم كسر القاع عند C. D من XA بين 1.618–1.902.',
-    prz: '1.618–1.902 من XA',
-    points: 'XABCD',
-    type: 'انعكاسي قصوي',
-    reliability: '★★★★★',
-    legs: [
-      { label: 'B من XA', min: 0.382, max: 0.618, ideal: '0.382–0.618' },
-      { label: 'C من AB', min: 0.382, max: 0.886, ideal: '0.618 — مهم: لا كسر القاع' },
-      { label: 'D من XA', min: 1.618, max: 1.902, ideal: '1.618 مثالي' },
-      { label: 'D من BC', min: 2.618, max: 3.618, ideal: '2.618 / 3.14 / 3.618' },
-    ],
-    tableNote: 'B: 0.382–0.618 · D من XA: 1.618–1.902 · BC: 2.618/3.14/3.618'
-  },
-  // ── الفرعية / المتطورة ──────────────────────────────────────────
-  {
-    id: 'alt-bat',
-    nameAr: 'الخفاش البديل',
-    nameEn: 'ALTERNATE BAT',
-    category: 'نماذج فرعية',
-    desc: 'اكتشفه Carney عام 2003. B بين 0.352–0.382. مهم: عدم كسر القاع عند C. D من XA = 1.13 بالضبط.',
-    prz: '1.13 من XA',
-    points: 'XABCD',
-    type: 'انعكاسي',
-    reliability: '★★★★☆',
-    legs: [
-      { label: 'B من XA', min: 0.352, max: 0.382, ideal: '0.382 الحد الأقصى' },
-      { label: 'C من AB', min: 0.382, max: 0.886, ideal: '0.618 — مهم: لا كسر القاع' },
-      { label: 'D من XA', min: 1.130, max: 1.130, ideal: '1.13 بالضبط' },
-      { label: 'D من BC', min: 2.000, max: 3.618, ideal: '2 / 2.24 / 2.618 / 3 / 3.618' },
-    ],
-    tableNote: 'B: 0.352–0.382 · D = 1.13 XA · BC: 2/2.24/2.618/3/3.618'
+    id:'crab', nameAr:'السرطان', nameEn:'CRAB', cat:'كلاسيكية', icon:'◆',
+    prz:'1.618–1.902 من XA', type:'انعكاسي قصوي', note:'لا كسر القاع عند C',
+    legs:{
+      bxa:{ min:0.382, max:0.618, ideal:'0.382–0.618', label:'B من XA' },
+      cab:{ min:0.382, max:0.886, ideal:'0.618', label:'C من AB' },
+      dxa:{ min:1.618, max:1.902, ideal:'1.618', label:'D من XA' },
+      dbc:{ min:2.618, max:3.618, ideal:'2.618 / 3.14 / 3.618', label:'D من BC' },
+    }
   },
   {
-    id: 'deep-crab',
-    nameAr: 'السرطان العميق',
-    nameEn: 'DEEP CRAB',
-    category: 'نماذج فرعية',
-    desc: 'نسخة مُعمَّقة من السرطان. B بين 0.88–0.936. مهم: عدم كسر القاع عند C. D من XA بين 1.618–1.902.',
-    prz: '1.618–1.902 من XA',
-    points: 'XABCD',
-    type: 'انعكاسي قصوي',
-    reliability: '★★★★☆',
-    legs: [
-      { label: 'B من XA', min: 0.880, max: 0.936, ideal: '0.886 مثالي' },
-      { label: 'C من AB', min: 0.382, max: 0.886, ideal: '0.618 — مهم: لا كسر القاع' },
-      { label: 'D من XA', min: 1.618, max: 1.902, ideal: '1.618 مثالي' },
-      { label: 'D من BC', min: 2.000, max: 3.618, ideal: '2 / 2.24 / 2.618 / 3 / 3.618' },
-    ],
-    tableNote: 'B: 0.88–0.936 · D من XA: 1.618–1.902 · BC: 2/2.24/2.618/3/3.618'
+    id:'shark', nameAr:'القرش', nameEn:'SHARK', cat:'كلاسيكية', icon:'◆',
+    prz:'0.88–1.13 من XA', type:'دفعي / انعكاسي', note:'نقاط OXABC · يسبق 5-0',
+    legs:{
+      bxa:{ min:0.382, max:0.618, ideal:'0.382–0.618', label:'B من XA' },
+      cab:{ min:1.130, max:1.618, ideal:'1.13–1.618', label:'C من AB' },
+      dxa:{ min:0.880, max:1.130, ideal:'0.886–1.13', label:'D من XA' },
+      dbc:{ min:1.618, max:2.240, ideal:'1.618 / 2 / 2.24', label:'D من BC' },
+    }
   },
   {
-    id: 'shark',
-    nameAr: 'القرش',
-    nameEn: 'SHARK',
-    category: 'كلاسيكية',
-    desc: 'اكتشفه Carney عام 2011، نشره في Volume Three. B بين 0.382–0.618 من XA. C بين 1.13–1.618. D من XA بين 0.88–1.13.',
-    prz: '0.88–1.13 من XA',
-    points: 'OXABC',
-    type: 'دفعي/انعكاسي',
-    reliability: '★★★★☆',
-    legs: [
-      { label: 'B من XA', min: 0.382, max: 0.618, ideal: '0.382–0.618' },
-      { label: 'C من AB', min: 1.130, max: 1.618, ideal: '1.13–1.618' },
-      { label: 'D من XA', min: 0.880, max: 1.130, ideal: '0.886–1.13' },
-      { label: 'D من BC', min: 1.618, max: 2.240, ideal: '1.618 / 2 / 2.24' },
-    ],
-    tableNote: 'B: 0.382–0.618 · C: 1.13–1.618 · D من XA: 0.88–1.13 · BC: 1.618/2/2.24'
+    id:'alt-bat', nameAr:'الخفاش البديل', nameEn:'ALT BAT', cat:'فرعية', icon:'◇',
+    prz:'1.13 من XA', type:'انعكاسي', note:'B ≤ 0.382 · لا كسر القاع عند C',
+    legs:{
+      bxa:{ min:0.352, max:0.382, ideal:'0.382', label:'B من XA' },
+      cab:{ min:0.382, max:0.886, ideal:'0.618', label:'C من AB' },
+      dxa:{ min:1.130, max:1.130, ideal:'1.13', label:'D من XA' },
+      dbc:{ min:2.000, max:3.618, ideal:'2 / 2.24 / 2.618 / 3 / 3.618', label:'D من BC' },
+    }
   },
   {
-    id: 'five-zero',
-    nameAr: 'الخمسة-صفر',
-    nameEn: '5-0',
-    category: 'نماذج فرعية',
-    desc: 'يتبع نموذج القرش. BC يجب أن تكون 1.618–2.24 من AB. AB لا تتجاوز 1.618 من XA. D عند 50% من BC مع AB=CD عكسي.',
-    prz: '0.500 من BC',
-    points: 'OXABCD',
-    type: 'انعكاسي',
-    reliability: '★★★★☆',
-    legs: [
-      { label: 'AB من XA', min: 1.130, max: 1.618, ideal: '≤ 1.618 شرط' },
-      { label: 'BC من AB', min: 1.618, max: 2.240, ideal: '1.618–2.24 شرط' },
-      { label: 'D من BC', min: 0.500, max: 0.500, ideal: '0.500 بالضبط' },
-      { label: 'AB=CD عكسي', min: null, max: null, ideal: 'شرط لازم' },
-    ],
-    tableNote: 'BC = 1.618–2.24 من AB · D = 50% BC · AB لا تتجاوز 1.618 XA'
+    id:'deep-crab', nameAr:'السرطان العميق', nameEn:'DEEP CRAB', cat:'فرعية', icon:'◇',
+    prz:'1.618–1.902 من XA', type:'انعكاسي قصوي', note:'B عميق · لا كسر القاع عند C',
+    legs:{
+      bxa:{ min:0.880, max:0.936, ideal:'0.886', label:'B من XA' },
+      cab:{ min:0.382, max:0.886, ideal:'0.618', label:'C من AB' },
+      dxa:{ min:1.618, max:1.902, ideal:'1.618', label:'D من XA' },
+      dbc:{ min:2.000, max:3.618, ideal:'2 / 2.24 / 2.618 / 3 / 3.618', label:'D من BC' },
+    }
   },
   {
-    id: 'cypher',
-    nameAr: 'السايفر',
-    nameEn: 'CYPHER',
-    category: 'نماذج فرعية',
-    desc: 'اكتشفه Darren Oglesbee، يُعتمَد في V3. C يمتد 1.272–1.414 من XA فوق نقطة A. D عند 0.782 من XC بالضبط.',
-    prz: '0.782 من XC',
-    points: 'XABCD',
-    type: 'انعكاسي',
-    reliability: '★★★★☆',
-    legs: [
-      { label: 'B من XA', min: 0.382, max: 0.618, ideal: '0.382–0.618' },
-      { label: 'C من XA', min: 1.130, max: 1.414, ideal: '1.272' },
-      { label: 'D من XC', min: 0.782, max: 0.782, ideal: '0.782 بالضبط' },
-      { label: 'D من BC', min: 1.272, max: 2.000, ideal: '1.272' },
-    ],
-    tableNote: 'C يتجاوز A · D = 78.2% XC (وليس 78.6%)'
-  },
-  // ── AB=CD ────────────────────────────────────────────────────────
-  {
-    id: 'abcd-classic',
-    nameAr: 'AB=CD الكلاسيكي',
-    nameEn: 'AB=CD CLASSIC',
-    category: 'نماذج AB=CD',
-    desc: 'النموذج الأساسي لجميع الأنماط. BC تراجع 61.8–78.6% من AB، وCD يساوي AB في المسافة.',
-    prz: 'D = CD يساوي AB',
-    points: 'ABCD',
-    type: 'استمراري/انعكاسي',
-    reliability: '★★★☆☆',
-    legs: [
-      { label: 'BC من AB', min: 0.618, max: 0.786, ideal: '0.618–0.786' },
-      { label: 'CD من AB', min: 1.000, max: 1.000, ideal: '= AB' },
-      { label: 'CD (امتداد)', min: 1.272, max: 1.618, ideal: '1.272' },
-      { label: 'وقت CD', min: null, max: null, ideal: '= وقت AB' },
-    ],
-    tableNote: 'CD = AB السعرية · توقيت متماثل'
+    id:'cypher', nameAr:'السايفر', nameEn:'CYPHER', cat:'فرعية', icon:'◇',
+    prz:'0.782 من XC', type:'انعكاسي', note:'C يتجاوز A · D = 78.2% من XC',
+    legs:{
+      bxa:{ min:0.382, max:0.618, ideal:'0.382–0.618', label:'B من XA' },
+      cab:{ min:1.130, max:1.414, ideal:'1.272', label:'C من XA (يتجاوز A)' },
+      dxa:{ min:0.782, max:0.782, ideal:'0.782', label:'D من XC' },
+      dbc:{ min:1.272, max:2.000, ideal:'1.272', label:'D من BC' },
+    }
   },
   {
-    id: 'abcd-alt',
-    nameAr: 'AB=CD البديل',
-    nameEn: 'ALT AB=CD',
-    category: 'نماذج AB=CD',
-    desc: 'نسخة مُمتدّة حيث CD ليس مساوياً لـ AB بل يرتبط بنسب فيبوناتشي مُحددة.',
-    prz: '1.27 أو 1.618 من AB',
-    points: 'ABCD',
-    type: 'استمراري',
-    reliability: '★★★☆☆',
-    legs: [
-      { label: 'BC من AB', min: 0.382, max: 0.886, ideal: '0.618' },
-      { label: 'CD من AB', min: 1.272, max: 1.618, ideal: '1.618' },
-      { label: 'D من BC', min: 2.000, max: 2.618, ideal: '2.618' },
-      { label: 'ملاحظة', min: null, max: null, ideal: 'تُدعم بنموذج أكبر' },
-    ],
-    tableNote: 'CD = 1.272 أو 1.618 من AB'
+    id:'five-zero', nameAr:'الخمسة-صفر', nameEn:'5-0', cat:'فرعية', icon:'◇',
+    prz:'0.500 من BC', type:'انعكاسي', note:'يتبع القرش · AB=CD عكسي شرط',
+    legs:{
+      bxa:{ min:1.130, max:1.618, ideal:'≤ 1.618', label:'AB من XA' },
+      cab:{ min:1.618, max:2.240, ideal:'1.618–2.24', label:'BC من AB' },
+      dxa:{ min:0.500, max:0.500, ideal:'0.500', label:'D من BC' },
+      dbc:{ min:null, max:null, ideal:'AB=CD عكسي', label:'AB=CD عكسي' },
+    }
   },
-
+  {
+    id:'abcd', nameAr:'AB=CD', nameEn:'AB=CD', cat:'فرعية', icon:'◇',
+    prz:'D = نهاية CD', type:'استمراري / انعكاسي', note:'CD = AB في المسافة والوقت',
+    legs:{
+      bxa:{ min:null, max:null, ideal:'—', label:'غير مطلوب' },
+      cab:{ min:0.618, max:0.786, ideal:'0.618–0.786', label:'BC من AB' },
+      dxa:{ min:1.000, max:1.618, ideal:'1.000 أو 1.272', label:'CD من AB' },
+      dbc:{ min:null, max:null, ideal:'—', label:'غير مطلوب' },
+    }
+  },
 ];
 
-// ═══════════════════════════════════════════════════════════════════
-let currentPatternId = PATTERNS[0].id;
-
-function buildTabs() {
-  const nav = document.getElementById('patternNav');
-  const cats = [...new Set(PATTERNS.map(p => p.category))];
-  cats.forEach(cat => {
-    const span = document.createElement('span');
-    span.style.cssText = 'font-family:var(--mono);font-size:9px;color:var(--muted);letter-spacing:.12em;padding:10px 8px 10px 14px;display:flex;align-items:center;white-space:nowrap;text-transform:uppercase;';
-    span.textContent = cat + '  ';
-    nav.appendChild(span);
-    PATTERNS.filter(p => p.category === cat).forEach(p => {
-      const btn = document.createElement('button');
-      btn.className = 'tab-btn' + (p.id === currentPatternId ? ' active' : '');
-      btn.setAttribute('data-id', p.id);
-      btn.textContent = p.nameEn;
-      btn.onclick = () => selectPattern(p.id);
-      nav.appendChild(btn);
-    });
-  });
+// ═══════════════════════════════════════════
+// HELPERS
+// ═══════════════════════════════════════════
+function onInput(el) {
+  el.classList.toggle('has-value', el.value !== '' && !isNaN(parseFloat(el.value)));
 }
 
-function selectPattern(id) {
-  currentPatternId = id;
-  // update tabs
-  document.querySelectorAll('.tab-btn').forEach(b => {
-    b.classList.toggle('active', b.getAttribute('data-id') === id);
-  });
-  renderPanel();
-  renderInputs();
-  document.getElementById('resultBox').style.display = 'none';
+function getInputs() {
+  return {
+    bxa: parseFloat(document.getElementById('inp_bxa').value),
+    cab: parseFloat(document.getElementById('inp_cab').value),
+    dxa: parseFloat(document.getElementById('inp_dxa').value),
+    dbc: parseFloat(document.getElementById('inp_dbc').value),
+  };
 }
 
-function renderPanel() {
-  const p = PATTERNS.find(x => x.id === currentPatternId);
-  document.getElementById('panelCategory').textContent = p.category;
-  document.getElementById('displayNameAr').textContent = p.nameAr;
-  document.getElementById('displayNameEn').textContent = p.nameEn;
-  document.getElementById('displayDesc').textContent = p.desc;
-  document.getElementById('metaPRZ').textContent = p.prz;
-  document.getElementById('metaPoints').textContent = p.points;
-  document.getElementById('metaType').textContent = p.type;
-  document.getElementById('metaRel').textContent = p.reliability;
-
-  const rows = document.getElementById('ratioDisplay');
-  rows.innerHTML = '';
-  p.legs.forEach(leg => {
-    const div = document.createElement('div');
-    div.className = 'ratio-row';
-    const range = (leg.min !== null)
-      ? `<span class="range">${leg.min}${leg.max !== leg.min ? ' – ' + leg.max : ''}</span>`
-      : '';
-    div.innerHTML = `
-      <span class="ratio-label">${leg.label}</span>
-      <span class="ratio-range">${range}</span>
-      <span class="ratio-ideal">◈ ${leg.ideal}</span>
-    `;
-    rows.appendChild(div);
+function clearAll() {
+  ['inp_bxa','inp_cab','inp_dxa','inp_dbc'].forEach(id => {
+    const el = document.getElementById(id);
+    el.value = ''; el.classList.remove('has-value');
   });
+  document.getElementById('resultsSection').innerHTML =
+    `<div class="no-results"><span class="big">◎</span>أدخل النسب أعلاه وسيكتشف المحقق النموذج تلقائياً</div>`;
 }
 
-function renderInputs() {
-  const p = PATTERNS.find(x => x.id === currentPatternId);
-  const section = document.getElementById('inputsSection');
-  section.innerHTML = '';
-  p.legs.filter(l => l.min !== null).forEach((leg, i) => {
-    const div = document.createElement('div');
-    div.className = 'input-group';
-    div.innerHTML = `
-      <label class="input-label">${leg.label}</label>
-      <input type="number" step="0.001" min="0" max="10"
-             class="ratio-input" id="inp_${i}"
-             placeholder="${leg.min}${leg.max !== leg.min ? ' – ' + leg.max : ''}"
-             oninput="checkInput(${i})">
-      <span class="input-status" id="status_${i}">·</span>
-    `;
-    section.appendChild(div);
-  });
+function inRange(val, min, max) {
+  if (min === null || max === null) return null;
+  if (isNaN(val)) return null;
+  return val >= min && val <= max;
 }
 
-function checkInput(i) {
-  const p = PATTERNS.find(x => x.id === currentPatternId);
-  const validLegs = p.legs.filter(l => l.min !== null);
-  const leg = validLegs[i];
-  const val = parseFloat(document.getElementById('inp_' + i).value);
-  const inp = document.getElementById('inp_' + i);
-  const status = document.getElementById('status_' + i);
-  if (isNaN(val)) { inp.className = 'ratio-input'; status.textContent = '·'; return; }
-  // Use exact min/max range from pattern definition (no extra tolerance)
-  const ok = val >= leg.min && val <= leg.max;
-  inp.className = 'ratio-input ' + (ok ? 'valid' : 'invalid');
-  status.textContent = ok ? '✓' : '✗';
+function scorePattern(p, inputs) {
+  const keys = ['bxa','cab','dxa','dbc'];
+  let passed = 0, failed = 0, results = {};
+  keys.forEach(k => {
+    const leg = p.legs[k];
+    const val = inputs[k];
+    const res = inRange(val, leg.min, leg.max);
+    results[k] = { val, min: leg.min, max: leg.max, ideal: leg.ideal, label: leg.label, result: res };
+    if (res === true) passed++;
+    else if (res === false) failed++;
+  });
+  const applicable = passed + failed;
+  const score = applicable === 0 ? 0 : Math.round((passed / applicable) * 100);
+  return { score, passed, failed, results };
 }
 
-function validatePattern() {
-  const p = PATTERNS.find(x => x.id === currentPatternId);
-  const validLegs = p.legs.filter(l => l.min !== null);
-  let allFilled = true, allValid = true, failedLegs = [];
+// ═══════════════════════════════════════════
+// ANALYZE
+// ═══════════════════════════════════════════
+function analyze() {
+  const inputs = getInputs();
+  const entered = Object.values(inputs).filter(v => !isNaN(v)).length;
+  if (entered === 0) { alert('يرجى إدخال نسبة واحدة على الأقل'); return; }
 
-  validLegs.forEach((leg, i) => {
-    const val = parseFloat(document.getElementById('inp_' + i).value);
-    if (isNaN(val)) { allFilled = false; return; }
-    const ok = val >= leg.min && val <= leg.max;
-    if (!ok) { allValid = false; failedLegs.push(leg.label); }
-  });
+  let matches = DB.map(p => ({ pattern: p, ...scorePattern(p, inputs) }))
+    .filter(m => m.score > 0)
+    .sort((a,b) => b.score - a.score);
 
-  const box = document.getElementById('resultBox');
-  const icon = document.getElementById('resultIcon');
-  const title = document.getElementById('resultTitle');
-  const detail = document.getElementById('resultDetail');
+  const sec = document.getElementById('resultsSection');
 
-  if (!allFilled) {
-    box.className = 'result-box warning';
-    icon.textContent = '⚠';
-    title.className = 'result-title warning';
-    title.textContent = 'بيانات ناقصة';
-    detail.textContent = 'يرجى إدخال جميع النسب لإتمام التحقق.';
-  } else if (allValid) {
-    box.className = 'result-box valid';
-    icon.textContent = '◉';
-    title.className = 'result-title valid';
-    title.textContent = `نموذج ${p.nameAr} صالح ✓`;
-    detail.textContent = `جميع النسب ضمن معايير Scott Carney V3. منطقة الانعكاس المحتملة (PRZ): ${p.prz}. النموذج جاهز للتداول مع تأكيد إضافي.`;
-  } else {
-    box.className = 'result-box invalid';
-    icon.textContent = '◎';
-    title.className = 'result-title invalid';
-    title.textContent = 'النموذج غير مكتمل';
-    detail.textContent = `النسب التالية خارج المعايير: ${failedLegs.join('، ')}. راجع جدول النسب المرجعية.`;
+  if (matches.length === 0) {
+    sec.innerHTML = `<div class="no-results"><span class="big">✕</span>لا يوجد نموذج مطابق — راجع القيم أو تأكد من صحة الحسابات</div>`;
+    return;
   }
-  box.style.display = 'block';
+
+  const topScore = matches[0].score;
+  let html = `<div class="results-header">◈ النتائج — ${matches.length} نموذج مطابق · أفضل تطابق: ${topScore}%</div>`;
+
+  matches.slice(0,6).forEach(m => {
+    const quality = m.score === 100 ? 'perfect' : m.score >= 50 ? 'good' : 'weak';
+    const label   = m.score === 100 ? 'مطابقة تامة' : m.score >= 75 ? 'مطابقة جيدة' : m.score >= 50 ? 'جزئي' : 'ضعيف';
+
+    const cells = ['bxa','cab','dxa','dbc'].map(k => {
+      const r = m.results[k];
+      if (r.min === null) return `<div class="ratio-cell"><div class="ratio-cell-label">${r.label}</div><div class="ratio-cell-entered" style="color:#d1d5db">—</div><div class="ratio-cell-range">غير مطلوب</div></div>`;
+      if (isNaN(r.val)) return `<div class="ratio-cell"><div class="ratio-cell-label">${r.label}</div><div class="ratio-cell-entered" style="color:#d1d5db">—</div><div class="ratio-cell-range">لم يُدخل</div></div>`;
+      const cls = r.result ? 'ok' : 'bad';
+      return `<div class="ratio-cell ${cls}">
+        <div class="ratio-cell-status">${r.result ? '✓' : '✗'}</div>
+        <div class="ratio-cell-label">${r.label}</div>
+        <div class="ratio-cell-entered">${r.val.toFixed(3)}</div>
+        <div class="ratio-cell-range">النطاق: ${r.min}–${r.max}</div>
+      </div>`;
+    }).join('');
+
+    html += `<div class="match-card ${quality}">
+      <div class="match-header">
+        <div class="match-name">
+          <div class="match-icon">${m.pattern.icon}</div>
+          <div>
+            <div class="match-name-ar">${m.pattern.nameAr}</div>
+            <div class="match-name-en">${m.pattern.nameEn}</div>
+          </div>
+        </div>
+        <div class="match-score-wrap">
+          <div class="match-score">${m.score}<sup>%</sup></div>
+          <div class="match-label">${label}</div>
+        </div>
+      </div>
+      <div class="match-ratios">${cells}</div>
+      <div class="match-footer">
+        <span class="match-footer-item">◈ PRZ: <strong>${m.pattern.prz}</strong></span>
+        <span class="match-footer-item">◈ النوع: <strong>${m.pattern.type}</strong></span>
+        <span class="match-footer-item">◈ ${m.pattern.note}</span>
+        <span class="match-footer-item">◈ ${m.passed} من ${m.passed+m.failed} نسبة مطابقة</span>
+      </div>
+    </div>`;
+  });
+
+  sec.innerHTML = html;
 }
 
-function buildMasterTable() {
-  const tbody = document.getElementById('masterTableBody');
-  const cats = [...new Set(PATTERNS.map(p => p.category))];
+// ═══════════════════════════════════════════
+// REFERENCE TABLE
+// ═══════════════════════════════════════════
+function buildRefTable() {
+  const tbody = document.getElementById('refBody');
+  const cats = [...new Set(DB.map(p => p.cat))];
   cats.forEach(cat => {
-    const catRow = document.createElement('tr');
-    catRow.className = 'cat-row';
-    catRow.innerHTML = `<td colspan="6">◈ ${cat}</td>`;
-    tbody.appendChild(catRow);
-
-    PATTERNS.filter(p => p.category === cat).forEach(p => {
-      const legs = p.legs;
-      const get = (idx) => legs[idx]
-        ? (legs[idx].min === legs[idx].max && legs[idx].min !== null)
-          ? `<span class="ideal">${legs[idx].min}</span>`
-          : legs[idx].min !== null
-            ? `<span class="range">${legs[idx].min}–${legs[idx].max}</span>`
-            : '—'
-        : '—';
-
+    const cr = document.createElement('tr'); cr.className = 'cat-row';
+    cr.innerHTML = `<td colspan="6">◈ النماذج ال${cat}</td>`;
+    tbody.appendChild(cr);
+    DB.filter(p => p.cat === cat).forEach(p => {
+      const fmt = l => l.min === null ? '<span class="t-note">—</span>'
+        : l.min === l.max ? `<span class="t-ideal">${l.min}</span>`
+        : `<span class="t-range">${l.min}–${l.max}</span>`;
       const tr = document.createElement('tr');
       tr.innerHTML = `
-        <td>${p.nameAr}<br><span style="font-size:10px;color:var(--muted)">${p.nameEn}</span></td>
-        <td>${get(0)}</td>
-        <td>${get(1)}</td>
-        <td>${get(2)}</td>
-        <td>${get(3)}</td>
-        <td class="note-cell">${p.tableNote}</td>
-      `;
+        <td>${p.nameAr}<br><span style="font-size:9px;color:#9ca3af">${p.nameEn}</span></td>
+        <td>${fmt(p.legs.bxa)}<br><span class="t-note">${p.legs.bxa.ideal}</span></td>
+        <td>${fmt(p.legs.cab)}<br><span class="t-note">${p.legs.cab.ideal}</span></td>
+        <td>${fmt(p.legs.dxa)}<br><span class="t-note">${p.legs.dxa.ideal}</span></td>
+        <td>${fmt(p.legs.dbc)}<br><span class="t-note">${p.legs.dbc.ideal}</span></td>
+        <td class="t-note">${p.note}</td>`;
       tbody.appendChild(tr);
     });
   });
 }
 
-// ── INIT ──────────────────────────────────────────────────────────
-buildTabs();
-renderPanel();
-renderInputs();
-buildMasterTable();
+document.addEventListener('keydown', e => { if (e.key === 'Enter') analyze(); });
+buildRefTable();
 </script>
 </body>
 </html>
