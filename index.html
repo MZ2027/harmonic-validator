@@ -522,72 +522,72 @@ const PATTERNS = [
     nameAr: 'الجارتلي',
     nameEn: 'GARTLEY',
     category: 'كلاسيكية',
-    desc: 'أقدم النماذج الهارمونية، اكتُشف عام 1935. نموذج استمراري قوي يُشكّل W/M ويعيد الاختبار عند 78.6% من XA.',
-    prz: '0.786 من XA',
+    desc: 'أقدم النماذج الهارمونية، اكتُشف عام 1935. نموذج استمراري قوي. B المثالي 0.618، والمقبول 0.588–0.648. مهم: عدم كسر القاع عند C.',
+    prz: '0.78–0.88 من XA',
     points: 'XABCD',
     type: 'استمراري',
     reliability: '★★★★☆',
     legs: [
-      { label: 'B من XA', min: 0.618, max: 0.618, ideal: 0.618 },
-      { label: 'C من AB', min: 0.382, max: 0.886, ideal: '0.618' },
-      { label: 'D من XA', min: 0.786, max: 0.786, ideal: 0.786 },
-      { label: 'D من BC', min: 1.272, max: 1.618, ideal: '1.272' },
+      { label: 'B من XA', min: 0.588, max: 0.648, ideal: '0.618 مثالي' },
+      { label: 'C من AB', min: 0.382, max: 0.886, ideal: '0.618 — مهم: لا كسر القاع' },
+      { label: 'D من XA', min: 0.780, max: 0.880, ideal: '0.786 مثالي' },
+      { label: 'D من BC', min: 1.130, max: 1.618, ideal: '1.13 / 1.27 / 1.618' },
     ],
-    tableNote: 'B مثالي = 0.618 بالضبط · D عند 0.786 XA'
+    tableNote: 'B: 0.588–0.648 · D من XA: 0.78–0.88 · D من BC: 1.13/1.27/1.618'
   },
   {
     id: 'bat',
     nameAr: 'الخفاش',
     nameEn: 'BAT',
     category: 'كلاسيكية',
-    desc: 'من أدق النماذج الهارمونية، اكتشفه Carney عام 2001. B يجب أن يكون أقل من 0.618، مثالياً 0.500 أو 0.382. BC لا يقل عن 1.618.',
+    desc: 'من أدق النماذج الهارمونية، اكتشفه Carney عام 2001. B بين 0.382–0.55. BC لا تقل عن 1.618. مهم: عدم كسر القاع عند C.',
     prz: '0.886 من XA',
     points: 'XABCD',
     type: 'انعكاسي',
     reliability: '★★★★★',
     legs: [
-      { label: 'B من XA', min: 0.382, max: 0.500, ideal: '0.500 مثالي' },
-      { label: 'C من AB', min: 0.382, max: 0.886, ideal: '0.618' },
-      { label: 'D من XA', min: 0.886, max: 0.886, ideal: 0.886 },
-      { label: 'D من BC', min: 1.618, max: 2.618, ideal: '1.618 أو 2.000' },
+      { label: 'B من XA', min: 0.382, max: 0.550, ideal: '0.500 مثالي' },
+      { label: 'C من AB', min: 0.382, max: 0.886, ideal: '0.618 — مهم: لا كسر القاع' },
+      { label: 'D من XA', min: 0.886, max: 0.886, ideal: '0.886 بالضبط' },
+      { label: 'D من BC', min: 1.618, max: 2.618, ideal: '1.618 / 2 / 2.24 / 2.618' },
     ],
-    tableNote: 'B < 0.618 · BC لا تقل عن 1.618 أبداً · D = 0.886 XA'
+    tableNote: 'B: 0.382–0.55 · D = 0.886 XA · BC: 1.618/2/2.24/2.618'
   },
   {
     id: 'butterfly',
     nameAr: 'الفراشة',
     nameEn: 'BUTTERFLY',
     category: 'كلاسيكية',
-    desc: 'نموذج امتدادي اكتشف هيكله Bryce Gilmore وحدّد Carney نسبه الدقيقة. B = 0.786 إلزامي. 1.27 XA هو الرقم الأهم في PRZ.',
-    prz: '1.27–1.618 من XA',
+    desc: 'نموذج امتدادي، B بين 0.755–0.816 (مثالي 0.786). مهم: عدم كسر القاع عند C. D من XA = 1.27 هو الرقم الأهم.',
+    prz: '1.27 من XA',
     points: 'XABCD',
     type: 'انعكاسي عميق',
     reliability: '★★★★☆',
     legs: [
-      { label: 'B من XA', min: 0.786, max: 0.786, ideal: '0.786 إلزامي' },
-      { label: 'C من AB', min: 0.382, max: 0.886, ideal: '0.618' },
-      { label: 'D من XA', min: 1.270, max: 1.618, ideal: '1.270 أهم رقم' },
-      { label: 'D من BC', min: 1.618, max: 2.618, ideal: '2.00 أو 2.24 أو 2.618' },
+      { label: 'B من XA', min: 0.755, max: 0.816, ideal: '0.786 مثالي' },
+      { label: 'C من AB', min: 0.382, max: 0.886, ideal: '0.618 — مهم: لا كسر القاع' },
+      { label: 'D من XA', min: 1.270, max: 1.270, ideal: '1.27 الرقم الأساسي' },
+      { label: 'D من BC', min: 1.618, max: 2.618, ideal: '1.618 / 2 / 2.24 / 2.618' },
     ],
-    tableNote: 'B = 0.786 إلزامي · 1.27 XA أساس PRZ · BC امتداد قصوي'
+    tableNote: 'B: 0.755–0.816 · D من XA = 1.27 · BC: 1.618/2/2.24/2.618'
   },
   {
     id: 'crab',
     nameAr: 'السرطان',
     nameEn: 'CRAB',
     category: 'كلاسيكية',
-    desc: 'أكثر النماذج دقة حسب Carney. امتداد قصوي عند 1.618 من XA يُوفّر نسبة مكافأة/مخاطرة ممتازة.',
-    prz: '1.618 من XA',
+    desc: 'أكثر النماذج دقة حسب Carney. B بين 0.382–0.618. مهم: عدم كسر القاع عند C. D من XA بين 1.618–1.902.',
+    prz: '1.618–1.902 من XA',
     points: 'XABCD',
     type: 'انعكاسي قصوي',
     reliability: '★★★★★',
     legs: [
       { label: 'B من XA', min: 0.382, max: 0.618, ideal: '0.382–0.618' },
-      { label: 'C من AB', min: 0.382, max: 0.886, ideal: '0.618' },
-      { label: 'D من XA', min: 1.618, max: 1.618, ideal: 1.618 },
-      { label: 'D من BC', min: 2.240, max: 3.618, ideal: '2.618' },
+      { label: 'C من AB', min: 0.382, max: 0.886, ideal: '0.618 — مهم: لا كسر القاع' },
+      { label: 'D من XA', min: 1.618, max: 1.902, ideal: '1.618 مثالي' },
+      { label: 'D من BC', min: 2.618, max: 3.618, ideal: '2.618 / 3.14 / 3.618' },
     ],
-    tableNote: 'D = 1.618 XA بالضبط · أوسع امتداد'
+    tableNote: 'B: 0.382–0.618 · D من XA: 1.618–1.902 · BC: 2.618/3.14/3.618'
   },
   // ── الفرعية / المتطورة ──────────────────────────────────────────
   {
@@ -595,54 +595,54 @@ const PATTERNS = [
     nameAr: 'الخفاش البديل',
     nameEn: 'ALTERNATE BAT',
     category: 'نماذج فرعية',
-    desc: 'اكتشفه Carney عام 2003. يستخدم 1.13 من XA كنقطة انعكاس. B يجب أن يكون ≤ 0.382 من XA.',
+    desc: 'اكتشفه Carney عام 2003. B بين 0.352–0.382. مهم: عدم كسر القاع عند C. D من XA = 1.13 بالضبط.',
     prz: '1.13 من XA',
     points: 'XABCD',
     type: 'انعكاسي',
     reliability: '★★★★☆',
     legs: [
-      { label: 'B من XA', min: 0.382, max: 0.382, ideal: '≤ 0.382' },
-      { label: 'C من AB', min: 0.382, max: 0.886, ideal: '0.618' },
-      { label: 'D من XA', min: 1.130, max: 1.130, ideal: 1.130 },
-      { label: 'D من BC', min: 2.000, max: 3.618, ideal: '2.000' },
+      { label: 'B من XA', min: 0.352, max: 0.382, ideal: '0.382 الحد الأقصى' },
+      { label: 'C من AB', min: 0.382, max: 0.886, ideal: '0.618 — مهم: لا كسر القاع' },
+      { label: 'D من XA', min: 1.130, max: 1.130, ideal: '1.13 بالضبط' },
+      { label: 'D من BC', min: 2.000, max: 3.618, ideal: '2 / 2.24 / 2.618 / 3 / 3.618' },
     ],
-    tableNote: 'B ≤ 0.382 · D = 1.13 XA · AB=CD ممتد'
+    tableNote: 'B: 0.352–0.382 · D = 1.13 XA · BC: 2/2.24/2.618/3/3.618'
   },
   {
     id: 'deep-crab',
     nameAr: 'السرطان العميق',
     nameEn: 'DEEP CRAB',
     category: 'نماذج فرعية',
-    desc: 'نسخة مُعمَّقة من السرطان تجمع بين خصائص الخفاش والسرطان. B عند 0.886 مع D عند 1.618.',
-    prz: '1.618 من XA',
+    desc: 'نسخة مُعمَّقة من السرطان. B بين 0.88–0.936. مهم: عدم كسر القاع عند C. D من XA بين 1.618–1.902.',
+    prz: '1.618–1.902 من XA',
     points: 'XABCD',
     type: 'انعكاسي قصوي',
     reliability: '★★★★☆',
     legs: [
-      { label: 'B من XA', min: 0.886, max: 0.886, ideal: 0.886 },
-      { label: 'C من AB', min: 0.382, max: 0.886, ideal: '0.618' },
-      { label: 'D من XA', min: 1.618, max: 1.618, ideal: 1.618 },
-      { label: 'D من BC', min: 2.618, max: 3.618, ideal: '2.618' },
+      { label: 'B من XA', min: 0.880, max: 0.936, ideal: '0.886 مثالي' },
+      { label: 'C من AB', min: 0.382, max: 0.886, ideal: '0.618 — مهم: لا كسر القاع' },
+      { label: 'D من XA', min: 1.618, max: 1.902, ideal: '1.618 مثالي' },
+      { label: 'D من BC', min: 2.000, max: 3.618, ideal: '2 / 2.24 / 2.618 / 3 / 3.618' },
     ],
-    tableNote: 'B = 0.886 · D = 1.618 · منطقة ضيقة'
+    tableNote: 'B: 0.88–0.936 · D من XA: 1.618–1.902 · BC: 2/2.24/2.618/3/3.618'
   },
   {
     id: 'shark',
     nameAr: 'القرش',
     nameEn: 'SHARK',
     category: 'كلاسيكية',
-    desc: 'اكتشفه Carney عام 2011 ونشره في Volume Three. يستخدم نقاط O,X,A,B,C. الإتمام عند 0.886–1.13 من OX. BC لا تقل عن 1.618 من AB.',
-    prz: '0.886–1.13 من OX',
+    desc: 'اكتشفه Carney عام 2011، نشره في Volume Three. B بين 0.382–0.618 من XA. C بين 1.13–1.618. D من XA بين 0.88–1.13.',
+    prz: '0.88–1.13 من XA',
     points: 'OXABC',
     type: 'دفعي/انعكاسي',
     reliability: '★★★★☆',
     legs: [
-      { label: 'AB من XA', min: 1.130, max: 1.618, ideal: '1.130–1.618' },
-      { label: 'BC من AB', min: 1.618, max: 2.240, ideal: '1.618–2.240' },
-      { label: 'C من OX', min: 0.886, max: 1.130, ideal: '0.886 حد أدنى' },
-      { label: 'وقف الخسارة', min: null, max: null, ideal: 'ما وراء C' },
+      { label: 'B من XA', min: 0.382, max: 0.618, ideal: '0.382–0.618' },
+      { label: 'C من AB', min: 1.130, max: 1.618, ideal: '1.13–1.618' },
+      { label: 'D من XA', min: 0.880, max: 1.130, ideal: '0.886–1.13' },
+      { label: 'D من BC', min: 1.618, max: 2.240, ideal: '1.618 / 2 / 2.24' },
     ],
-    tableNote: 'C = 0.886–1.13 من OX · BC 1.618 حد أدنى · يسبق 5-0'
+    tableNote: 'B: 0.382–0.618 · C: 1.13–1.618 · D من XA: 0.88–1.13 · BC: 1.618/2/2.24'
   },
   {
     id: 'five-zero',
@@ -717,62 +717,7 @@ const PATTERNS = [
     ],
     tableNote: 'CD = 1.272 أو 1.618 من AB'
   },
-  // ── ثلاثة دفعات ─────────────────────────────────────────────────
-  {
-    id: 'three-drives',
-    nameAr: 'ثلاثة دفعات',
-    nameEn: 'THREE DRIVES',
-    category: 'نماذج خاصة',
-    desc: 'نموذج من 6 نقاط يتكون من 3 دفعات متصاعدة (أو متراجعة) متماثلة في النسب والوقت.',
-    prz: 'الدفعة الثالثة',
-    points: '6 نقاط',
-    type: 'انعكاسي',
-    reliability: '★★★☆☆',
-    legs: [
-      { label: 'تراجع 1', min: 0.618, max: 0.786, ideal: '0.618–0.786' },
-      { label: 'تراجع 2', min: 0.618, max: 0.786, ideal: '0.618–0.786' },
-      { label: 'امتداد 1', min: 1.272, max: 1.618, ideal: '1.272' },
-      { label: 'امتداد 2', min: 1.272, max: 1.618, ideal: '1.272' },
-    ],
-    tableNote: 'تماثل الوقت بين الدفعات ضروري'
-  },
-  // ── نموذج خاص بـ V3 ─────────────────────────────────────────────
-  {
-    id: 'nen-star',
-    nameAr: 'نجمة نين',
-    nameEn: 'NEN STAR',
-    category: 'نماذج V3 المتقدمة',
-    desc: 'نموذج متقدم من V3. B عند 0.618، C يمتد 1.272–2.618 من AB، D عند 0.786 من XA.',
-    prz: '0.786 من XA',
-    points: 'XABCD',
-    type: 'انعكاسي',
-    reliability: '★★★☆☆',
-    legs: [
-      { label: 'B من XA', min: 0.618, max: 0.618, ideal: 0.618 },
-      { label: 'C من AB', min: 1.272, max: 2.618, ideal: '1.618' },
-      { label: 'D من XA', min: 0.786, max: 0.786, ideal: 0.786 },
-      { label: 'D من BC', min: 0.382, max: 0.618, ideal: '0.500' },
-    ],
-    tableNote: 'C يتجاوز A بامتداد · D = 0.786 XA'
-  },
-  {
-    id: 'leonardo',
-    nameAr: 'ليوناردو',
-    nameEn: 'LEONARDO',
-    category: 'نماذج V3 المتقدمة',
-    desc: 'نموذج مُستوحى من Fibonacci/Leonardo. B عند 0.500، D عند 0.786 من XA مع AB=CD.',
-    prz: '0.786 من XA',
-    points: 'XABCD',
-    type: 'انعكاسي',
-    reliability: '★★★☆☆',
-    legs: [
-      { label: 'B من XA', min: 0.500, max: 0.500, ideal: 0.500 },
-      { label: 'C من AB', min: 0.382, max: 0.886, ideal: '0.618' },
-      { label: 'D من XA', min: 0.786, max: 0.886, ideal: '0.786' },
-      { label: 'D من BC', min: 1.128, max: 2.618, ideal: '1.618' },
-    ],
-    tableNote: 'B = 0.500 بالضبط · قريب من الجارتلي'
-  },
+
 ];
 
 // ═══════════════════════════════════════════════════════════════════
@@ -863,7 +808,8 @@ function checkInput(i) {
   const inp = document.getElementById('inp_' + i);
   const status = document.getElementById('status_' + i);
   if (isNaN(val)) { inp.className = 'ratio-input'; status.textContent = '·'; return; }
-  const ok = val >= leg.min * 0.97 && val <= leg.max * 1.03;
+  // Use exact min/max range from pattern definition (no extra tolerance)
+  const ok = val >= leg.min && val <= leg.max;
   inp.className = 'ratio-input ' + (ok ? 'valid' : 'invalid');
   status.textContent = ok ? '✓' : '✗';
 }
@@ -876,7 +822,7 @@ function validatePattern() {
   validLegs.forEach((leg, i) => {
     const val = parseFloat(document.getElementById('inp_' + i).value);
     if (isNaN(val)) { allFilled = false; return; }
-    const ok = val >= leg.min * 0.97 && val <= leg.max * 1.03;
+    const ok = val >= leg.min && val <= leg.max;
     if (!ok) { allValid = false; failedLegs.push(leg.label); }
   });
 
