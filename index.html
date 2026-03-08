@@ -17,9 +17,9 @@
     --cyan: #0e7490;
     --red: #dc2626;
     --green: #16a34a;
-    --muted: #6b7a99;
-    --text: #2d3a4a;
-    --text-bright: #111827;
+    --muted: #4a5568;
+    --text: #000000;
+    --text-bright: #000000;
     --mono: 'IBM Plex Mono', monospace;
     --arabic: 'Tajawal', sans-serif;
   }
@@ -35,17 +35,7 @@
   }
 
   /* Grid background */
-  body::before {
-    content: '';
-    position: fixed;
-    inset: 0;
-    background-image:
-      linear-gradient(rgba(180,195,220,0.4) 1px, transparent 1px),
-      linear-gradient(90deg, rgba(180,195,220,0.4) 1px, transparent 1px);
-    background-size: 40px 40px;
-    pointer-events: none;
-    z-index: 0;
-  }
+  body::before { display: none; }
 
   .wrapper { position: relative; z-index: 1; max-width: 1100px; margin: 0 auto; padding: 0 20px; }
 
