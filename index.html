@@ -1,1031 +1,950 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>محقق نماذج الهارمونيك</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@300;400;500;700;900&family=IBM+Plex+Mono:wght@400;600&display=swap" rel="stylesheet" />
-  <style>
-    :root {
-      --bg: #060a0f;
-      --surface: #0d1520;
-      --surface2: #111d2e;
-      --border: #1a2d45;
-      --gold: #c9a84c;
-      --gold-dim: #8a6e2f;
-      --green: #00e5a0;
-      --green-dim: #00a872;
-      --red: #ff4757;
-      --red-dim: #c0392b;
-      --blue: #3fa9f5;
-      --text: #e8f0fa;
-      --text-dim: #6b8aab;
-      --text-muted: #3a566e;
-    }
-
-    * { box-sizing: border-box; margin: 0; padding: 0; }
-
-    body {
-      background: var(--bg);
-      color: var(--text);
-      font-family: 'Tajawal', sans-serif;
-      min-height: 100vh;
-      overflow-x: hidden;
-    }
-
-    /* Background grid */
-    body::before {
-      content: '';
-      position: fixed;
-      inset: 0;
-      background-image:
-        linear-gradient(rgba(201,168,76,0.03) 1px, transparent 1px),
-        linear-gradient(90deg, rgba(201,168,76,0.03) 1px, transparent 1px);
-      background-size: 40px 40px;
-      pointer-events: none;
-      z-index: 0;
-    }
-
-    /* Glow orbs */
-    body::after {
-      content: '';
-      position: fixed;
-      top: -200px;
-      right: -200px;
-      width: 600px;
-      height: 600px;
-      background: radial-gradient(circle, rgba(201,168,76,0.06) 0%, transparent 70%);
-      pointer-events: none;
-      z-index: 0;
-    }
-
-    .wrapper {
-      position: relative;
-      z-index: 1;
-      max-width: 1100px;
-      margin: 0 auto;
-      padding: 0 24px 60px;
-    }
-
-    /* ===== HEADER ===== */
-    header {
-      padding: 40px 0 30px;
-      text-align: center;
-      border-bottom: 1px solid var(--border);
-      margin-bottom: 40px;
-      position: relative;
-    }
-
-    .logo-line {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 16px;
-      margin-bottom: 10px;
-    }
-
-    .logo-symbol {
-      font-family: 'IBM Plex Mono', monospace;
-      font-size: 28px;
-      color: var(--gold);
-      opacity: 0.8;
-    }
-
-    header h1 {
-      font-size: clamp(26px, 4vw, 38px);
-      font-weight: 900;
-      letter-spacing: -0.5px;
-      background: linear-gradient(135deg, var(--gold) 0%, #fff5d6 50%, var(--gold) 100%);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      background-clip: text;
-    }
-
-    header p {
-      color: var(--text-dim);
-      font-size: 15px;
-      margin-top: 8px;
-      font-weight: 300;
-    }
-
-    .version-badge {
-      display: inline-block;
-      margin-top: 12px;
-      padding: 3px 12px;
-      border: 1px solid var(--gold-dim);
-      border-radius: 20px;
-      font-size: 11px;
-      color: var(--gold);
-      font-family: 'IBM Plex Mono', monospace;
-      letter-spacing: 1px;
-    }
-
-    /* ===== PATTERN SELECTOR ===== */
-    .selector-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
-      gap: 10px;
-      margin-bottom: 36px;
-    }
-
-    .pattern-btn {
-      background: var(--surface);
-      border: 1px solid var(--border);
-      border-radius: 10px;
-      padding: 14px 10px;
-      cursor: pointer;
-      transition: all 0.2s;
-      text-align: center;
-      color: var(--text-dim);
-      font-family: 'Tajawal', sans-serif;
-      font-size: 14px;
-      font-weight: 500;
-    }
-
-    .pattern-btn .en-name {
-      display: block;
-      font-family: 'IBM Plex Mono', monospace;
-      font-size: 12px;
-      color: var(--text-muted);
-      margin-bottom: 4px;
-    }
-
-    .pattern-btn:hover {
-      border-color: var(--gold-dim);
-      color: var(--text);
-      background: var(--surface2);
-    }
-
-    .pattern-btn.active {
-      border-color: var(--gold);
-      background: linear-gradient(135deg, rgba(201,168,76,0.12), rgba(201,168,76,0.04));
-      color: var(--gold);
-    }
-
-    .pattern-btn.active .en-name { color: var(--gold-dim); }
-
-    /* ===== MAIN CARD ===== */
-    .card {
-      background: var(--surface);
-      border: 1px solid var(--border);
-      border-radius: 16px;
-      overflow: hidden;
-    }
-
-    .card-header {
-      padding: 20px 28px;
-      border-bottom: 1px solid var(--border);
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      background: var(--surface2);
-    }
-
-    .card-title {
-      font-size: 20px;
-      font-weight: 700;
-      color: var(--text);
-    }
-
-    .card-title span {
-      font-family: 'IBM Plex Mono', monospace;
-      color: var(--gold);
-      font-size: 16px;
-      margin-right: 10px;
-    }
-
-    .info-badge {
-      font-size: 12px;
-      color: var(--text-muted);
-      font-family: 'IBM Plex Mono', monospace;
-    }
-
-    .card-body { padding: 28px; }
-
-    /* ===== INPUTS GRID ===== */
-    .inputs-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 20px;
-      margin-bottom: 28px;
-    }
-
-    @media (max-width: 600px) {
-      .inputs-grid { grid-template-columns: 1fr; }
-    }
-
-    .input-group {
-      position: relative;
-    }
-
-    .input-group label {
-      display: block;
-      font-size: 13px;
-      color: var(--text-dim);
-      margin-bottom: 8px;
-      font-weight: 500;
-    }
-
-    .input-group label .point-tag {
-      font-family: 'IBM Plex Mono', monospace;
-      font-size: 11px;
-      background: rgba(201,168,76,0.1);
-      color: var(--gold);
-      padding: 2px 7px;
-      border-radius: 4px;
-      margin-left: 8px;
-    }
-
-    .input-group label .range-hint {
-      font-size: 11px;
-      color: var(--text-muted);
-      font-family: 'IBM Plex Mono', monospace;
-      display: block;
-      margin-top: 3px;
-    }
-
-    .input-wrapper {
-      position: relative;
-    }
-
-    .input-wrapper input {
-      width: 100%;
-      background: var(--bg);
-      border: 1.5px solid var(--border);
-      border-radius: 8px;
-      padding: 12px 44px 12px 16px;
-      color: var(--text);
-      font-size: 18px;
-      font-family: 'IBM Plex Mono', monospace;
-      font-weight: 600;
-      outline: none;
-      transition: border-color 0.2s, box-shadow 0.2s;
-      text-align: center;
-      direction: ltr;
-    }
-
-    .input-wrapper input:focus {
-      border-color: var(--gold-dim);
-      box-shadow: 0 0 0 3px rgba(201,168,76,0.1);
-    }
-
-    .input-wrapper input.valid {
-      border-color: var(--green);
-      box-shadow: 0 0 0 3px rgba(0,229,160,0.08);
-    }
-
-    .input-wrapper input.invalid {
-      border-color: var(--red);
-      box-shadow: 0 0 0 3px rgba(255,71,87,0.08);
-    }
-
-    .input-status {
-      position: absolute;
-      left: 12px;
-      top: 50%;
-      transform: translateY(-50%);
-      font-size: 18px;
-      transition: all 0.2s;
-    }
-
-    /* ===== VALIDATE BUTTON ===== */
-    .validate-btn {
-      width: 100%;
-      padding: 16px;
-      background: linear-gradient(135deg, var(--gold) 0%, #e8c05a 100%);
-      border: none;
-      border-radius: 10px;
-      color: #0d0a00;
-      font-family: 'Tajawal', sans-serif;
-      font-size: 17px;
-      font-weight: 700;
-      cursor: pointer;
-      transition: all 0.25s;
-      letter-spacing: 0.3px;
-      margin-bottom: 24px;
-    }
-
-    .validate-btn:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 8px 24px rgba(201,168,76,0.35);
-    }
-
-    .validate-btn:active { transform: translateY(0); }
-
-    /* ===== RESULT ===== */
-    .result-panel {
-      border-radius: 12px;
-      padding: 24px;
-      display: none;
-      animation: slideUp 0.3s ease;
-    }
-
-    @keyframes slideUp {
-      from { opacity: 0; transform: translateY(12px); }
-      to { opacity: 1; transform: translateY(0); }
-    }
-
-    .result-panel.valid-result {
-      display: block;
-      background: linear-gradient(135deg, rgba(0,229,160,0.08), rgba(0,229,160,0.03));
-      border: 1px solid rgba(0,229,160,0.3);
-    }
-
-    .result-panel.invalid-result {
-      display: block;
-      background: linear-gradient(135deg, rgba(255,71,87,0.08), rgba(255,71,87,0.03));
-      border: 1px solid rgba(255,71,87,0.3);
-    }
-
-    .result-header {
-      display: flex;
-      align-items: center;
-      gap: 14px;
-      margin-bottom: 18px;
-    }
-
-    .result-icon {
-      font-size: 36px;
-      line-height: 1;
-    }
-
-    .result-title {
-      font-size: 22px;
-      font-weight: 800;
-    }
-
-    .valid-result .result-title { color: var(--green); }
-    .invalid-result .result-title { color: var(--red); }
-
-    .result-subtitle {
-      font-size: 13px;
-      color: var(--text-dim);
-      margin-top: 2px;
-    }
-
-    /* Detail rows */
-    .details-grid {
-      display: grid;
-      gap: 8px;
-    }
-
-    .detail-row {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding: 10px 14px;
-      background: rgba(0,0,0,0.25);
-      border-radius: 8px;
-      border-right: 3px solid transparent;
-    }
-
-    .detail-row.ok { border-right-color: var(--green); }
-    .detail-row.fail { border-right-color: var(--red); }
-    .detail-row.warn { border-right-color: var(--gold); }
-
-    .detail-label {
-      font-size: 13px;
-      color: var(--text-dim);
-    }
-
-    .detail-label strong {
-      font-family: 'IBM Plex Mono', monospace;
-      font-size: 12px;
-      color: var(--gold);
-      background: rgba(201,168,76,0.1);
-      padding: 2px 6px;
-      border-radius: 3px;
-      margin-left: 8px;
-    }
-
-    .detail-right {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      font-family: 'IBM Plex Mono', monospace;
-    }
-
-    .detail-value {
-      font-size: 15px;
-      font-weight: 600;
-      color: var(--text);
-    }
-
-    .detail-range {
-      font-size: 11px;
-      color: var(--text-muted);
-    }
-
-    .detail-status {
-      font-size: 16px;
-    }
-
-    /* ===== REFERENCE TABLE ===== */
-    .ref-section {
-      margin-top: 40px;
-    }
-
-    .ref-title {
-      font-size: 16px;
-      font-weight: 700;
-      color: var(--text-dim);
-      margin-bottom: 16px;
-      padding-bottom: 10px;
-      border-bottom: 1px solid var(--border);
-      display: flex;
-      align-items: center;
-      gap: 10px;
-    }
-
-    .ref-title::before {
-      content: '';
-      display: inline-block;
-      width: 4px;
-      height: 16px;
-      background: var(--gold);
-      border-radius: 2px;
-    }
-
-    .ref-table {
-      width: 100%;
-      border-collapse: collapse;
-      font-size: 13px;
-    }
-
-    .ref-table th {
-      padding: 10px 14px;
-      background: var(--surface2);
-      color: var(--text-muted);
-      font-weight: 600;
-      text-align: right;
-      border-bottom: 1px solid var(--border);
-      font-family: 'IBM Plex Mono', monospace;
-      font-size: 11px;
-      letter-spacing: 0.5px;
-    }
-
-    .ref-table td {
-      padding: 11px 14px;
-      border-bottom: 1px solid rgba(26,45,69,0.5);
-      color: var(--text-dim);
-      vertical-align: middle;
-    }
-
-    .ref-table tr:hover td { background: rgba(201,168,76,0.03); }
-
-    .ref-table .pattern-name {
-      font-weight: 700;
-      color: var(--gold);
-      font-size: 13px;
-    }
-
-    .ref-table .num {
-      font-family: 'IBM Plex Mono', monospace;
-      color: var(--blue);
-      font-size: 12px;
-    }
-
-    .ref-table .special {
-      font-family: 'IBM Plex Mono', monospace;
-      color: var(--green);
-      font-size: 11px;
-    }
-
-    .ref-table .note {
-      font-size: 11px;
-      color: var(--text-muted);
-      font-style: italic;
-    }
-
-    /* ===== SCROLL BAR ===== */
-    ::-webkit-scrollbar { width: 6px; }
-    ::-webkit-scrollbar-track { background: var(--bg); }
-    ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
-
-    /* ===== FOOTER ===== */
-    footer {
-      text-align: center;
-      padding: 30px 0 10px;
-      color: var(--text-muted);
-      font-size: 12px;
-      font-family: 'IBM Plex Mono', monospace;
-      border-top: 1px solid var(--border);
-      margin-top: 50px;
-    }
-  </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>محقق نماذج الهارمونيك — Scott Carney V3</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@300;400;600&family=Tajawal:wght@300;400;500;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #050a0f;
+    --surface: #0b1420;
+    --surface2: #0f1d2e;
+    --border: #1a3050;
+    --gold: #c8963e;
+    --gold2: #e8b55a;
+    --cyan: #2dd4bf;
+    --red: #ef4444;
+    --green: #22c55e;
+    --muted: #4a6580;
+    --text: #c8d8e8;
+    --text-bright: #e8f0f8;
+    --mono: 'IBM Plex Mono', monospace;
+    --arabic: 'Tajawal', sans-serif;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: var(--arabic);
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  /* Grid background */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image:
+      linear-gradient(rgba(26,48,80,0.3) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(26,48,80,0.3) 1px, transparent 1px);
+    background-size: 40px 40px;
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  .wrapper { position: relative; z-index: 1; max-width: 1100px; margin: 0 auto; padding: 0 20px; }
+
+  /* ── HEADER ── */
+  header {
+    border-bottom: 1px solid var(--border);
+    padding: 28px 0 22px;
+    margin-bottom: 32px;
+  }
+  .header-inner {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    flex-wrap: wrap;
+  }
+  .logo-mark {
+    width: 48px; height: 48px;
+    border: 2px solid var(--gold);
+    display: flex; align-items: center; justify-content: center;
+    font-family: var(--mono);
+    color: var(--gold);
+    font-size: 20px;
+    flex-shrink: 0;
+    position: relative;
+    animation: pulse-border 3s ease-in-out infinite;
+  }
+  @keyframes pulse-border {
+    0%,100% { box-shadow: 0 0 0 0 rgba(200,150,62,0); }
+    50% { box-shadow: 0 0 0 6px rgba(200,150,62,0.15); }
+  }
+  .header-text h1 {
+    font-size: 22px;
+    font-weight: 700;
+    color: var(--text-bright);
+    letter-spacing: 0.03em;
+  }
+  .header-text p {
+    font-size: 12px;
+    color: var(--muted);
+    font-family: var(--mono);
+    letter-spacing: 0.1em;
+    margin-top: 3px;
+  }
+  .version-badge {
+    margin-right: auto;
+    background: linear-gradient(135deg, var(--gold) 0%, #8b5e20 100%);
+    color: #0a0500;
+    font-family: var(--mono);
+    font-size: 11px;
+    font-weight: 600;
+    padding: 4px 12px;
+    letter-spacing: 0.12em;
+  }
+
+  /* ── PATTERN TABS ── */
+  .pattern-nav {
+    display: flex;
+    gap: 2px;
+    margin-bottom: 24px;
+    flex-wrap: wrap;
+    border-bottom: 1px solid var(--border);
+    padding-bottom: 0;
+  }
+  .tab-btn {
+    background: transparent;
+    border: none;
+    border-bottom: 2px solid transparent;
+    padding: 10px 18px;
+    color: var(--muted);
+    font-family: var(--mono);
+    font-size: 11px;
+    letter-spacing: 0.1em;
+    cursor: pointer;
+    transition: all 0.2s;
+    white-space: nowrap;
+    margin-bottom: -1px;
+  }
+  .tab-btn:hover { color: var(--text); }
+  .tab-btn.active {
+    color: var(--gold);
+    border-bottom-color: var(--gold);
+  }
+
+  /* ── MAIN GRID ── */
+  .main-grid {
+    display: grid;
+    grid-template-columns: 340px 1fr;
+    gap: 20px;
+    margin-bottom: 40px;
+  }
+  @media(max-width: 780px) { .main-grid { grid-template-columns: 1fr; } }
+
+  /* ── PANEL ── */
+  .panel {
+    background: var(--surface);
+    border: 1px solid var(--border);
+  }
+  .panel-header {
+    padding: 14px 18px;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  .panel-title {
+    font-family: var(--mono);
+    font-size: 11px;
+    letter-spacing: 0.12em;
+    color: var(--gold);
+    text-transform: uppercase;
+  }
+  .panel-body { padding: 18px; }
+
+  /* ── PATTERN INFO ── */
+  .pattern-name-ar {
+    font-size: 26px;
+    font-weight: 700;
+    color: var(--text-bright);
+    margin-bottom: 4px;
+  }
+  .pattern-name-en {
+    font-family: var(--mono);
+    font-size: 14px;
+    color: var(--gold2);
+    letter-spacing: 0.1em;
+    margin-bottom: 14px;
+  }
+  .pattern-desc {
+    font-size: 13px;
+    line-height: 1.7;
+    color: var(--muted);
+    margin-bottom: 16px;
+    border-right: 2px solid var(--border);
+    padding-right: 12px;
+  }
+  .pattern-meta {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+    margin-bottom: 16px;
+  }
+  .meta-item {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    padding: 8px 10px;
+  }
+  .meta-label {
+    font-family: var(--mono);
+    font-size: 9px;
+    color: var(--muted);
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    margin-bottom: 3px;
+  }
+  .meta-value {
+    font-family: var(--mono);
+    font-size: 13px;
+    color: var(--cyan);
+    font-weight: 600;
+  }
+
+  /* ── RATIOS TABLE IN PANEL ── */
+  .ratio-rows { display: flex; flex-direction: column; gap: 6px; }
+  .ratio-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    padding: 8px 12px;
+  }
+  .ratio-label {
+    font-family: var(--mono);
+    font-size: 12px;
+    color: var(--muted);
+    min-width: 70px;
+  }
+  .ratio-range {
+    flex: 1;
+    font-family: var(--mono);
+    font-size: 12px;
+    color: var(--text);
+  }
+  .ratio-ideal {
+    font-family: var(--mono);
+    font-size: 12px;
+    color: var(--gold);
+    font-weight: 600;
+  }
+
+  /* ── INPUT FORM ── */
+  .inputs-section { }
+  .input-group {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 10px;
+  }
+  .input-label {
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--muted);
+    min-width: 90px;
+    letter-spacing: 0.08em;
+  }
+  .ratio-input {
+    flex: 1;
+    background: var(--bg);
+    border: 1px solid var(--border);
+    color: var(--text-bright);
+    font-family: var(--mono);
+    font-size: 14px;
+    padding: 9px 12px;
+    outline: none;
+    transition: border-color 0.2s;
+    width: 100%;
+  }
+  .ratio-input:focus { border-color: var(--gold); }
+  .ratio-input.valid { border-color: var(--green); }
+  .ratio-input.invalid { border-color: var(--red); }
+
+  .input-status {
+    min-width: 20px;
+    text-align: center;
+    font-size: 16px;
+  }
+
+  .validate-btn {
+    width: 100%;
+    margin-top: 14px;
+    background: var(--gold);
+    border: none;
+    color: #050a0f;
+    font-family: var(--mono);
+    font-size: 13px;
+    font-weight: 600;
+    letter-spacing: 0.12em;
+    padding: 13px;
+    cursor: pointer;
+    transition: all 0.2s;
+    text-transform: uppercase;
+  }
+  .validate-btn:hover { background: var(--gold2); }
+
+  /* ── RESULT ── */
+  .result-box {
+    margin-top: 14px;
+    padding: 14px;
+    border: 1px solid var(--border);
+    display: none;
+    animation: fadeIn 0.3s ease;
+  }
+  @keyframes fadeIn { from { opacity:0; transform: translateY(4px); } to { opacity:1; transform: translateY(0); } }
+  .result-box.valid { border-color: var(--green); background: rgba(34,197,94,0.06); }
+  .result-box.invalid { border-color: var(--red); background: rgba(239,68,68,0.06); }
+  .result-box.warning { border-color: var(--gold); background: rgba(200,150,62,0.06); }
+
+  .result-icon { font-size: 24px; margin-bottom: 6px; }
+  .result-title {
+    font-family: var(--mono);
+    font-size: 13px;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    margin-bottom: 4px;
+  }
+  .result-title.valid { color: var(--green); }
+  .result-title.invalid { color: var(--red); }
+  .result-title.warning { color: var(--gold); }
+  .result-detail {
+    font-size: 12px;
+    color: var(--muted);
+    line-height: 1.6;
+  }
+
+  /* ── MASTER TABLE ── */
+  .table-section { margin-top: 40px; }
+  .section-title {
+    font-family: var(--mono);
+    font-size: 11px;
+    letter-spacing: 0.16em;
+    color: var(--gold);
+    text-transform: uppercase;
+    margin-bottom: 14px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+  .section-title::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: var(--border);
+  }
+
+  .master-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-family: var(--mono);
+    font-size: 12px;
+  }
+  .master-table th {
+    background: var(--surface2);
+    color: var(--gold);
+    font-weight: 600;
+    font-size: 10px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    padding: 10px 14px;
+    text-align: right;
+    border: 1px solid var(--border);
+  }
+  .master-table td {
+    padding: 9px 14px;
+    border: 1px solid var(--border);
+    color: var(--text);
+    vertical-align: middle;
+  }
+  .master-table tr:hover td { background: rgba(200,150,62,0.04); }
+  .master-table tr td:first-child { color: var(--text-bright); font-weight: 600; }
+  .cat-row td {
+    background: var(--surface2);
+    color: var(--muted);
+    font-size: 10px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    padding: 6px 14px;
+  }
+
+  /* ideal highlight */
+  .ideal { color: var(--gold2); }
+  .range { color: var(--cyan); }
+  .note-cell { color: var(--muted); font-size: 11px; }
+
+  /* ── FOOTER ── */
+  footer {
+    border-top: 1px solid var(--border);
+    padding: 20px 0;
+    margin-top: 40px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 10px;
+  }
+  footer span {
+    font-family: var(--mono);
+    font-size: 10px;
+    color: var(--muted);
+    letter-spacing: 0.1em;
+  }
+
+  /* scrollbar */
+  ::-webkit-scrollbar { width: 6px; }
+  ::-webkit-scrollbar-track { background: var(--bg); }
+  ::-webkit-scrollbar-thumb { background: var(--border); }
+</style>
 </head>
 <body>
 <div class="wrapper">
 
+  <!-- HEADER -->
   <header>
-    <div class="logo-line">
-      <span class="logo-symbol">◈</span>
-      <h1>محقق نماذج الهارمونيك</h1>
-      <span class="logo-symbol">◈</span>
+    <div class="header-inner">
+      <div class="logo-mark">◈</div>
+      <div class="header-text">
+        <h1>محقق نماذج الهارمونيك</h1>
+        <p>HARMONIC PATTERNS · SCOTT CARNEY V3</p>
+      </div>
+      <div class="version-badge">V3 · COMPLETE</div>
     </div>
-    <p>أدخل النسب للتحقق من صحة النموذج وفق معايير Scott Carney</p>
-    <span class="version-badge">HARMONIC PATTERNS · V3</span>
   </header>
 
-  <!-- Pattern Selector -->
-  <div class="selector-grid" id="patternSelector"></div>
+  <!-- TABS -->
+  <div class="pattern-nav" id="patternNav">
+    <!-- filled by JS -->
+  </div>
 
-  <!-- Input Card -->
-  <div class="card">
-    <div class="card-header">
-      <div class="card-title">
-        <span id="activePatternCode">GARTLEY</span>
-        <span id="activePatternName">الجارتلي</span>
+  <!-- MAIN GRID -->
+  <div class="main-grid">
+
+    <!-- LEFT: Info + Ratios -->
+    <div>
+      <div class="panel" id="infoPanel">
+        <div class="panel-header">
+          <span class="panel-title" id="panelCategory">النموذج</span>
+        </div>
+        <div class="panel-body">
+          <div class="pattern-name-ar" id="displayNameAr">—</div>
+          <div class="pattern-name-en" id="displayNameEn">—</div>
+          <div class="pattern-desc" id="displayDesc">—</div>
+          <div class="pattern-meta">
+            <div class="meta-item">
+              <div class="meta-label">النقطة الحرجة</div>
+              <div class="meta-value" id="metaPRZ">—</div>
+            </div>
+            <div class="meta-item">
+              <div class="meta-label">هيكل النقاط</div>
+              <div class="meta-value" id="metaPoints">—</div>
+            </div>
+            <div class="meta-item">
+              <div class="meta-label">نوع النموذج</div>
+              <div class="meta-value" id="metaType">—</div>
+            </div>
+            <div class="meta-item">
+              <div class="meta-label">الموثوقية</div>
+              <div class="meta-value" id="metaRel">—</div>
+            </div>
+          </div>
+          <div class="ratio-rows" id="ratioDisplay"></div>
+        </div>
       </div>
-      <div class="info-badge" id="patternNote">نسبة B = 0.618 مثالية</div>
     </div>
-    <div class="card-body">
-      <div class="inputs-grid" id="inputsGrid"></div>
-      <button class="validate-btn" onclick="validate()">⟶ تحقق من النموذج</button>
-      <div class="result-panel" id="resultPanel"></div>
+
+    <!-- RIGHT: Validator -->
+    <div>
+      <div class="panel">
+        <div class="panel-header">
+          <span class="panel-title">التحقق من النسب</span>
+          <span style="font-family:var(--mono);font-size:10px;color:var(--muted)">أدخل النسب المحسوبة</span>
+        </div>
+        <div class="panel-body">
+          <div class="inputs-section" id="inputsSection">
+            <!-- filled by JS -->
+          </div>
+          <button class="validate-btn" onclick="validatePattern()">⟶ تحقق من النموذج</button>
+          <div class="result-box" id="resultBox">
+            <div class="result-icon" id="resultIcon"></div>
+            <div class="result-title" id="resultTitle"></div>
+            <div class="result-detail" id="resultDetail"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div><!-- /main-grid -->
+
+  <!-- MASTER REFERENCE TABLE -->
+  <div class="table-section">
+    <div class="section-title">جدول النسب المرجعية الشامل — Scott Carney V3</div>
+    <div style="overflow-x:auto">
+    <table class="master-table">
+      <thead>
+        <tr>
+          <th>النموذج</th>
+          <th>B من XA</th>
+          <th>C من AB</th>
+          <th>D من XA</th>
+          <th>D من BC</th>
+          <th>PRZ / ملاحظات</th>
+        </tr>
+      </thead>
+      <tbody id="masterTableBody">
+        <!-- filled by JS -->
+      </tbody>
+    </table>
     </div>
   </div>
 
-  <!-- Reference Table -->
-  <div class="ref-section">
-    <div class="ref-title">جدول النسب المرجعية — Scott Carney V3</div>
-    <div style="overflow-x:auto;">
-      <table class="ref-table">
-        <thead>
-          <tr>
-            <th>النموذج</th>
-            <th>B من XA</th>
-            <th>C من AB</th>
-            <th>D من XA</th>
-            <th>D من BC</th>
-            <th>PRZ / ملاحظات</th>
-          </tr>
-        </thead>
-        <tbody id="refTableBody"></tbody>
-      </table>
-    </div>
-  </div>
+  <footer>
+    <span>HARMONIC VALIDATOR · SCOTT CARNEY V3 · Built for Precision Trading</span>
+    <span>جميع النسب وفق معايير HarmonicTrader.com</span>
+  </footer>
 
-</div>
-
-<footer>HARMONIC VALIDATOR · SCOTT CARNEY V3 · Built for Precision Trading</footer>
+</div><!-- /wrapper -->
 
 <script>
-// ============================================================
-//  HARMONIC PATTERNS DATABASE — Scott Carney V3 (Corrected)
-// ============================================================
-const PATTERNS = {
-  gartley: {
-    name: "الجارتلي",
-    code: "GARTLEY",
-    note: "نسبة B = 0.618 مثالية • D يجب أن يكون عند 0.786",
-    inputs: [
-      {
-        id: "B_XA",
-        label: "تصحيح B من ضلع XA",
-        tag: "B",
-        hint: "مثالي: 0.618",
-        min: 0.588, max: 0.648, ideal: 0.618
-      },
-      {
-        id: "C_AB",
-        label: "تصحيح C من ضلع AB",
-        tag: "C",
-        hint: "0.382 – 0.886",
-        min: 0.382, max: 0.886
-      },
-      {
-        id: "D_XA",
-        label: "تصحيح D من ضلع XA",
-        tag: "D",
-        hint: "مثالي: 0.786",
-        min: 0.786, max: 0.786, ideal: 0.786, tolerance: 0.02
-      },
-      {
-        id: "D_BC",
-        label: "امتداد D من ضلع BC",
-        tag: "D",
-        hint: "1.272 – 1.618",
-        min: 1.272, max: 1.618
-      }
+// ═══════════════════════════════════════════════════════════════════
+// PATTERNS DATABASE — Scott Carney V3 Complete
+// ═══════════════════════════════════════════════════════════════════
+const PATTERNS = [
+  // ── الكلاسيكية ──────────────────────────────────────────────────
+  {
+    id: 'gartley',
+    nameAr: 'الجارتلي',
+    nameEn: 'GARTLEY',
+    category: 'كلاسيكية',
+    desc: 'أقدم النماذج الهارمونية، اكتُشف عام 1935. نموذج استمراري قوي يُشكّل W/M ويعيد الاختبار عند 78.6% من XA.',
+    prz: '0.786 من XA',
+    points: 'XABCD',
+    type: 'استمراري',
+    reliability: '★★★★☆',
+    legs: [
+      { label: 'B من XA', min: 0.618, max: 0.618, ideal: 0.618 },
+      { label: 'C من AB', min: 0.382, max: 0.886, ideal: '0.618' },
+      { label: 'D من XA', min: 0.786, max: 0.786, ideal: 0.786 },
+      { label: 'D من BC', min: 1.272, max: 1.618, ideal: '1.272' },
     ],
-    prz: "0.786 XA + 1.13 أو 1.618 BC",
-    note2: "يجب ألا تكسر D مستوى X"
+    tableNote: 'B مثالي = 0.618 بالضبط · D عند 0.786 XA'
   },
-
-  bat: {
-    name: "الخفاش",
-    code: "BAT",
-    note: "B يجب ألا يتجاوز 0.50 من XA — الفارق عن Gartley",
-    inputs: [
-      {
-        id: "B_XA",
-        label: "تصحيح B من ضلع XA",
-        tag: "B",
-        hint: "0.382 – 0.500",
-        min: 0.382, max: 0.500
-      },
-      {
-        id: "C_AB",
-        label: "تصحيح C من ضلع AB",
-        tag: "C",
-        hint: "0.382 – 0.886",
-        min: 0.382, max: 0.886
-      },
-      {
-        id: "D_XA",
-        label: "تصحيح D من ضلع XA",
-        tag: "D",
-        hint: "مثالي: 0.886",
-        min: 0.886, max: 0.886, ideal: 0.886, tolerance: 0.015
-      },
-      {
-        id: "D_BC",
-        label: "امتداد D من ضلع BC",
-        tag: "D",
-        hint: "1.618 – 2.618",
-        min: 1.618, max: 2.618
-      }
+  {
+    id: 'bat',
+    nameAr: 'الخفاش',
+    nameEn: 'BAT',
+    category: 'كلاسيكية',
+    desc: 'من أدق النماذج الهارمونية، اكتشفه Carney عام 2001. يستخدم نسبة 0.886 القوية كنقطة انعكاس رئيسية.',
+    prz: '0.886 من XA',
+    points: 'XABCD',
+    type: 'انعكاسي',
+    reliability: '★★★★★',
+    legs: [
+      { label: 'B من XA', min: 0.382, max: 0.500, ideal: '0.382–0.500' },
+      { label: 'C من AB', min: 0.382, max: 0.886, ideal: '0.618' },
+      { label: 'D من XA', min: 0.886, max: 0.886, ideal: 0.886 },
+      { label: 'D من BC', min: 1.618, max: 2.618, ideal: '2.000' },
     ],
-    prz: "0.886 XA + 1.618–2.618 BC",
-    note2: "B > 0.50 يُحوّل النموذج إلى Gartley"
+    tableNote: 'أقل من 0.618 عند B · D = 0.886 XA'
   },
-
-  crab: {
-    name: "السلطعون",
-    code: "CRAB",
-    note: "D عند 1.618 من XA هي العلامة المميزة لـ CRAB",
-    inputs: [
-      {
-        id: "B_XA",
-        label: "تصحيح B من ضلع XA",
-        tag: "B",
-        hint: "0.382 – 0.618",
-        min: 0.382, max: 0.618
-      },
-      {
-        id: "C_AB",
-        label: "تصحيح C من ضلع AB",
-        tag: "C",
-        hint: "0.382 – 0.886",
-        min: 0.382, max: 0.886
-      },
-      {
-        id: "D_XA",
-        label: "امتداد D من ضلع XA",
-        tag: "D",
-        hint: "مثالي: 1.618",
-        min: 1.618, max: 1.618, ideal: 1.618, tolerance: 0.02
-      },
-      {
-        id: "D_BC",
-        label: "امتداد D من ضلع BC",
-        tag: "D",
-        hint: "2.618 – 3.618",
-        min: 2.618, max: 3.618
-      }
+  {
+    id: 'butterfly',
+    nameAr: 'الفراشة',
+    nameEn: 'BUTTERFLY',
+    category: 'كلاسيكية',
+    desc: 'نموذج امتدادي قوي تتجاوز فيه نقطة D نقطة البداية X. يُمثّل استنفاد الاتجاه الرئيسي.',
+    prz: '1.27–1.618 من XA',
+    points: 'XABCD',
+    type: 'انعكاسي عميق',
+    reliability: '★★★★☆',
+    legs: [
+      { label: 'B من XA', min: 0.786, max: 0.786, ideal: 0.786 },
+      { label: 'C من AB', min: 0.382, max: 0.886, ideal: '0.618' },
+      { label: 'D من XA', min: 1.270, max: 1.618, ideal: '1.270' },
+      { label: 'D من BC', min: 1.618, max: 2.618, ideal: '1.618' },
     ],
-    prz: "1.618 XA + 2.618–3.618 BC",
-    note2: "D يمتد خارج X — أبعد نموذج"
+    tableNote: 'D يتجاوز X · B = 0.786 بالضبط'
   },
-
-  deepcrab: {
-    name: "السلطعون الممتد",
-    code: "DEEP CRAB",
-    note: "B بين 0.886–0.936 هو ما يُميزه عن CRAB العادي",
-    inputs: [
-      {
-        id: "B_XA",
-        label: "تصحيح B من ضلع XA",
-        tag: "B",
-        hint: "0.886 – 0.936",
-        min: 0.886, max: 0.936
-      },
-      {
-        id: "C_AB",
-        label: "تصحيح C من ضلع AB",
-        tag: "C",
-        hint: "0.382 – 0.886",
-        min: 0.382, max: 0.886
-      },
-      {
-        id: "D_XA",
-        label: "امتداد D من ضلع XA",
-        tag: "D",
-        hint: "مثالي: 1.618",
-        min: 1.618, max: 1.618, ideal: 1.618, tolerance: 0.02
-      },
-      {
-        id: "D_BC",
-        label: "امتداد D من ضلع BC",
-        tag: "D",
-        hint: "2 – 3.14",
-        min: 2.0, max: 3.14
-      }
+  {
+    id: 'crab',
+    nameAr: 'السرطان',
+    nameEn: 'CRAB',
+    category: 'كلاسيكية',
+    desc: 'أكثر النماذج دقة حسب Carney. امتداد قصوي عند 1.618 من XA يُوفّر نسبة مكافأة/مخاطرة ممتازة.',
+    prz: '1.618 من XA',
+    points: 'XABCD',
+    type: 'انعكاسي قصوي',
+    reliability: '★★★★★',
+    legs: [
+      { label: 'B من XA', min: 0.382, max: 0.618, ideal: '0.382–0.618' },
+      { label: 'C من AB', min: 0.382, max: 0.886, ideal: '0.618' },
+      { label: 'D من XA', min: 1.618, max: 1.618, ideal: 1.618 },
+      { label: 'D من BC', min: 2.240, max: 3.618, ideal: '2.618' },
     ],
-    prz: "1.618 XA + 2–3.618 BC",
-    note2: "B عميق يتجاوز 0.886 هو الفارق الرئيسي"
+    tableNote: 'D = 1.618 XA بالضبط · أوسع امتداد'
   },
-
-  butterfly: {
-    name: "الفراشة",
-    code: "BUTTERFLY",
-    note: "B = 0.786 نسبة ثابتة ومحددة — ليس نطاقاً",
-    inputs: [
-      {
-        id: "B_XA",
-        label: "تصحيح B من ضلع XA",
-        tag: "B",
-        hint: "مثالي: 0.786",
-        min: 0.786, max: 0.786, ideal: 0.786, tolerance: 0.015
-      },
-      {
-        id: "C_AB",
-        label: "تصحيح C من ضلع AB",
-        tag: "C",
-        hint: "0.382 – 0.886",
-        min: 0.382, max: 0.886
-      },
-      {
-        id: "D_XA",
-        label: "امتداد D من ضلع XA",
-        tag: "D",
-        hint: "1.27 – 1.618",
-        min: 1.27, max: 1.618
-      },
-      {
-        id: "D_BC",
-        label: "امتداد D من ضلع BC",
-        tag: "D",
-        hint: "1.618 – 2.618",
-        min: 1.618, max: 2.618
-      }
+  // ── الفرعية / المتطورة ──────────────────────────────────────────
+  {
+    id: 'alt-bat',
+    nameAr: 'الخفاش البديل',
+    nameEn: 'ALTERNATE BAT',
+    category: 'نماذج فرعية',
+    desc: 'اكتشفه Carney عام 2003. يستخدم 1.13 من XA كنقطة انعكاس. B يجب أن يكون ≤ 0.382 من XA.',
+    prz: '1.13 من XA',
+    points: 'XABCD',
+    type: 'انعكاسي',
+    reliability: '★★★★☆',
+    legs: [
+      { label: 'B من XA', min: 0.382, max: 0.382, ideal: '≤ 0.382' },
+      { label: 'C من AB', min: 0.382, max: 0.886, ideal: '0.618' },
+      { label: 'D من XA', min: 1.130, max: 1.130, ideal: 1.130 },
+      { label: 'D من BC', min: 2.000, max: 3.618, ideal: '2.000' },
     ],
-    prz: "1.27 أو 1.618 XA + 1.618–2.618 BC",
-    note2: "D يمتد خارج X مثل CRAB لكن أقل امتداداً"
+    tableNote: 'B ≤ 0.382 · D = 1.13 XA · AB=CD ممتد'
   },
-
-  altbat: {
-    name: "الخفاش البديل",
-    code: "ALT BAT",
-    note: "B = 0.382 فقط — أصغر B بين جميع النماذج",
-    inputs: [
-      {
-        id: "B_XA",
-        label: "تصحيح B من ضلع XA",
-        tag: "B",
-        hint: "مثالي: 0.382",
-        min: 0.382, max: 0.382, ideal: 0.382, tolerance: 0.01
-      },
-      {
-        id: "C_AB",
-        label: "تصحيح C من ضلع AB",
-        tag: "C",
-        hint: "0.382 – 0.886",
-        min: 0.382, max: 0.886
-      },
-      {
-        id: "D_XA",
-        label: "امتداد D من ضلع XA",
-        tag: "D",
-        hint: "مثالي: 1.13",
-        min: 1.13, max: 1.13, ideal: 1.13, tolerance: 0.02
-      },
-      {
-        id: "D_BC",
-        label: "امتداد D من ضلع BC",
-        tag: "D",
-        hint: "2 – 3.618",
-        min: 2.0, max: 3.618
-      }
+  {
+    id: 'deep-crab',
+    nameAr: 'السرطان العميق',
+    nameEn: 'DEEP CRAB',
+    category: 'نماذج فرعية',
+    desc: 'نسخة مُعمَّقة من السرطان تجمع بين خصائص الخفاش والسرطان. B عند 0.886 مع D عند 1.618.',
+    prz: '1.618 من XA',
+    points: 'XABCD',
+    type: 'انعكاسي قصوي',
+    reliability: '★★★★☆',
+    legs: [
+      { label: 'B من XA', min: 0.886, max: 0.886, ideal: 0.886 },
+      { label: 'C من AB', min: 0.382, max: 0.886, ideal: '0.618' },
+      { label: 'D من XA', min: 1.618, max: 1.618, ideal: 1.618 },
+      { label: 'D من BC', min: 2.618, max: 3.618, ideal: '2.618' },
     ],
-    prz: "1.13 XA + 2–3.618 BC",
-    note2: "B صغير جداً = تصحيح خفيف قبل الانطلاق"
+    tableNote: 'B = 0.886 · D = 1.618 · منطقة ضيقة'
   },
-
-  shark: {
-    name: "القرش",
-    code: "SHARK",
-    note: "D يعتمد على 0.886 من الضلع OX — العلامة الأساسية",
-    inputs: [
-      {
-        id: "B_XA",
-        label: "تصحيح B من ضلع XA",
-        tag: "B",
-        hint: "0.382 – 0.618",
-        min: 0.382, max: 0.618
-      },
-      {
-        id: "C_AB",
-        label: "امتداد C من ضلع AB",
-        tag: "C",
-        hint: "1.13 – 1.618",
-        min: 1.13, max: 1.618
-      },
-      {
-        id: "D_XA",
-        label: "تصحيح D من ضلع XA",
-        tag: "D",
-        hint: "0.886 – 1.13",
-        min: 0.886, max: 1.13
-      },
-      {
-        id: "D_BC",
-        label: "امتداد D من ضلع BC",
-        tag: "D",
-        hint: "1.618 – 2.24",
-        min: 1.618, max: 2.24
-      }
+  {
+    id: 'shark',
+    nameAr: 'القرش',
+    nameEn: 'SHARK',
+    category: 'نماذج فرعية',
+    desc: 'اكتشفه Carney عام 2011. يستخدم نقاط O,X,A,B,C. يُعدّ نموذجاً خماسياً مبتكراً لموجات الدفع.',
+    prz: '0.886 من OX',
+    points: 'OXABC',
+    type: 'دفعي',
+    reliability: '★★★★☆',
+    legs: [
+      { label: 'B من XA', min: 1.130, max: 1.618, ideal: '1.130–1.618' },
+      { label: 'C من AB', min: 1.618, max: 2.240, ideal: '1.618' },
+      { label: 'C من OX', min: 0.886, max: 1.130, ideal: '0.886–1.13' },
+      { label: 'إيقاف', min: null, max: null, ideal: 'عند C' },
     ],
-    prz: "0.886 OX + 1.618–2.24 BC",
-    note2: "نموذج 5 نقاط — يختلف هيكلياً عن XABCD التقليدي"
-  }
-};
+    tableNote: 'نقاط OXABC · دخول عند C لا D · نموذج دفعي'
+  },
+  {
+    id: 'five-zero',
+    nameAr: 'الخمسة-صفر',
+    nameEn: '5-0',
+    category: 'نماذج فرعية',
+    desc: 'يتبع نموذج القرش، يستخدم 5 نقاط. AB=CD معكوس ضروري. نسبة B من OX بين 1.13 و1.618.',
+    prz: '0.500 من BC',
+    points: 'OXABCD',
+    type: 'انعكاسي',
+    reliability: '★★★☆☆',
+    legs: [
+      { label: 'AB من OX', min: 1.130, max: 1.618, ideal: '1.130–1.618' },
+      { label: 'BC من AB', min: 1.618, max: 2.240, ideal: '2.000' },
+      { label: 'D من BC', min: 0.500, max: 0.500, ideal: 0.500 },
+      { label: 'D=AB=CD', min: null, max: null, ideal: 'متساوية' },
+    ],
+    tableNote: 'D = 50% من BC · AB=CD معكوس ضروري'
+  },
+  {
+    id: 'cypher',
+    nameAr: 'السايفر',
+    nameEn: 'CYPHER',
+    category: 'نماذج فرعية',
+    desc: 'اكتشفه Darren Oglesbee، يُعتمَد في V3. C يمتد 1.272 – 1.414 من XA. D عند 0.786 من XC.',
+    prz: '0.786 من XC',
+    points: 'XABCD',
+    type: 'انعكاسي',
+    reliability: '★★★★☆',
+    legs: [
+      { label: 'B من XA', min: 0.382, max: 0.618, ideal: '0.382–0.618' },
+      { label: 'C من XA', min: 1.130, max: 1.414, ideal: '1.272' },
+      { label: 'D من XC', min: 0.786, max: 0.786, ideal: 0.786 },
+      { label: 'D من BC', min: 1.272, max: 2.000, ideal: '1.272' },
+    ],
+    tableNote: 'C يتجاوز A · D = 78.6% XC'
+  },
+  // ── AB=CD ────────────────────────────────────────────────────────
+  {
+    id: 'abcd-classic',
+    nameAr: 'AB=CD الكلاسيكي',
+    nameEn: 'AB=CD CLASSIC',
+    category: 'نماذج AB=CD',
+    desc: 'النموذج الأساسي لجميع الأنماط. BC تراجع 61.8–78.6% من AB، وCD يساوي AB في المسافة.',
+    prz: 'D = CD يساوي AB',
+    points: 'ABCD',
+    type: 'استمراري/انعكاسي',
+    reliability: '★★★☆☆',
+    legs: [
+      { label: 'BC من AB', min: 0.618, max: 0.786, ideal: '0.618–0.786' },
+      { label: 'CD من AB', min: 1.000, max: 1.000, ideal: '= AB' },
+      { label: 'CD (امتداد)', min: 1.272, max: 1.618, ideal: '1.272' },
+      { label: 'وقت CD', min: null, max: null, ideal: '= وقت AB' },
+    ],
+    tableNote: 'CD = AB السعرية · توقيت متماثل'
+  },
+  {
+    id: 'abcd-alt',
+    nameAr: 'AB=CD البديل',
+    nameEn: 'ALT AB=CD',
+    category: 'نماذج AB=CD',
+    desc: 'نسخة مُمتدّة حيث CD ليس مساوياً لـ AB بل يرتبط بنسب فيبوناتشي مُحددة.',
+    prz: '1.27 أو 1.618 من AB',
+    points: 'ABCD',
+    type: 'استمراري',
+    reliability: '★★★☆☆',
+    legs: [
+      { label: 'BC من AB', min: 0.382, max: 0.886, ideal: '0.618' },
+      { label: 'CD من AB', min: 1.272, max: 1.618, ideal: '1.618' },
+      { label: 'D من BC', min: 2.000, max: 2.618, ideal: '2.618' },
+      { label: 'ملاحظة', min: null, max: null, ideal: 'تُدعم بنموذج أكبر' },
+    ],
+    tableNote: 'CD = 1.272 أو 1.618 من AB'
+  },
+  // ── ثلاثة دفعات ─────────────────────────────────────────────────
+  {
+    id: 'three-drives',
+    nameAr: 'ثلاثة دفعات',
+    nameEn: 'THREE DRIVES',
+    category: 'نماذج خاصة',
+    desc: 'نموذج من 6 نقاط يتكون من 3 دفعات متصاعدة (أو متراجعة) متماثلة في النسب والوقت.',
+    prz: 'الدفعة الثالثة',
+    points: '6 نقاط',
+    type: 'انعكاسي',
+    reliability: '★★★☆☆',
+    legs: [
+      { label: 'تراجع 1', min: 0.618, max: 0.786, ideal: '0.618–0.786' },
+      { label: 'تراجع 2', min: 0.618, max: 0.786, ideal: '0.618–0.786' },
+      { label: 'امتداد 1', min: 1.272, max: 1.618, ideal: '1.272' },
+      { label: 'امتداد 2', min: 1.272, max: 1.618, ideal: '1.272' },
+    ],
+    tableNote: 'تماثل الوقت بين الدفعات ضروري'
+  },
+  // ── نموذج خاص بـ V3 ─────────────────────────────────────────────
+  {
+    id: 'nen-star',
+    nameAr: 'نجمة نين',
+    nameEn: 'NEN STAR',
+    category: 'نماذج V3 المتقدمة',
+    desc: 'نموذج متقدم من V3. B عند 0.618، C يمتد 1.272–2.618 من AB، D عند 0.786 من XA.',
+    prz: '0.786 من XA',
+    points: 'XABCD',
+    type: 'انعكاسي',
+    reliability: '★★★☆☆',
+    legs: [
+      { label: 'B من XA', min: 0.618, max: 0.618, ideal: 0.618 },
+      { label: 'C من AB', min: 1.272, max: 2.618, ideal: '1.618' },
+      { label: 'D من XA', min: 0.786, max: 0.786, ideal: 0.786 },
+      { label: 'D من BC', min: 0.382, max: 0.618, ideal: '0.500' },
+    ],
+    tableNote: 'C يتجاوز A بامتداد · D = 0.786 XA'
+  },
+  {
+    id: 'leonardo',
+    nameAr: 'ليوناردو',
+    nameEn: 'LEONARDO',
+    category: 'نماذج V3 المتقدمة',
+    desc: 'نموذج مُستوحى من Fibonacci/Leonardo. B عند 0.500، D عند 0.786 من XA مع AB=CD.',
+    prz: '0.786 من XA',
+    points: 'XABCD',
+    type: 'انعكاسي',
+    reliability: '★★★☆☆',
+    legs: [
+      { label: 'B من XA', min: 0.500, max: 0.500, ideal: 0.500 },
+      { label: 'C من AB', min: 0.382, max: 0.886, ideal: '0.618' },
+      { label: 'D من XA', min: 0.786, max: 0.886, ideal: '0.786' },
+      { label: 'D من BC', min: 1.128, max: 2.618, ideal: '1.618' },
+    ],
+    tableNote: 'B = 0.500 بالضبط · قريب من الجارتلي'
+  },
+];
 
-// ============================================================
-//  BUILD UI
-// ============================================================
-let currentPattern = 'gartley';
+// ═══════════════════════════════════════════════════════════════════
+let currentPatternId = PATTERNS[0].id;
 
-function buildSelector() {
-  const container = document.getElementById('patternSelector');
-  const patternList = [
-    ['gartley','الجارتلي'],['bat','الخفاش'],['crab','السلطعون'],
-    ['deepcrab','السلطعون الممتد'],['butterfly','الفراشة'],
-    ['altbat','الخفاش البديل'],['shark','القرش']
-  ];
-  patternList.forEach(([key, ar]) => {
-    const btn = document.createElement('button');
-    btn.className = 'pattern-btn' + (key === currentPattern ? ' active' : '');
-    btn.innerHTML = `<span class="en-name">${PATTERNS[key].code}</span>${ar}`;
-    btn.onclick = () => selectPattern(key);
-    container.appendChild(btn);
+function buildTabs() {
+  const nav = document.getElementById('patternNav');
+  const cats = [...new Set(PATTERNS.map(p => p.category))];
+  cats.forEach(cat => {
+    const span = document.createElement('span');
+    span.style.cssText = 'font-family:var(--mono);font-size:9px;color:var(--muted);letter-spacing:.12em;padding:10px 8px 10px 14px;display:flex;align-items:center;white-space:nowrap;text-transform:uppercase;';
+    span.textContent = cat + '  ';
+    nav.appendChild(span);
+    PATTERNS.filter(p => p.category === cat).forEach(p => {
+      const btn = document.createElement('button');
+      btn.className = 'tab-btn' + (p.id === currentPatternId ? ' active' : '');
+      btn.setAttribute('data-id', p.id);
+      btn.textContent = p.nameEn;
+      btn.onclick = () => selectPattern(p.id);
+      nav.appendChild(btn);
+    });
   });
 }
 
-function selectPattern(key) {
-  currentPattern = key;
-  document.querySelectorAll('.pattern-btn').forEach((b,i) => {
-    b.classList.toggle('active', Object.keys(PATTERNS)[i] === key);
+function selectPattern(id) {
+  currentPatternId = id;
+  // update tabs
+  document.querySelectorAll('.tab-btn').forEach(b => {
+    b.classList.toggle('active', b.getAttribute('data-id') === id);
   });
-  const p = PATTERNS[key];
-  document.getElementById('activePatternCode').textContent = p.code;
-  document.getElementById('activePatternName').textContent = p.name;
-  document.getElementById('patternNote').textContent = p.note;
-  buildInputs(key);
-  document.getElementById('resultPanel').style.display = 'none';
-  document.getElementById('resultPanel').className = 'result-panel';
+  renderPanel();
+  renderInputs();
+  document.getElementById('resultBox').style.display = 'none';
 }
 
-function buildInputs(key) {
-  const p = PATTERNS[key];
-  const grid = document.getElementById('inputsGrid');
-  grid.innerHTML = '';
-  p.inputs.forEach(inp => {
+function renderPanel() {
+  const p = PATTERNS.find(x => x.id === currentPatternId);
+  document.getElementById('panelCategory').textContent = p.category;
+  document.getElementById('displayNameAr').textContent = p.nameAr;
+  document.getElementById('displayNameEn').textContent = p.nameEn;
+  document.getElementById('displayDesc').textContent = p.desc;
+  document.getElementById('metaPRZ').textContent = p.prz;
+  document.getElementById('metaPoints').textContent = p.points;
+  document.getElementById('metaType').textContent = p.type;
+  document.getElementById('metaRel').textContent = p.reliability;
+
+  const rows = document.getElementById('ratioDisplay');
+  rows.innerHTML = '';
+  p.legs.forEach(leg => {
+    const div = document.createElement('div');
+    div.className = 'ratio-row';
+    const range = (leg.min !== null)
+      ? `<span class="range">${leg.min}${leg.max !== leg.min ? ' – ' + leg.max : ''}</span>`
+      : '';
+    div.innerHTML = `
+      <span class="ratio-label">${leg.label}</span>
+      <span class="ratio-range">${range}</span>
+      <span class="ratio-ideal">◈ ${leg.ideal}</span>
+    `;
+    rows.appendChild(div);
+  });
+}
+
+function renderInputs() {
+  const p = PATTERNS.find(x => x.id === currentPatternId);
+  const section = document.getElementById('inputsSection');
+  section.innerHTML = '';
+  p.legs.filter(l => l.min !== null).forEach((leg, i) => {
     const div = document.createElement('div');
     div.className = 'input-group';
     div.innerHTML = `
-      <label>
-        ${inp.label}
-        <span class="point-tag">${inp.tag}</span>
-        <span class="range-hint">${inp.hint}</span>
-      </label>
-      <div class="input-wrapper">
-        <input type="number" id="inp_${inp.id}" step="0.001" min="0" max="10"
-          placeholder="0.000" oninput="liveCheck('${inp.id}', ${inp.min}, ${inp.max}, ${inp.tolerance||0})" />
-        <span class="input-status" id="status_${inp.id}"></span>
-      </div>
+      <label class="input-label">${leg.label}</label>
+      <input type="number" step="0.001" min="0" max="10"
+             class="ratio-input" id="inp_${i}"
+             placeholder="${leg.min}${leg.max !== leg.min ? ' – ' + leg.max : ''}"
+             oninput="checkInput(${i})">
+      <span class="input-status" id="status_${i}">·</span>
     `;
-    grid.appendChild(div);
+    section.appendChild(div);
   });
 }
 
-function liveCheck(id, min, max, tol) {
-  const input = document.getElementById('inp_' + id);
-  const status = document.getElementById('status_' + id);
-  const val = parseFloat(input.value);
-  if (isNaN(val) || input.value === '') {
-    input.className = '';
-    status.textContent = '';
-    return;
-  }
-  const lo = tol ? min - tol : min;
-  const hi = tol ? max + tol : max;
-  const ok = val >= lo && val <= hi;
-  input.className = ok ? 'valid' : 'invalid';
+function checkInput(i) {
+  const p = PATTERNS.find(x => x.id === currentPatternId);
+  const validLegs = p.legs.filter(l => l.min !== null);
+  const leg = validLegs[i];
+  const val = parseFloat(document.getElementById('inp_' + i).value);
+  const inp = document.getElementById('inp_' + i);
+  const status = document.getElementById('status_' + i);
+  if (isNaN(val)) { inp.className = 'ratio-input'; status.textContent = '·'; return; }
+  const ok = val >= leg.min * 0.97 && val <= leg.max * 1.03;
+  inp.className = 'ratio-input ' + (ok ? 'valid' : 'invalid');
   status.textContent = ok ? '✓' : '✗';
-  status.style.color = ok ? 'var(--green)' : 'var(--red)';
 }
 
-function validate() {
-  const p = PATTERNS[currentPattern];
-  const results = [];
-  let allOk = true;
+function validatePattern() {
+  const p = PATTERNS.find(x => x.id === currentPatternId);
+  const validLegs = p.legs.filter(l => l.min !== null);
+  let allFilled = true, allValid = true, failedLegs = [];
 
-  p.inputs.forEach(inp => {
-    const el = document.getElementById('inp_' + inp.id);
-    const val = parseFloat(el.value);
-    if (isNaN(val)) {
-      results.push({ inp, val: null, ok: false, missing: true });
-      allOk = false;
-      return;
-    }
-    const tol = inp.tolerance || 0;
-    const lo = tol ? inp.min - tol : inp.min;
-    const hi = tol ? inp.max + tol : inp.max;
-    const ok = val >= lo && val <= hi;
-    if (!ok) allOk = false;
-    results.push({ inp, val, ok, lo, hi });
+  validLegs.forEach((leg, i) => {
+    const val = parseFloat(document.getElementById('inp_' + i).value);
+    if (isNaN(val)) { allFilled = false; return; }
+    const ok = val >= leg.min * 0.97 && val <= leg.max * 1.03;
+    if (!ok) { allValid = false; failedLegs.push(leg.label); }
   });
 
-  renderResult(allOk, results, p);
+  const box = document.getElementById('resultBox');
+  const icon = document.getElementById('resultIcon');
+  const title = document.getElementById('resultTitle');
+  const detail = document.getElementById('resultDetail');
+
+  if (!allFilled) {
+    box.className = 'result-box warning';
+    icon.textContent = '⚠';
+    title.className = 'result-title warning';
+    title.textContent = 'بيانات ناقصة';
+    detail.textContent = 'يرجى إدخال جميع النسب لإتمام التحقق.';
+  } else if (allValid) {
+    box.className = 'result-box valid';
+    icon.textContent = '◉';
+    title.className = 'result-title valid';
+    title.textContent = `نموذج ${p.nameAr} صالح ✓`;
+    detail.textContent = `جميع النسب ضمن معايير Scott Carney V3. منطقة الانعكاس المحتملة (PRZ): ${p.prz}. النموذج جاهز للتداول مع تأكيد إضافي.`;
+  } else {
+    box.className = 'result-box invalid';
+    icon.textContent = '◎';
+    title.className = 'result-title invalid';
+    title.textContent = 'النموذج غير مكتمل';
+    detail.textContent = `النسب التالية خارج المعايير: ${failedLegs.join('، ')}. راجع جدول النسب المرجعية.`;
+  }
+  box.style.display = 'block';
 }
 
-function renderResult(allOk, results, p) {
-  const panel = document.getElementById('resultPanel');
-  panel.className = 'result-panel ' + (allOk ? 'valid-result' : 'invalid-result');
+function buildMasterTable() {
+  const tbody = document.getElementById('masterTableBody');
+  const cats = [...new Set(PATTERNS.map(p => p.category))];
+  cats.forEach(cat => {
+    const catRow = document.createElement('tr');
+    catRow.className = 'cat-row';
+    catRow.innerHTML = `<td colspan="6">◈ ${cat}</td>`;
+    tbody.appendChild(catRow);
 
-  let rows = results.map(r => {
-    if (r.missing) {
-      return `<div class="detail-row warn">
-        <div class="detail-label"><strong>${r.inp.tag}</strong> ${r.inp.label}</div>
-        <div class="detail-right">
-          <span class="detail-range">لم يُدخل</span>
-          <span class="detail-status">⚠️</span>
-        </div>
-      </div>`;
-    }
-    const tol = r.inp.tolerance || 0;
-    const rangeText = tol
-      ? `${r.inp.ideal} ± ${tol}`
-      : r.inp.min === r.inp.max
-        ? `${r.inp.min}`
-        : `${r.inp.min} – ${r.inp.max}`;
-    return `<div class="detail-row ${r.ok ? 'ok' : 'fail'}">
-      <div class="detail-label">
-        <strong>${r.inp.tag}</strong> ${r.inp.label}
-        <br/><span style="font-size:11px;color:var(--text-muted);font-family:'IBM Plex Mono',monospace">المطلوب: ${rangeText}</span>
-      </div>
-      <div class="detail-right">
-        <span class="detail-value">${r.val.toFixed(3)}</span>
-        <span class="detail-status">${r.ok ? '✅' : '❌'}</span>
-      </div>
-    </div>`;
-  }).join('');
+    PATTERNS.filter(p => p.category === cat).forEach(p => {
+      const legs = p.legs;
+      const get = (idx) => legs[idx]
+        ? (legs[idx].min === legs[idx].max && legs[idx].min !== null)
+          ? `<span class="ideal">${legs[idx].min}</span>`
+          : legs[idx].min !== null
+            ? `<span class="range">${legs[idx].min}–${legs[idx].max}</span>`
+            : '—'
+        : '—';
 
-  panel.innerHTML = `
-    <div class="result-header">
-      <div class="result-icon">${allOk ? '🎯' : '⚠️'}</div>
-      <div>
-        <div class="result-title">${allOk ? 'النموذج صحيح ✓' : 'النموذج غير مكتمل ✗'}</div>
-        <div class="result-subtitle">${allOk
-          ? `نموذج ${p.name} (${p.code}) مكتمل — ${p.prz}`
-          : 'بعض النسب خارج النطاق المطلوب'}</div>
-      </div>
-    </div>
-    <div class="details-grid">${rows}</div>
-    ${allOk ? `<div style="margin-top:14px;padding:12px 16px;background:rgba(0,229,160,0.07);border-radius:8px;font-size:13px;color:var(--green-dim)">
-      <strong style="color:var(--green)">📌 منطقة PRZ:</strong> ${p.prz}<br/>
-      <span style="color:var(--text-muted)">${p.note2}</span>
-    </div>` : ''}
-  `;
-}
-
-// ============================================================
-//  REFERENCE TABLE
-// ============================================================
-function buildRefTable() {
-  const tbody = document.getElementById('refTableBody');
-  const rows = [
-    ['الجارتلي','GARTLEY','0.618 ✦','0.382–0.886','0.786 ✦','1.272–1.618','0.786 XA'],
-    ['الخفاش','BAT','0.382–0.50 ⚠','0.382–0.886','0.886 ✦','1.618–2.618','0.886 XA'],
-    ['السلطعون','CRAB','0.382–0.618','0.382–0.886','1.618 ✦','2.618–3.618','1.618 XA'],
-    ['السلطعون الممتد','DEEP CRAB','0.886–0.936','0.382–0.886','1.618 ✦','2.0–3.14','1.618 XA'],
-    ['الفراشة','BUTTERFLY','0.786 ✦','0.382–0.886','1.27–1.618','1.618–2.618','1.27 XA'],
-    ['الخفاش البديل','ALT BAT','0.382 ✦','0.382–0.886','1.13 ✦','2.0–3.618','1.13 XA'],
-    ['القرش','SHARK','0.382–0.618','1.13–1.618','0.886–1.13','1.618–2.24','0.886 OX ⭐'],
-  ];
-  rows.forEach(([ar, en, b, c, d_xa, d_bc, prz]) => {
-    const tr = document.createElement('tr');
-    tr.innerHTML = `
-      <td><span class="pattern-name">${ar}</span><br/><span style="font-family:'IBM Plex Mono',monospace;font-size:11px;color:var(--text-muted)">${en}</span></td>
-      <td class="num">${b}</td>
-      <td class="num">${c}</td>
-      <td class="num">${d_xa}</td>
-      <td class="num">${d_bc}</td>
-      <td class="special">${prz}</td>
-    `;
-    tbody.appendChild(tr);
+      const tr = document.createElement('tr');
+      tr.innerHTML = `
+        <td>${p.nameAr}<br><span style="font-size:10px;color:var(--muted)">${p.nameEn}</span></td>
+        <td>${get(0)}</td>
+        <td>${get(1)}</td>
+        <td>${get(2)}</td>
+        <td>${get(3)}</td>
+        <td class="note-cell">${p.tableNote}</td>
+      `;
+      tbody.appendChild(tr);
+    });
   });
 }
 
-// ============================================================
-//  INIT
-// ============================================================
-buildSelector();
-buildInputs(currentPattern);
-buildRefTable();
+// ── INIT ──────────────────────────────────────────────────────────
+buildTabs();
+renderPanel();
+renderInputs();
+buildMasterTable();
 </script>
 </body>
 </html>
