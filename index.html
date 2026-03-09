@@ -688,7 +688,7 @@ body {
 const DB = [
   {
     id:'gartley', nameAr:'الجارتلي', nameEn:'GARTLEY', cat:'كلاسيكية',
-    prz:'0.78–0.88 من XA', type:'استمراري', note:'لا كسر القاع عند C',
+    prz:'0.78–0.88 من XA', type:'استمراري', note:'B المثالي 0.618 من XA · D عند 0.786 · لا يصح كسر نقطة X',
     legs:{
       bxa:{ min:0.588, max:0.648, ideal:'0.618', label:'B من XA' },
       cab:{ min:0.382, max:0.886, ideal:'0.618', label:'C من AB' },
@@ -698,7 +698,7 @@ const DB = [
   },
   {
     id:'bat', nameAr:'الخفاش', nameEn:'BAT', cat:'كلاسيكية',
-    prz:'0.886 من XA', type:'انعكاسي', note:'لا كسر القاع عند C',
+    prz:'0.886 من XA', type:'انعكاسي', note:'B المثالي 0.500 · BC لا تقل عن 1.618 · أدق نموذج في الاستراتيجية',
     legs:{
       bxa:{ min:0.382, max:0.500, ideal:'0.500', label:'B من XA' },
       cab:{ min:0.382, max:0.886, ideal:'0.618', label:'C من AB' },
@@ -708,7 +708,7 @@ const DB = [
   },
   {
     id:'butterfly', nameAr:'الفراشة', nameEn:'BUTTERFLY', cat:'كلاسيكية',
-    prz:'1.27 من XA', type:'انعكاسي عميق', note:'D يتجاوز X · لا كسر القاع عند C',
+    prz:'1.27 من XA', type:'انعكاسي عميق', note:'B يجب 0.786 بالضبط · D عند 1.27 أو 1.618 من XA · يتجاوز نقطة X',
     legs:{
       bxa:{ min:0.755, max:0.816, ideal:'0.786', label:'B من XA' },
       cab:{ min:0.382, max:0.886, ideal:'0.618', label:'C من AB' },
@@ -718,7 +718,7 @@ const DB = [
   },
   {
     id:'crab', nameAr:'السرطان', nameEn:'CRAB', cat:'كلاسيكية',
-    prz:'1.618–1.902 من XA', type:'انعكاسي قصوي', note:'لا كسر القاع عند C',
+    prz:'1.618–1.902 من XA', type:'انعكاسي قصوي', note:'1.618 من XA شرط حاسم · انعكاسات حادة جداً عند PRZ',
     legs:{
       bxa:{ min:0.382, max:0.618, ideal:'0.382–0.618', label:'B من XA' },
       cab:{ min:0.382, max:0.886, ideal:'0.618', label:'C من AB' },
@@ -728,7 +728,7 @@ const DB = [
   },
   {
     id:'shark', nameAr:'القرش', nameEn:'SHARK', cat:'كلاسيكية',
-    prz:'0.88–1.13 من XA', type:'دفعي / انعكاسي', note:'نقاط OXABC · يسبق 5-0',
+    prz:'0.88–1.13 من XA', type:'دفعي / انعكاسي', note:'الدخول عند C · D هو هدف الربح · يسبق نموذج 5-0',
     legs:{
       bxa:{ min:0.382, max:0.618, ideal:'0.382–0.618', label:'B من XA' },
       cab:{ min:1.130, max:1.618, ideal:'1.13–1.618', label:'C من AB' },
@@ -738,7 +738,7 @@ const DB = [
   },
   {
     id:'alt-bat', nameAr:'الخفاش البديل', nameEn:'ALT BAT', cat:'فرعية',
-    prz:'1.13 من XA', type:'انعكاسي', note:'B ≤ 0.382 · لا كسر القاع عند C',
+    prz:'1.13 من XA', type:'انعكاسي', note:'B يجب 0.382 بالضبط · D عند 1.13 من XA · لا يصح كسر نقطة X',
     legs:{
       bxa:{ min:0.352, max:0.382, ideal:'0.382', label:'B من XA' },
       cab:{ min:0.382, max:0.886, ideal:'0.618', label:'C من AB' },
@@ -748,7 +748,7 @@ const DB = [
   },
   {
     id:'deep-crab', nameAr:'السرطان العميق', nameEn:'DEEP CRAB', cat:'فرعية',
-    prz:'1.618–1.902 من XA', type:'انعكاسي قصوي', note:'B عميق · لا كسر القاع عند C',
+    prz:'1.618–1.902 من XA', type:'انعكاسي قصوي', note:'B يجب 0.886 بالضبط · يجمع خصائص الخفاش والسرطان',
     legs:{
       bxa:{ min:0.880, max:0.886, ideal:'0.886', label:'B من XA' },
       cab:{ min:0.382, max:0.886, ideal:'0.618', label:'C من AB' },
@@ -758,7 +758,7 @@ const DB = [
   },
   {
     id:'cypher', nameAr:'السايفر', nameEn:'CYPHER', cat:'فرعية',
-    prz:'0.782 من XC', type:'انعكاسي', note:'C يتجاوز A · D = 78.2% من XC',
+    prz:'0.782 من XC', type:'انعكاسي', note:'C بين 1.13 و 1.414 من XA · D عند 0.782 من XC دائماً',
     legs:{
       bxa:{ min:0.382, max:0.618, ideal:'0.382–0.618', label:'B من XA' },
       cab:{ min:1.130, max:1.414, ideal:'1.272', label:'C من XA (يتجاوز A)' },
@@ -768,7 +768,7 @@ const DB = [
   },
   {
     id:'five-zero', nameAr:'الخمسة-صفر', nameEn:'5-0', cat:'فرعية',
-    prz:'0.500 من BC', type:'انعكاسي', note:'يتبع القرش · AB=CD عكسي شرط',
+    prz:'0.500 من BC', type:'انعكاسي', note:'AB=CD عكسي شرط إلزامي · D عند 0.500 من BC · يتبع نموذج القرش',
     legs:{
       bxa:{ min:1.130, max:1.618, ideal:'≤ 1.618', label:'AB من XA' },
       cab:{ min:1.618, max:2.240, ideal:'1.618–2.24', label:'BC من AB' },
@@ -778,7 +778,7 @@ const DB = [
   },
   {
     id:'abcd', nameAr:'AB=CD', nameEn:'AB=CD', cat:'فرعية',
-    prz:'D = نهاية CD', type:'استمراري / انعكاسي', note:'CD = AB مسافةً وزمناً',
+    prz:'D = نهاية CD', type:'استمراري / انعكاسي', note:'CD يساوي AB مسافةً وزمناً · أساس جميع النماذج الهارمونية',
     legs:{
       bxa:{ min:null, max:null, ideal:'—', label:'غير مطلوب' },
       cab:{ min:0.618, max:0.786, ideal:'0.618–0.786', label:'BC من AB' },
