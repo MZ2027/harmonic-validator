@@ -686,34 +686,25 @@ body {
 // DATABASE
 // ══════════════════════════════════════════
 const DB = [
+  // ── كلاسيكية ──
   {
     id:'gartley', nameAr:'الجارتلي', nameEn:'GARTLEY', cat:'كلاسيكية',
     prz:'0.78–0.88 من XA', type:'استمراري', note:'B المثالي 0.618 من XA · D عند 0.786 · لا يصح كسر نقطة X',
     legs:{
       bxa:{ min:0.588, max:0.648, ideal:'0.618', label:'B من XA' },
-      cab:{ min:0.382, max:0.886, ideal:'0.618', label:'C من AB' },
+      cab:{ min:0.382, max:0.880, ideal:'0.618', label:'C من AB' },
       dxa:{ min:0.780, max:0.880, ideal:'0.786', label:'D من XA' },
-      dbc:{ min:1.130, max:1.618, ideal:'1.13/1.27/1.618', label:'D من BC' },
+      dbc:{ min:1.130, max:1.618, ideal:'1.13 / 1.27 / 1.618', label:'D من BC' },
     }
   },
   {
     id:'bat', nameAr:'الخفاش', nameEn:'BAT', cat:'كلاسيكية',
-    prz:'0.886 من XA', type:'انعكاسي', note:'B المثالي 0.500 · BC لا تقل عن 1.618 · أدق نموذج في الاستراتيجية',
+    prz:'0.88 من XA', type:'انعكاسي', note:'B المثالي 0.500 · BC لا تقل عن 1.618 · أدق نموذج في الاستراتيجية',
     legs:{
-      bxa:{ min:0.382, max:0.500, ideal:'0.500', label:'B من XA' },
-      cab:{ min:0.382, max:0.886, ideal:'0.618', label:'C من AB' },
-      dxa:{ min:0.886, max:0.886, ideal:'0.886', label:'D من XA' },
-      dbc:{ min:1.618, max:2.618, ideal:'1.618/2/2.24/2.618', label:'D من BC' },
-    }
-  },
-  {
-    id:'butterfly', nameAr:'الفراشة', nameEn:'BUTTERFLY', cat:'كلاسيكية',
-    prz:'1.27 من XA', type:'انعكاسي عميق', note:'B يجب 0.786 بالضبط · D عند 1.27 أو 1.618 من XA · يتجاوز نقطة X',
-    legs:{
-      bxa:{ min:0.755, max:0.816, ideal:'0.786', label:'B من XA' },
-      cab:{ min:0.382, max:0.886, ideal:'0.618', label:'C من AB' },
-      dxa:{ min:1.270, max:1.270, ideal:'1.27', label:'D من XA' },
-      dbc:{ min:1.618, max:2.618, ideal:'1.618/2/2.24/2.618', label:'D من BC' },
+      bxa:{ min:0.382, max:0.550, ideal:'0.500', label:'B من XA' },
+      cab:{ min:0.382, max:0.880, ideal:'0.618', label:'C من AB' },
+      dxa:{ min:0.880, max:0.880, ideal:'0.88', label:'D من XA' },
+      dbc:{ min:1.618, max:2.618, ideal:'1.618 / 2 / 2.24 / 2.618', label:'D من BC' },
     }
   },
   {
@@ -721,39 +712,50 @@ const DB = [
     prz:'1.618–1.902 من XA', type:'انعكاسي قصوي', note:'1.618 من XA شرط حاسم · انعكاسات حادة جداً عند PRZ',
     legs:{
       bxa:{ min:0.382, max:0.618, ideal:'0.382–0.618', label:'B من XA' },
-      cab:{ min:0.382, max:0.886, ideal:'0.618', label:'C من AB' },
+      cab:{ min:0.382, max:0.880, ideal:'0.618', label:'C من AB' },
       dxa:{ min:1.618, max:1.902, ideal:'1.618', label:'D من XA' },
-      dbc:{ min:2.618, max:3.618, ideal:'2.618/3.14/3.618', label:'D من BC' },
+      dbc:{ min:2.618, max:3.618, ideal:'2.618 / 3.14 / 3.618', label:'D من BC' },
     }
   },
-  {
-    id:'shark', nameAr:'القرش', nameEn:'SHARK', cat:'كلاسيكية',
-    prz:'0.88–1.13 من XA', type:'دفعي / انعكاسي', note:'الدخول عند C · D هو هدف الربح · يسبق نموذج 5-0',
-    legs:{
-      bxa:{ min:0.382, max:0.618, ideal:'0.382–0.618', label:'B من XA' },
-      cab:{ min:1.130, max:1.618, ideal:'1.13–1.618', label:'C من AB' },
-      dxa:{ min:0.880, max:1.130, ideal:'0.886–1.13', label:'D من XA' },
-      dbc:{ min:1.618, max:2.240, ideal:'1.618/2/2.24', label:'D من BC' },
-    }
-  },
+  // ── فرعية ──
   {
     id:'alt-bat', nameAr:'الخفاش البديل', nameEn:'ALT BAT', cat:'فرعية',
     prz:'1.13 من XA', type:'انعكاسي', note:'B يجب 0.382 بالضبط · D عند 1.13 من XA · لا يصح كسر نقطة X',
     legs:{
       bxa:{ min:0.352, max:0.382, ideal:'0.382', label:'B من XA' },
-      cab:{ min:0.382, max:0.886, ideal:'0.618', label:'C من AB' },
+      cab:{ min:0.382, max:0.880, ideal:'0.618', label:'C من AB' },
       dxa:{ min:1.130, max:1.130, ideal:'1.13', label:'D من XA' },
-      dbc:{ min:2.000, max:3.618, ideal:'2/2.24/2.618/3/3.618', label:'D من BC' },
+      dbc:{ min:2.000, max:3.618, ideal:'2 / 2.24 / 2.618 / 3 / 3.618', label:'D من BC' },
+    }
+  },
+  {
+    id:'butterfly', nameAr:'الفراشة', nameEn:'BUTTERFLY', cat:'فرعية',
+    prz:'1.27 من XA', type:'انعكاسي عميق', note:'B يجب 0.786 بالضبط · D عند 1.27 من XA · يتجاوز نقطة X',
+    legs:{
+      bxa:{ min:0.755, max:0.816, ideal:'0.786', label:'B من XA' },
+      cab:{ min:0.382, max:0.880, ideal:'0.618', label:'C من AB' },
+      dxa:{ min:1.270, max:1.270, ideal:'1.27', label:'D من XA' },
+      dbc:{ min:1.618, max:2.618, ideal:'1.618 / 2 / 2.24 / 2.618', label:'D من BC' },
     }
   },
   {
     id:'deep-crab', nameAr:'السرطان العميق', nameEn:'DEEP CRAB', cat:'فرعية',
     prz:'1.618–1.902 من XA', type:'انعكاسي قصوي', note:'B يجب 0.886 بالضبط · يجمع خصائص الخفاش والسرطان',
     legs:{
-      bxa:{ min:0.880, max:0.886, ideal:'0.886', label:'B من XA' },
-      cab:{ min:0.382, max:0.886, ideal:'0.618', label:'C من AB' },
+      bxa:{ min:0.880, max:0.936, ideal:'0.886', label:'B من XA' },
+      cab:{ min:0.382, max:0.880, ideal:'0.618', label:'C من AB' },
       dxa:{ min:1.618, max:1.902, ideal:'1.618', label:'D من XA' },
-      dbc:{ min:2.000, max:3.618, ideal:'2/2.24/2.618/3/3.618', label:'D من BC' },
+      dbc:{ min:2.000, max:3.618, ideal:'2 / 2.24 / 2.618 / 3 / 3.618', label:'D من BC' },
+    }
+  },
+  {
+    id:'shark', nameAr:'القرش', nameEn:'SHARK', cat:'فرعية',
+    prz:'0.88–1.13 من XA', type:'دفعي / انعكاسي', note:'الدخول عند C · D هو هدف الربح · يسبق نموذج 5-0',
+    legs:{
+      bxa:{ min:0.382, max:0.618, ideal:'0.382–0.618', label:'B من XA' },
+      cab:{ min:1.130, max:1.618, ideal:'1.13–1.618', label:'C من AB' },
+      dxa:{ min:0.880, max:1.130, ideal:'0.88–1.13', label:'D من XA' },
+      dbc:{ min:1.618, max:2.240, ideal:'1.618 / 2 / 2.24', label:'D من BC' },
     }
   },
   {
@@ -764,26 +766,6 @@ const DB = [
       cab:{ min:1.130, max:1.414, ideal:'1.272', label:'C من XA (يتجاوز A)' },
       dxa:{ min:0.782, max:0.782, ideal:'0.782', label:'D من XC' },
       dbc:{ min:1.272, max:2.000, ideal:'1.272', label:'D من BC' },
-    }
-  },
-  {
-    id:'five-zero', nameAr:'الخمسة-صفر', nameEn:'5-0', cat:'فرعية',
-    prz:'0.500 من BC', type:'انعكاسي', note:'AB=CD عكسي شرط إلزامي · D عند 0.500 من BC · يتبع نموذج القرش',
-    legs:{
-      bxa:{ min:1.130, max:1.618, ideal:'≤ 1.618', label:'AB من XA' },
-      cab:{ min:1.618, max:2.240, ideal:'1.618–2.24', label:'BC من AB' },
-      dxa:{ min:0.500, max:0.500, ideal:'0.500', label:'D من BC' },
-      dbc:{ min:null, max:null, ideal:'AB=CD عكسي', label:'AB=CD عكسي' },
-    }
-  },
-  {
-    id:'abcd', nameAr:'AB=CD', nameEn:'AB=CD', cat:'فرعية',
-    prz:'D = نهاية CD', type:'استمراري / انعكاسي', note:'CD يساوي AB مسافةً وزمناً · أساس جميع النماذج الهارمونية',
-    legs:{
-      bxa:{ min:null, max:null, ideal:'—', label:'غير مطلوب' },
-      cab:{ min:0.618, max:0.786, ideal:'0.618–0.786', label:'BC من AB' },
-      dxa:{ min:1.000, max:1.618, ideal:'1.000 أو 1.272', label:'CD من AB' },
-      dbc:{ min:null, max:null, ideal:'—', label:'غير مطلوب' },
     }
   },
 ];
